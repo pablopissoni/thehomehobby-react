@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 // --- imgages ---
-import Logo from "../../public/Logo miniatura.svg";
-import Perfil from "../../public/perfil.png";
+import Logo from "../assets/Logo miniatura.svg";
+import Perfil from "../assets/perfil.png";
 
 export const NavBar = () => {
   return (
