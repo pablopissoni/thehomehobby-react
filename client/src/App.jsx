@@ -1,21 +1,17 @@
-import { Route, Routes } from "react-router-dom";
-import { HomePage } from "./components/page/Homepage.jsx";
-import { NavBar } from "./components/NavBar.jsx";
-import { Login } from "./components/page/Login.jsx";
+// App.jsx
+import React from 'react';
+import { Provider } from 'react-redux';
+import store from './store/configureStore';
+import HomePage from './components/HomePage';
 
-
-function App() {
-
+const App = () => {
   return (
-    <div>
-        <NavBar/>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<Login/>} />
-        {/* <Route path="/detail/:id" element={<Login/>} /> */}
-      </Routes>
-    </div>
+    <Provider store={store}>
+      <div>
+        <HomePage />
+      </div>
+    </Provider>
   );
-}
+};
 
-export default App
+export default App;

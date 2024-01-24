@@ -53,7 +53,11 @@ export const Slider = () => {
 return (
     <>
       <div className="navigation-wrapper">
-        <div ref={sliderRef} className="keen-slider">
+                <div
+                    ref={sliderRef}
+                    className="keen-slider"
+                    style={{ height: "350px" }} // Ajusta la altura según tus necesidades
+                >
         <img
             className="keen-slider__slide number-slide1"
             src={sliderDesktop1}

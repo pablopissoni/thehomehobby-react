@@ -6,13 +6,14 @@ import Perfil from "../../public/perfil.png";
 
 export const NavBar = () => {
   return (
-    <nav className="bg-red-700  py-3">
-      <div className="flex justify-between " >
+    <nav className="bg-white py-3">
+      <div className="flex items-center justify-between mx-10">
         {/* --- Logo y titulo --- */}
-        <div className="flex mx-10 ">
-          <img src={Logo} alt="logo" />
-          <h1 className="ml-20 font-bold text-xl">The Home Hobby</h1>
+        <div className="flex items-center">
+          <img src={Logo} alt="logo" className="mr-2" />
+          <h1 className="font-bold text-xl">THE HOME HOBBY</h1>
         </div>
+
         {/* --- search --- */}
         <form id="buscador2" method="POST" action="{{ route('search') }}" className="bg-white border rounded-lg max-w-[420px] w-full overflow-hidden flex items-center lg:hidden">
           <input type="text" className="ring-0 shadow-none border-none outline-none focus:ring-0 px-4 py-2 w-full" name="search" placeholder="Search..." id="input_buscador1"/>
