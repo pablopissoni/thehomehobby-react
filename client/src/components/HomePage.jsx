@@ -1,5 +1,6 @@
 // components/HomePage.jsx
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
+import { Footer } from "./Footer";
 // import { useDispatch, useSelector } from 'react-redux';
 // import { fetchProducts } from '../actions/productActions';
 // import ProductList from './ProductList';
@@ -16,6 +17,9 @@ export const HomePage = () => {
     <div>
       <h1>Home Page</h1>
       {/* <ProductList products={products} /> */}
+      <div className="fixed bottom-0 left-0 w-full bg-gray-800 text-white p-4">
+        <Footer />
+      </div>
     </div>
   );
 };
