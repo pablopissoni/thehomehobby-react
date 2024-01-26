@@ -6,6 +6,7 @@ import { Route, Routes, useLocation} from "react-router-dom";
 import { Login } from './components/page/Login';
 import { NavBar } from './components/NavBar';
 import { HomePage } from './components/HomePage';
+import { Details } from './components/page/Details';
 
 const App = () => {
 
@@ -22,6 +23,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login/>} />
+        <Route path="/details" element={<Details/>} />
         {/* <Route path="/detail/:id" element={<Login/>} /> */}
       </Routes>
     </div>
