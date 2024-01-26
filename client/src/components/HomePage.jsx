@@ -217,7 +217,10 @@ export const HomePage = () => {
               </div>
             </div>
             <div class="cards-slider-2 swiper-container col-span-12 xl:col-span-9">
-              <div class="swiper swiper-cards-2 group relative flex items-center py-5 swiper-initialized swiper-horizontal swiper-free-mode swiper-backface-hidden"></div>
+              <div class="swiper swiper-cards-2 group relative flex items-center py-5 swiper-initialized swiper-horizontal swiper-free-mode swiper-backface-hidden">
+                {" "}
+                <SliderProducts />
+              </div>
             </div>
           </div>
         </div>
