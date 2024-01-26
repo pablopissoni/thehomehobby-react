@@ -2,11 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 // --- imgages ---
 import Logo from "../assets/Logo miniatura.svg";
+import LogoGrande from "../assets/logo The Home Hobby.svg";
 import Perfil from "../assets/perfil.png";
 import "bootstrap-icons/font/bootstrap-icons.css";
 export const NavBar = () => {
   return (
-    <header className="header-section relative z-30 shadow-custom-1">
+    <header className="header-section relative z-30 shadow-custom1">
       <div className="hidden bg-secondary sm:flex">
         <div className="container mx-auto grid h-full grid-cols-12 px-2 py-[6px] sm:px-8">
           <div className="col-span-8 self-center">
@@ -14,7 +15,7 @@ export const NavBar = () => {
               <div className="flex items-center gap-2">
                 <i className="bi bi-envelope flex text-2xl text-primary"></i>
                 <a href="#" className="font-light text-white">
-                  megabyte@example.com
+                  Ejemplo@example.com
                 </a>
               </div>
               <div className="flex items-center gap-2">
@@ -47,18 +48,22 @@ export const NavBar = () => {
         <div className="container mx-auto grid h-full grid-cols-4 gap-1 px-2 py-5 sm:px-8 lg:grid-cols-12 lg:gap-0">
           <div className="order-1 col-span-2 self-center lg:order-1 lg:col-span-3">
             <a href="index.html">
-              <img className="inline" src={Logo} alt="logo" />
+              <img
+                className="inline bg-white rounded-md"
+                src={LogoGrande}
+                alt="logo"
+              />
             </a>
           </div>
           <div className="header-search transition-all-300 order-3 col-span-4 mt-[10px] hidden self-center lg:order-2 lg:col-span-6 lg:mt-0 lg:block">
             <form className="search" action="#">
-              <div className="flex h-[40px] overflow-hidden rounded-[50px] bg-gray-300">
+              <div className="flex h-[40px] overflow-hidden rounded-[50px] bg-white">
                 <input
-                  className="search w-full border-none bg-transparent py-[5px] pl-5 text-white placeholder-icon focus:border-none focus:ring-0 focus:ring-transparent"
+                  class="search w-full border-none bg-transparent py-[5px] pl-5 text-black focus:border-none focus:ring-0 focus:ring-transparent"
                   type="search"
                   placeholder="Search..."
                 />
-                <button className="btn-search px-3 text-white" type="submit">
+                <button className="btn-search px-3 text-red-600" type="submit">
                   <i className="bi bi-search flex text-xl"></i>
                 </button>
               </div>
@@ -106,7 +111,7 @@ export const NavBar = () => {
               </div>
               <div className="transition-all-300 invisible absolute top-full z-30 w-[120%] pt-[10px] opacity-0 group-hover:visible group-hover:opacity-100">
                 <div className="arrow relative">
-                  <ul className="overflow-hidden rounded-md bg-white p-[6px] shadow-custom-1">
+                  <ul className="overflow-hidden rounded-md bg-white p-[6px] shadow-custom1">
                     <li className="hover:font-semibold">
                       <a
                         href="#"
@@ -152,7 +157,7 @@ export const NavBar = () => {
                 <i className="bi bi-caret-down-fill transition-all-300 flex rotate-0 text-xs text-primary group-hover:rotate-180"></i>
               </a>
               <div className="submenu transition-all-300 invisible absolute left-0 pt-[10px] opacity-0 group-hover:visible group-hover:opacity-100">
-                <ul className="relative w-[250px] bg-white text-base shadow-custom-1">
+                <ul className="relative w-[250px] bg-white text-base shadow-custom1">
                   <li className="group-1">
                     <a href="#" className="flex items-center gap-2 p-2">
                       <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
@@ -623,12 +628,12 @@ export const NavBar = () => {
               <a href="#">Smartphones</a>
             </li>
             <li className="underlined-animated group">
-              <a href="#" className="flex items-center gap-1">
+              <a href="#" className="btn-open flex items-center gap-1">
                 <span>Shop</span>
                 <i className="bi bi-caret-down-fill transition-all-300 flex rotate-0 text-xs text-primary group-hover:rotate-180"></i>
               </a>
-              <div className="transition-all-300 invisible absolute left-0 pt-[10px] opacity-0 group-hover:visible group-hover:opacity-100">
-                <ul className="relative w-[250px] bg-white text-base shadow-custom-1">
+              <div className="submenu transition-all-300 invisible absolute left-0 pt-[10px] opacity-0 group-hover:visible group-hover:opacity-100">
+                <ul className="relative w-[250px] bg-white text-base shadow-custom1">
                   <li className="group-1">
                     <a
                       href="shop-mixed.html"
@@ -665,7 +670,7 @@ export const NavBar = () => {
                 <i className="bi bi-caret-down-fill transition-all-300 flex rotate-0 text-xs text-primary group-hover:rotate-180"></i>
               </a>
               <div className="transition-all-300 invisible absolute left-0 pt-[10px] opacity-0 group-hover:visible group-hover:opacity-100">
-                <ul className="relative w-[250px] bg-white text-base shadow-custom-1">
+                <ul className="relative w-[250px] bg-white text-base shadow-custom1">
                   <li className="group-1">
                     <a
                       href="wishlist.html"
