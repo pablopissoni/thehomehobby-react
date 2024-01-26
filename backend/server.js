@@ -1,34 +1,52 @@
 const express = require("express");
-const mysql = require("mysql2");
-const bodyParser = require("body-parser");
-const routes = require("./routes");
+const cors = require("cors");
+const mysql = require("mysql");
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const port = 3001;
 
-const dbConfig = {
-  host: "thehome.cf42mm20c12e.us-east-1.rds.amazonaws.com",
-  user: "adbize",
-  password: "Adbize13",
-  database: "newschema",
-  port: 3306,
-};
+// Configuración de CORS
+app.use(cors());
 
-app.use(bodyParser.json());
+// Configuración de la conexión a la base de datos
+const connection = mysql.createConnection({
+  host: "localhost",
+  user: "tu_usuario",
+  password: "tu_contraseña",
+  database: "nombre_de_la_base_de_datos",
+});
 
-// Conectar a la base de datos utilizando createPool
-const pool = mysql.createPool(dbConfig);
+// Conexión a la base de datos
+connection.connect((error) => {
+  if (error) {
+    console.error("Error al conectar con la base de datos:", error);
+  } else {
+    console.log("Conexión exitosa a la base de datos");
+  }
+});
 
-// Usar las rutas definidas en routes.js
-app.use(
-  "/api",
-  (req, res, next) => {
-    req.pool = pool; // Pasar el pool a través de la solicitud
-    next();
-  },
-  routes
-);
+// Ruta para obtener los primeros 10 IDs
+app.get("/api/ids", (req, res) => {
+  const query = "SELECT id FROM productos LIMIT 10";
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.error("Error al realizar la consulta:", error);
+      res.status(500).json({ error: "Error en el servidor" });
+    } else {
+      const ids = results.map((row) => row.id);
+      res.json(ids);
+    }
+  });
+});
 
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en el puerto ${PORT}`);
+// Otras rutas...
+
+// Ruta de ejemplo
+app.get("/api/ejemplo", (req, res) => {
+  res.json({ mensaje: "Esta es una ruta de ejemplo" });
+});
+
+// Iniciar el servidor
+app.listen(port, () => {
+  console.log(`Servidor iniciado en el puerto ${port}`);
 });
