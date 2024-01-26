@@ -27,7 +27,7 @@ connection.connect((error) => {
 
 // Ruta para obtener los primeros 10 IDs
 app.get("/api/ids", (req, res) => {
-  const query = "SELECT id FROM productos LIMIT 10";
+  const query = "SELECT id FROM productos";
   connection.query(query, (error, results) => {
     if (error) {
       console.error("Error al realizar la consulta:", error);
