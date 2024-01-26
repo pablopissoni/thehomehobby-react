@@ -12,13 +12,13 @@ export const NavBar = () => {
           <div className="col-span-8 self-center">
             <div className="flex gap-[15px]">
               <div className="flex items-center gap-2">
-                <i className="bi bi-envelope flex text-2xl text-primary-color"></i>
+                <i className="bi bi-envelope flex text-2xl text-primary"></i>
                 <a href="#" className="font-light text-white">
                   megabyte@example.com
                 </a>
               </div>
               <div className="flex items-center gap-2">
-                <i className="bi bi-telephone flex text-xl text-primary-color"></i>
+                <i className="bi bi-telephone flex text-xl text-primary"></i>
                 <a href="#" className="font-light text-white">
                   0101-010101
                 </a>
@@ -47,12 +47,12 @@ export const NavBar = () => {
         <div className="container mx-auto grid h-full grid-cols-4 gap-1 px-2 py-5 sm:px-8 lg:grid-cols-12 lg:gap-0">
           <div className="order-1 col-span-2 self-center lg:order-1 lg:col-span-3">
             <a href="index.html">
-              <img className="inline" src="images/logo.png" alt="logo" />
+              <img className="inline" src={Logo} alt="logo" />
             </a>
           </div>
           <div className="header-search transition-all-300 order-3 col-span-4 mt-[10px] hidden self-center lg:order-2 lg:col-span-6 lg:mt-0 lg:block">
             <form className="search" action="#">
-              <div className="flex h-[40px] overflow-hidden rounded-[50px] bg-primary-rgba">
+              <div className="flex h-[40px] overflow-hidden rounded-[50px] bg-gray-300">
                 <input
                   className="search w-full border-none bg-transparent py-[5px] pl-5 text-white placeholder-icon focus:border-none focus:ring-0 focus:ring-transparent"
                   type="search"
@@ -120,7 +120,7 @@ export const NavBar = () => {
                         data-target=".entry-modal"
                       >
                         <div className="pointer-events-none flex items-center gap-2 p-1">
-                          <i className="bi bi-box-arrow-in-right flex text-xl text-primary-color"></i>
+                          <i className="bi bi-box-arrow-in-right flex text-xl text-primary"></i>
                           <span>Login</span>
                         </div>
                       </a>
@@ -133,7 +133,7 @@ export const NavBar = () => {
                         data-target=".entry-modal"
                       >
                         <div className="pointer-events-none flex items-center gap-2 p-1">
-                          <i className="bi bi-person flex text-xl text-primary-color"></i>
+                          <i className="bi bi-person flex text-xl text-primary"></i>
                           <span>Sign up</span>
                         </div>
                       </a>
@@ -154,20 +154,20 @@ export const NavBar = () => {
                 className="btn-open flex items-center gap-1 font-semibold"
               >
                 <span>Products</span>
-                <i className="bi bi-caret-down-fill transition-all-300 flex rotate-0 text-xs text-primary-color group-hover:rotate-180"></i>
+                <i className="bi bi-caret-down-fill transition-all-300 flex rotate-0 text-xs text-primary group-hover:rotate-180"></i>
               </a>
               <div className="submenu transition-all-300 invisible absolute left-0 pt-[10px] opacity-0 group-hover:visible group-hover:opacity-100">
                 <ul className="relative w-[250px] bg-white text-base shadow-custom-1">
                   <li className="group-1">
                     <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Pc components</span>
-                      <i className="bi bi-caret-right-fill group-1-hover-visible invisible ml-auto flex text-xs text-primary-color"></i>
+                      <i className="bi bi-caret-right-fill group-1-hover-visible invisible ml-auto flex text-xs text-primary"></i>
                     </a>
                     <div className="submenu group-1-hover-visible transition-all-300 invisible absolute top-0 left-full min-h-full min-w-[680px] opacity-0">
                       <div className="bg-white shadow-custom-2">
-                        <div className="border-b-2 border-primary-color py-[10px]">
-                          <span className="px-5 text-3xl font-bold uppercase text-primary-color">
+                        <div className="border-b-2 border-primary py-[10px]">
+                          <span className="px-5 text-3xl font-bold uppercase text-primary">
                             Pc components
                           </span>
                         </div>
@@ -314,14 +314,14 @@ export const NavBar = () => {
                   </li>
                   <li className="group-1">
                     <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Peripherals</span>
-                      <i className="bi bi-caret-right-fill group-1-hover-visible invisible ml-auto flex text-xs text-primary-color"></i>
+                      <i className="bi bi-caret-right-fill group-1-hover-visible invisible ml-auto flex text-xs text-primary"></i>
                     </a>
                     <div className="submenu group-1-hover-visible transition-all-300 invisible absolute top-0 left-full min-h-full min-w-[680px] opacity-0">
                       <div className="bg-white shadow-custom-2">
-                        <div className="border-b-2 border-primary-color py-[10px]">
-                          <span className="px-5 text-3xl font-bold uppercase text-primary-color">
+                        <div className="border-b-2 border-primary py-[10px]">
+                          <span className="px-5 text-3xl font-bold uppercase text-primary">
                             Peripherals
                           </span>
                         </div>
@@ -400,14 +400,14 @@ export const NavBar = () => {
                   </li>
                   <li className="group-1">
                     <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Computers</span>
-                      <i className="bi bi-caret-right-fill group-1-hover-visible invisible ml-auto flex text-xs text-primary-color"></i>
+                      <i className="bi bi-caret-right-fill group-1-hover-visible invisible ml-auto flex text-xs text-primary"></i>
                     </a>
                     <div className="submenu group-1-hover-visible transition-all-300 invisible absolute top-0 left-full min-h-full min-w-[680px] opacity-0">
                       <div className="bg-white shadow-custom-2">
-                        <div className="border-b-2 border-primary-color py-[10px]">
-                          <span className="px-5 text-3xl font-bold uppercase text-primary-color">
+                        <div className="border-b-2 border-primary py-[10px]">
+                          <span className="px-5 text-3xl font-bold uppercase text-primary">
                             Computers
                           </span>
                         </div>
@@ -452,26 +452,26 @@ export const NavBar = () => {
                   </li>
                   <li className="group-1">
                     <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Monitors</span>
                     </a>
                   </li>
                   <li className="group-1">
                     <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Printers</span>
                     </a>
                   </li>
                   <li className="group-1">
                     <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Gaming</span>
-                      <i className="bi bi-caret-right-fill group-1-hover-visible invisible ml-auto flex text-xs text-primary-color"></i>
+                      <i className="bi bi-caret-right-fill group-1-hover-visible invisible ml-auto flex text-xs text-primary"></i>
                     </a>
                     <div className="submenu group-1-hover-visible transition-all-300 invisible absolute top-0 left-full min-h-full min-w-[680px] opacity-0">
                       <div className="bg-white shadow-custom-2">
-                        <div className="border-b-2 border-primary-color py-[10px]">
-                          <span className="px-5 text-3xl font-bold uppercase text-primary-color">
+                        <div className="border-b-2 border-primary py-[10px]">
+                          <span className="px-5 text-3xl font-bold uppercase text-primary">
                             Gaming
                           </span>
                         </div>
@@ -533,26 +533,26 @@ export const NavBar = () => {
                   </li>
                   <li className="group-1">
                     <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Tablets</span>
                     </a>
                   </li>
                   <li className="group-1">
                     <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Smartphones</span>
                     </a>
                   </li>
                   <li className="group-1">
                     <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Software</span>
-                      <i className="bi bi-caret-right-fill group-1-hover-visible invisible ml-auto flex text-xs text-primary-color"></i>
+                      <i className="bi bi-caret-right-fill group-1-hover-visible invisible ml-auto flex text-xs text-primary"></i>
                     </a>
                     <div className="submenu group-1-hover-visible transition-all-300 invisible absolute top-0 left-full min-h-full min-w-[680px] opacity-0">
                       <div className="bg-white shadow-custom-2">
-                        <div className="border-b-2 border-primary-color py-[10px]">
-                          <span className="px-5 text-3xl font-bold uppercase text-primary-color">
+                        <div className="border-b-2 border-primary py-[10px]">
+                          <span className="px-5 text-3xl font-bold uppercase text-primary">
                             Software
                           </span>
                         </div>
@@ -630,7 +630,7 @@ export const NavBar = () => {
             <li className="underlined-animated group">
               <a href="#" className="flex items-center gap-1">
                 <span>Shop</span>
-                <i className="bi bi-caret-down-fill transition-all-300 flex rotate-0 text-xs text-primary-color group-hover:rotate-180"></i>
+                <i className="bi bi-caret-down-fill transition-all-300 flex rotate-0 text-xs text-primary group-hover:rotate-180"></i>
               </a>
               <div className="transition-all-300 invisible absolute left-0 pt-[10px] opacity-0 group-hover:visible group-hover:opacity-100">
                 <ul className="relative w-[250px] bg-white text-base shadow-custom-1">
@@ -639,7 +639,7 @@ export const NavBar = () => {
                       href="shop-mixed.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Shop - Mixed</span>
                     </a>
                   </li>
@@ -648,7 +648,7 @@ export const NavBar = () => {
                       href="shop-listed.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Shop - Listed</span>
                     </a>
                   </li>
@@ -657,7 +657,7 @@ export const NavBar = () => {
                       href="shop-grid.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Shop - Grid</span>
                     </a>
                   </li>
@@ -667,7 +667,7 @@ export const NavBar = () => {
             <li className="underlined-animated group">
               <a href="#" className="flex items-center gap-1">
                 <span>Pages</span>
-                <i className="bi bi-caret-down-fill transition-all-300 flex rotate-0 text-xs text-primary-color group-hover:rotate-180"></i>
+                <i className="bi bi-caret-down-fill transition-all-300 flex rotate-0 text-xs text-primary group-hover:rotate-180"></i>
               </a>
               <div className="transition-all-300 invisible absolute left-0 pt-[10px] opacity-0 group-hover:visible group-hover:opacity-100">
                 <ul className="relative w-[250px] bg-white text-base shadow-custom-1">
@@ -676,7 +676,7 @@ export const NavBar = () => {
                       href="wishlist.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Wishlist</span>
                     </a>
                   </li>
@@ -685,7 +685,7 @@ export const NavBar = () => {
                       href="shopping-cart.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Shopping Cart</span>
                     </a>
                   </li>
@@ -694,7 +694,7 @@ export const NavBar = () => {
                       href="product-details.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">
                         Product Details
                       </span>
@@ -705,7 +705,7 @@ export const NavBar = () => {
                       href="checkout.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Checkout</span>
                     </a>
                   </li>
@@ -714,7 +714,7 @@ export const NavBar = () => {
                       href="about-us.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">About Us</span>
                     </a>
                   </li>
@@ -723,7 +723,7 @@ export const NavBar = () => {
                       href="my-account.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">My Account</span>
                     </a>
                   </li>
@@ -732,7 +732,7 @@ export const NavBar = () => {
                       href="login.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Login</span>
                     </a>
                   </li>
@@ -741,7 +741,7 @@ export const NavBar = () => {
                       href="sign-up.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Sign Up</span>
                     </a>
                   </li>
@@ -750,7 +750,7 @@ export const NavBar = () => {
                       href="forgot-password.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">
                         Forgot Password
                       </span>
@@ -761,7 +761,7 @@ export const NavBar = () => {
                       href="error404.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Error 404</span>
                     </a>
                   </li>
@@ -770,7 +770,7 @@ export const NavBar = () => {
                       href="purchase-completed.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">
                         Purchase Completed
                       </span>
@@ -781,7 +781,7 @@ export const NavBar = () => {
                       href="purchase-failed.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">
                         Purchase Failed
                       </span>
@@ -792,7 +792,7 @@ export const NavBar = () => {
                       href="message-sent.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Message Sent</span>
                     </a>
                   </li>
@@ -801,7 +801,7 @@ export const NavBar = () => {
                       href="verification.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Verification</span>
                     </a>
                   </li>
@@ -810,7 +810,7 @@ export const NavBar = () => {
                       href="privacy-policy.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Privacy Policy</span>
                     </a>
                   </li>
@@ -819,7 +819,7 @@ export const NavBar = () => {
                       href="terms-and-conditions.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">
                         Terms &amp; Conditions
                       </span>
@@ -830,7 +830,7 @@ export const NavBar = () => {
                       href="maintenance.html"
                       className="flex items-center gap-2 p-2"
                     >
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary-color"></i>
+                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
                       <span className="group-1-hover-font">Maintenance</span>
                     </a>
                   </li>

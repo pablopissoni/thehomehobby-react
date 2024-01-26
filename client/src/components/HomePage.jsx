@@ -1,5 +1,6 @@
 // components/HomePage.jsx
 import React, { useEffect } from "react";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import { Footer } from "./Footer";
 import { Slider } from "./Slider";
 
@@ -178,6 +179,44 @@ export const HomePage = () => {
           </div>
         </div>
       </section>
+      <section>
+        <div class="products-1-section container mx-auto my-5 px-2 sm:px-8">
+          <div class="liner-container mt-5 flex justify-center border-b-2 border-[rgba(119,119,119,.17)]">
+            <h1 class="mb-[-2px] inline-block border-b-2 border-primary-color pb-3 text-2xl font-bold uppercase">
+              Notebooks
+            </h1>
+          </div>
+          <div class="grid grid-cols-12 gap-5">
+            <div class="group relative col-span-3 my-5 hidden overflow-hidden rounded-l-lg xl:block">
+              <div class="overlay-gradient absolute z-[1] h-full w-full"></div>
+              <img
+                class="transition-all-300 h-full w-full object-cover hover:transform group-hover:scale-110"
+                src={sliderMobile3}
+                alt="banner-img"
+              />
+              <div class="absolute top-0 left-0 flex h-full w-full items-center">
+                <div class="z-[2] p-5">
+                  <h3 class="text-lg font-bold uppercase text-primary-color drop-shadow-xl">
+                    Notebooks
+                  </h3>
+                  <p class="my-5 text-white drop-shadow-md">
+                    Choose your laptop now!
+                  </p>
+                  <a
+                    class="btn-effect inline-block rounded-lg bg-primary-color py-2 px-3 text-white"
+                    href="#"
+                  >
+                    <span>Show more</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="cards-slider-2 swiper-container col-span-12 xl:col-span-9">
+              <div class="swiper swiper-cards-2 group relative flex items-center py-5 swiper-initialized swiper-horizontal swiper-free-mode swiper-backface-hidden"></div>
+            </div>
+          </div>
+        </div>
+      </section>
       {/* Sección de categorías */}
       <section>
         <div className="categories-section container mx-auto my-5 px-2 sm:px-8">
@@ -191,7 +230,7 @@ export const HomePage = () => {
           </div>
         </div>
       </section>
-      <div className="fixed bottom-0 left-0 w-full bg-gray-800 text-white p-4">
+      <div className=" bottom-0 left-0 w-full bg-gray-800 text-white p-4">
         <Footer />
       </div>
     </div>
