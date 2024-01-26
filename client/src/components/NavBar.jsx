@@ -80,11 +80,7 @@ export const NavBar = () => {
             </div>
             <div className="group-items hidden items-center gap-5 text-white lg:flex">
               <div className="relative">
-                <a
-                  className="btn-open-modal"
-                  data-target=".wishlist-modal"
-                  href="javascript:void(0)"
-                >
+                <a className="btn-open-modal" data-target=".wishlist-modal">
                   <i className="bi bi-heart pointer-events-none flex translate-y-1 transform text-[32px] text-white"></i>
                 </a>
                 <span className="badge absolute top-0 right-[-6px] h-[15px] min-w-[15px] px-[2px]">
@@ -95,7 +91,6 @@ export const NavBar = () => {
                 <a
                   className="btn-open-modal"
                   data-target=".shopping-cart-modal"
-                  href="javascript:void(0)"
                 >
                   <i className="bi bi-cart2 pointer-events-none flex text-[35px] text-white"></i>
                 </a>
