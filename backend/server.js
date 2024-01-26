@@ -10,10 +10,10 @@ app.use(cors());
 
 // Configuración de la conexión a la base de datos
 const connection = mysql.createConnection({
-  host: "localhost",
-  user: "tu_usuario",
-  password: "tu_contraseña",
-  database: "nombre_de_la_base_de_datos",
+  host: "thehome.cf42mm20c12e.us-east-1.rds.amazonaws.com",
+  user: "adbize",
+  password: "Adbize13",
+  database: "newschema",
 });
 
 // Conexión a la base de datos
