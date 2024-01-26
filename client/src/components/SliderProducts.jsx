@@ -33,17 +33,13 @@ export const SliderProducts = () => {
           <div className="card-container transition-all-300 translateY-2 relative flex h-full flex-col overflow-hidden rounded-lg bg-white p-5 shadow-md hover:z-[2] hover:shadow-xl">
             <div className="absolute top-[10px] right-[10px]">
               <div className="p-[2px]">
-                <a
-                  className="tippy tippy-left-wishlist btn-wishlist transition-all-300 flex h-9 w-9 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[rgba(0,0,0,.3)] hover:bg-primary-hover"
-                  href="javascript:void(0)"
-                >
+                <a className="tippy tippy-left-wishlist btn-wishlist transition-all-300 flex h-9 w-9 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[rgba(0,0,0,.3)] hover:bg-primary-hover">
                   <i className="bi bi-heart pointer-events-none flex text-white"></i>
                 </a>
               </div>
               <div className="p-[2px]">
                 <a
                   className="tippy tippy-left-card-view btn-open-modal transition-all-300 flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg bg-[rgba(0,0,0,.3)] hover:bg-primary-hover"
-                  href="javascript:void(0)"
                   data-target=".quick-view-modal"
                 >
                   <i className="bi bi-eye pointer-events-none flex text-xl text-white"></i>
@@ -126,17 +122,13 @@ export const SliderProducts = () => {
           <div className="card-container transition-all-300 translateY-2 relative flex h-full flex-col overflow-hidden rounded-lg bg-white p-5 shadow-md hover:z-[2] hover:shadow-xl">
             <div className="absolute top-[10px] right-[10px]">
               <div className="p-[2px]">
-                <a
-                  className="tippy tippy-left-wishlist btn-wishlist transition-all-300 flex h-9 w-9 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[rgba(0,0,0,.3)] hover:bg-primary-hover"
-                  href="javascript:void(0)"
-                >
+                <a className="tippy tippy-left-wishlist btn-wishlist transition-all-300 flex h-9 w-9 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[rgba(0,0,0,.3)] hover:bg-primary-hover">
                   <i className="bi bi-heart pointer-events-none flex text-white"></i>
                 </a>
               </div>
               <div className="p-[2px]">
                 <a
                   className="tippy tippy-left-card-view btn-open-modal transition-all-300 flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg bg-[rgba(0,0,0,.3)] hover:bg-primary-hover"
-                  href="javascript:void(0)"
                   data-target=".quick-view-modal"
                 >
                   <i className="bi bi-eye pointer-events-none flex text-xl text-white"></i>
@@ -219,17 +211,13 @@ export const SliderProducts = () => {
           <div className="card-container transition-all-300 translateY-2 relative flex h-full flex-col overflow-hidden rounded-lg bg-white p-5 shadow-md hover:z-[2] hover:shadow-xl">
             <div className="absolute top-[10px] right-[10px]">
               <div className="p-[2px]">
-                <a
-                  className="tippy tippy-left-wishlist btn-wishlist transition-all-300 flex h-9 w-9 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[rgba(0,0,0,.3)] hover:bg-primary-hover"
-                  href="javascript:void(0)"
-                >
+                <a className="tippy tippy-left-wishlist btn-wishlist transition-all-300 flex h-9 w-9 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[rgba(0,0,0,.3)] hover:bg-primary-hover">
                   <i className="bi bi-heart pointer-events-none flex text-white"></i>
                 </a>
               </div>
               <div className="p-[2px]">
                 <a
                   className="tippy tippy-left-card-view btn-open-modal transition-all-300 flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg bg-[rgba(0,0,0,.3)] hover:bg-primary-hover"
-                  href="javascript:void(0)"
                   data-target=".quick-view-modal"
                 >
                   <i className="bi bi-eye pointer-events-none flex text-xl text-white"></i>
@@ -312,17 +300,13 @@ export const SliderProducts = () => {
           <div className="card-container transition-all-300 translateY-2 relative flex h-full flex-col overflow-hidden rounded-lg bg-white p-5 shadow-md hover:z-[2] hover:shadow-xl">
             <div className="absolute top-[10px] right-[10px]">
               <div className="p-[2px]">
-                <a
-                  className="tippy tippy-left-wishlist btn-wishlist transition-all-300 flex h-9 w-9 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[rgba(0,0,0,.3)] hover:bg-primary-hover"
-                  href="javascript:void(0)"
-                >
+                <a className="tippy tippy-left-wishlist btn-wishlist transition-all-300 flex h-9 w-9 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[rgba(0,0,0,.3)] hover:bg-primary-hover">
                   <i className="bi bi-heart pointer-events-none flex text-white"></i>
                 </a>
               </div>
               <div className="p-[2px]">
                 <a
                   className="tippy tippy-left-card-view btn-open-modal transition-all-300 flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg bg-[rgba(0,0,0,.3)] hover:bg-primary-hover"
-                  href="javascript:void(0)"
                   data-target=".quick-view-modal"
                 >
                   <i className="bi bi-eye pointer-events-none flex text-xl text-white"></i>
