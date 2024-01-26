@@ -4,6 +4,9 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { Footer } from "./Footer";
 import { Slider } from "./Slider";
 
+import { SliderProducts } from "./SliderProducts";
+// --- IMG ---
+
 import sliderMobile3 from "../assets/slider-mobile3.png";
 // import { useDispatch, useSelector } from 'react-redux';
 // import { fetchProducts } from '../actions/productActions';
@@ -120,7 +123,9 @@ export const HomePage = () => {
             </h1>
           </div>
           <div className="swiper-container">
-            <div className="swiper swiper-cards group relative flex items-center py-5 swiper-initialized swiper-horizontal swiper-free-mode swiper-backface-hidden"></div>
+            <div className="swiper swiper-cards group relative flex items-center py-5 swiper-initialized swiper-horizontal swiper-free-mode swiper-backface-hidden">
+              <SliderProducts />
+            </div>
           </div>
         </div>
       </section>
@@ -230,7 +235,7 @@ export const HomePage = () => {
           </div>
         </div>
       </section>
-      <div className=" bottom-0 left-0 w-full bg-gray-800 text-white p-4">
+      <div>
         <Footer />
       </div>
     </div>
