@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql");
+const router = require("./routes");
 
 const app = express();
 const port = 3001;
@@ -25,26 +26,8 @@ connection.connect((error) => {
   }
 });
 
-// Ruta para obtener los primeros 10 IDs
-app.get("/api/ids", (req, res) => {
-  const query = "SELECT id FROM productos";
-  connection.query(query, (error, results) => {
-    if (error) {
-      console.error("Error al realizar la consulta:", error);
-      res.status(500).json({ error: "Error en el servidor" });
-    } else {
-      const ids = results.map((row) => row.id);
-      res.json(ids);
-    }
-  });
-});
-
-// Otras rutas...
-
-// Ruta de ejemplo
-app.get("/api/ejemplo", (req, res) => {
-  res.json({ mensaje: "Esta es una ruta de ejemplo" });
-});
+// Rutas
+app.use("/", router(connection));
 
 // Iniciar el servidor
 app.listen(port, () => {
