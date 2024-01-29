@@ -159,8 +159,39 @@ module.exports = function (connection) {
     });
   });
 
-  router.get("/ejemplo", (req, res) => {
-    res.json({ mensaje: "Esta es una ruta de ejemplo" });
+  // Ruta para actualizar un producto por ID
+  router.put("/productos/:id", (req, res) => {
+    const productId = req.params.id;
+
+    if (Object.keys(req.body).length === 0) {
+      return res
+        .status(400)
+        .json({ error: "Se requiere al menos un campo para actualizar" });
+    }
+
+    const updateFields = { ...req.body, updated_at: new Date() };
+
+    // Convertir tags y galería a cadenas antes de la consulta SQL
+    updateFields.tags = JSON.stringify(updateFields.tags);
+    updateFields.galeria = JSON.stringify(updateFields.galeria);
+
+    // Convertir el objeto filtros a cadena JSON
+    updateFields.filtros = JSON.stringify(updateFields.filtros);
+
+    const query = "UPDATE productos SET ? WHERE id = ?";
+
+    connection.query(query, [updateFields, productId], (error, results) => {
+      if (error) {
+        console.error("Error al realizar la actualización:", error);
+        return res.status(500).json({ error: "Error en el servidor" });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ error: "El producto no fue encontrado" });
+      }
+
+      res.json({ mensaje: "Producto actualizado exitosamente" });
+    });
   });
 
   return router;
