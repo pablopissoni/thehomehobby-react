@@ -78,8 +78,26 @@ module.exports = function (connection) {
     });
   });
 
+  //crear productos
   router.post("/productos", (req, res) => {
-    const { nombre_es } = req.body;
+    const {
+      contenido,
+      nombre_es,
+      nombre_ingles,
+      tags,
+      marca_id,
+      sub_categoria_id,
+      imagen,
+      galeria,
+      categoria_id,
+      status,
+      video,
+      oferta_id,
+      precio_base,
+      filtros,
+      envio_free,
+      envio_rapido,
+    } = req.body;
 
     // Verifica que se haya proporcionado al menos el nombre_es
     if (!nombre_es) {
@@ -89,7 +107,22 @@ module.exports = function (connection) {
     }
 
     const nuevoProducto = {
+      contenido,
       nombre_es,
+      nombre_ingles,
+      tags: JSON.stringify(tags), // Convertir el array a formato JSON
+      marca_id,
+      sub_categoria_id,
+      imagen,
+      galeria: JSON.stringify(galeria), // Convertir el array a formato JSON
+      categoria_id,
+      status,
+      video,
+      oferta_id,
+      precio_base,
+      filtros: JSON.stringify(filtros), // Convertir el objeto a formato JSON
+      envio_free,
+      envio_rapido,
       created_at: new Date(),
       updated_at: new Date(),
     };
@@ -106,6 +139,23 @@ module.exports = function (connection) {
       res
         .status(201)
         .json({ id: nuevoProductoId, mensaje: "Producto creado exitosamente" });
+    });
+  });
+
+  router.delete("/productos/:id", (req, res) => {
+    const productId = req.params.id;
+    const query = "DELETE FROM productos WHERE id = ?";
+
+    connection.query(query, [productId], (error, results) => {
+      if (error) {
+        console.error("Error al realizar la eliminación:", error);
+        res.status(500).json({ error: "Error en el servidor" });
+      } else if (results.affectedRows === 0) {
+        // No se encontró el producto con el ID proporcionado
+        res.status(404).json({ error: "El producto no fue encontrado" });
+      } else {
+        res.json({ mensaje: "Producto eliminado exitosamente" });
+      }
     });
   });
 
