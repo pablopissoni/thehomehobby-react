@@ -9,6 +9,8 @@ const port = 3001;
 // Configuración de CORS
 app.use(cors());
 
+app.use(express.json());
+
 // Configuración de la conexión a la base de datos
 const connection = mysql.createConnection({
   host: "thehome.cf42mm20c12e.us-east-1.rds.amazonaws.com",
