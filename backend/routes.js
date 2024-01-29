@@ -78,6 +78,37 @@ module.exports = function (connection) {
     });
   });
 
+  router.post("/productos", (req, res) => {
+    const { nombre_es } = req.body;
+
+    // Verifica que se haya proporcionado al menos el nombre_es
+    if (!nombre_es) {
+      return res
+        .status(400)
+        .json({ error: "El campo 'nombre_es' es obligatorio" });
+    }
+
+    const nuevoProducto = {
+      nombre_es,
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+
+    const query = "INSERT INTO productos SET ?";
+
+    connection.query(query, nuevoProducto, (error, results) => {
+      if (error) {
+        console.error("Error al realizar la inserción:", error);
+        return res.status(500).json({ error: "Error en el servidor" });
+      }
+
+      const nuevoProductoId = results.insertId;
+      res
+        .status(201)
+        .json({ id: nuevoProductoId, mensaje: "Producto creado exitosamente" });
+    });
+  });
+
   router.get("/ejemplo", (req, res) => {
     res.json({ mensaje: "Esta es una ruta de ejemplo" });
   });
