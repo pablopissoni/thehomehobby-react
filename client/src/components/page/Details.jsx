@@ -177,7 +177,7 @@ export const Details = () => {
           <div className="col-span-12 md:col-span-6">
             <div className="my-1">
               <a
-                className="clamp-2 transition-all-300 break-all text-2xl font-medium hover:text-primary-color"
+                className="clamp-2 transition-all-300 break-all text-2xl font-medium hover:text-primary"
                 href="#"
               >
                 Ryzen 5 3600x
@@ -198,7 +198,7 @@ export const Details = () => {
               </div>
             </div>
             <div className="my-5 flex items-center gap-5">
-              <div className="flex rounded-lg bg-white px-3 py-2 text-primary-color shadow">
+              <div className="flex rounded-lg bg-white px-3 py-2 text-primary shadow">
                 <span className="text-sm">$</span>
                 <span className="text-2xl font-semibold leading-7">37.00</span>
               </div>
@@ -206,7 +206,7 @@ export const Details = () => {
                 <span className="text-md font-semibold uppercase text-green-400">
                   25% Off
                 </span>
-                <span className="prev-price text-sm text-primary-color line-through">
+                <span className="prev-price text-sm text-primary line-through">
                   $50.00
                 </span>
               </div>
@@ -235,7 +235,7 @@ export const Details = () => {
                           checked=""
                         />
                         <label
-                          className="flex h-8 w-10 cursor-pointer items-center justify-center rounded-lg border border-gray-300 bg-white hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-primary-color"
+                          className="flex h-8 w-10 cursor-pointer items-center justify-center rounded-lg border border-gray-300 bg-white hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-primary"
                           htmlFor="size1"
                         >
                           S
@@ -250,7 +250,7 @@ export const Details = () => {
                           id="size2"
                         />
                         <label
-                          className="flex h-8 w-10 cursor-pointer items-center justify-center rounded-lg border border-gray-300 bg-white hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-primary-color"
+                          className="flex h-8 w-10 cursor-pointer items-center justify-center rounded-lg border border-gray-300 bg-white hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-primary"
                           htmlFor="size2"
                         >
                           M
@@ -265,7 +265,7 @@ export const Details = () => {
                           id="size3"
                         />
                         <label
-                          className="flex h-8 w-10 cursor-pointer items-center justify-center rounded-lg border border-gray-300 bg-white hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-primary-color"
+                          className="flex h-8 w-10 cursor-pointer items-center justify-center rounded-lg border border-gray-300 bg-white hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-primary"
                           htmlFor="size3"
                         >
                           L
@@ -280,7 +280,7 @@ export const Details = () => {
                           id="size4"
                         />
                         <label
-                          className="flex h-8 w-10 cursor-pointer items-center justify-center rounded-lg border border-gray-300 bg-white hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-primary-color"
+                          className="flex h-8 w-10 cursor-pointer items-center justify-center rounded-lg border border-gray-300 bg-white hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-primary"
                           htmlFor="size4"
                         >
                           XL
@@ -294,7 +294,7 @@ export const Details = () => {
                         <input
                           type="radio"
                           className="radio bg-blue-600 text-blue-600 checked:ring-blue-300 focus:ring-blue-300"
-                          name="radio-colors"
+                          name="radio"
                           value="0"
                           checked=""
                         />
@@ -305,7 +305,7 @@ export const Details = () => {
                         <input
                           type="radio"
                           className="radio bg-red-600 text-red-600 checked:ring-red-300 focus:ring-red-300"
-                          name="radio-colors"
+                          name="radio"
                           value="1"
                         />
                       </label>
@@ -315,7 +315,7 @@ export const Details = () => {
                         <input
                           type="radio"
                           className="radio bg-yellow-600 text-yellow-600 checked:ring-yellow-300 focus:ring-yellow-300"
-                          name="radio-colors"
+                          name="radio"
                           value="2"
                         />
                       </label>
@@ -325,7 +325,7 @@ export const Details = () => {
                         <input
                           type="radio"
                           className="radio bg-black text-black checked:ring-gray-400 focus:ring-gray-400"
-                          name="radio-colors"
+                          name="radio"
                           value="3"
                         />
                       </label>
@@ -341,13 +341,13 @@ export const Details = () => {
                     />
                     <div className="flex w-5 flex-col justify-between">
                       <button
-                        className="quantity-btn increment text-primary-color"
+                        className="quantity-btn increment text-primary"
                         type="button"
                       >
                         <i className="bi bi-caret-up-fill"></i>
                       </button>
                       <button
-                        className="quantity-btn decrement text-primary-color"
+                        className="quantity-btn decrement text-primary"
                         type="button"
                       >
                         <i className="bi bi-caret-down-fill"></i>
@@ -356,7 +356,7 @@ export const Details = () => {
                   </div>
                   <div className="flex gap-2">
                     <button
-                      className="btn-effect transition-all-300 flex h-full w-full items-center justify-center gap-2 rounded-lg bg-primary-color p-2"
+                      className="btn-effect transition-all-300 flex h-full w-full items-center justify-center gap-2 rounded-lg bg-primary p-2"
                       type="submit"
                     >
                       <i className="bi bi-cart-fill flex text-xl text-white"></i>
@@ -365,7 +365,7 @@ export const Details = () => {
                       </span>
                     </button>
                     <a
-                      className="tippy tippy-wishlist btn-wishlist transition-all-300 flex min-h-[40px] min-w-[40px] cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary-color p-2 hover:bg-primary-hover"
+                      className="tippy tippy-wishlist btn-wishlist transition-all-300 flex min-h-[40px] min-w-[40px] cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary p-2 hover:bg-primary-hover"
                       // href="javascript:void(0)"
                     >
                       <i className="bi bi-heart pointer-events-none flex text-white"></i>
@@ -382,10 +382,10 @@ export const Details = () => {
               >
                 <div className="pointer-events-none flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <i className="bi bi-truck flex text-2xl text-primary-color"></i>
+                    <i className="bi bi-truck flex text-2xl text-primary"></i>
                     <span>Calculate Shipping Cost</span>
                   </div>
-                  <i className="bi bi-arrow-right-short flex text-2xl text-primary-color"></i>
+                  <i className="bi bi-arrow-right-short flex text-2xl text-primary"></i>
                 </div>
               </a>
             </div>
@@ -406,16 +406,16 @@ export const Details = () => {
                 <b>Share:</b>
                 <div className="flex items-center gap-[10px]">
                   <a href="#">
-                    <i className="bi bi-facebook transition-all-300 flex text-zinc-500 hover:text-primary-color"></i>
+                    <i className="bi bi-facebook transition-all-300 flex text-zinc-500 hover:text-primary"></i>
                   </a>
                   <a href="#">
-                    <i className="bi bi-twitter transition-all-300 flex text-zinc-500 hover:text-primary-color"></i>
+                    <i className="bi bi-twitter transition-all-300 flex text-zinc-500 hover:text-primary"></i>
                   </a>
                   <a href="#">
-                    <i className="bi bi-whatsapp transition-all-300 flex text-zinc-500 hover:text-primary-color"></i>
+                    <i className="bi bi-whatsapp transition-all-300 flex text-zinc-500 hover:text-primary"></i>
                   </a>
                   <a href="#">
-                    <i className="bi bi-link-45deg transition-all-300 flex text-zinc-500 hover:text-primary-color"></i>
+                    <i className="bi bi-link-45deg transition-all-300 flex text-zinc-500 hover:text-primary"></i>
                   </a>
                 </div>
               </div>
@@ -423,7 +423,7 @@ export const Details = () => {
           </div>
           <div className="col-span-12">
             <div className="liner-container mb-5 flex border-b-2 border-[rgba(119,119,119,.17)]">
-              <h1 className="mb-[-2px] inline-block border-b-2 border-primary-color pb-3 text-xl font-bold uppercase">
+              <h1 className="mb-[-2px] inline-block border-b-2 border-primary pb-3 text-xl font-bold uppercase">
                 Specifications
               </h1>
             </div>
@@ -492,7 +492,7 @@ export const Details = () => {
           </div>
           <div className="col-span-12">
             <div className="liner-container mb-5 flex border-b-2 border-[rgba(119,119,119,.17)]">
-              <h1 className="mb-[-2px] inline-block border-b-2 border-primary-color pb-3 text-xl font-bold uppercase">
+              <h1 className="mb-[-2px] inline-block border-b-2 border-primary pb-3 text-xl font-bold uppercase">
                 Description
               </h1>
             </div>
@@ -549,7 +549,7 @@ export const Details = () => {
                   </p>
                 </div>
               </div>
-              <button className="btn-see-more absolute bottom-0 z-10 flex w-full justify-center hover:text-primary-color">
+              <button className="btn-see-more absolute bottom-0 z-10 flex w-full justify-center hover:text-primary">
                 <i className="bi bi-chevron-compact-down text-stroke-medium transition-all-300 flex text-xl"></i>
               </button>
             </div>
@@ -592,7 +592,7 @@ export const Details = () => {
                           ></textarea>
                         </div>
                         <button
-                          className="btn-effect mt-2 rounded-lg bg-primary-color p-2 font-bold text-white"
+                          className="btn-effect mt-2 rounded-lg bg-primary p-2 font-bold text-white"
                           type="submit"
                         >
                           <span>Comment</span>
@@ -634,10 +634,7 @@ export const Details = () => {
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <a
-                            className="font-bold hover:text-primary-color"
-                            href="#"
-                          >
+                          <a className="font-bold hover:text-primary" href="#">
                             John Doe
                           </a>
                           <span className="text-xs text-slate-400">
@@ -649,11 +646,11 @@ export const Details = () => {
                           there stock available?
                         </p>
                         <div className="flex items-center gap-3">
-                          <div className="flex cursor-pointer items-center gap-1 text-sm text-slate-500 hover:text-primary-color">
+                          <div className="flex cursor-pointer items-center gap-1 text-sm text-slate-500 hover:text-primary">
                             <i className="bi bi-reply-fill flex"></i>
                             <span>Reply</span>
                           </div>
-                          <div className="flex cursor-pointer items-center gap-1 text-sm text-slate-500 hover:text-primary-color">
+                          <div className="flex cursor-pointer items-center gap-1 text-sm text-slate-500 hover:text-primary">
                             <i className="bi bi-pencil-square flex"></i>
                             <span>Edit</span>
                           </div>
@@ -669,7 +666,7 @@ export const Details = () => {
                           <div>
                             <div className="flex items-center gap-2">
                               <a
-                                className="font-bold text-blue-400 hover:text-primary-color"
+                                className="font-bold text-blue-400 hover:text-primary"
                                 href="#"
                               >
                                 Megabyte
@@ -681,7 +678,7 @@ export const Details = () => {
                             <small className="flex items-center gap-1 text-slate-400">
                               <i className="bi bi-reply-fill flex"></i>
                               Responding to
-                              <a className="hover:text-primary-color" href="#">
+                              <a className="hover:text-primary" href="#">
                                 John Doe
                               </a>
                             </small>
@@ -691,7 +688,7 @@ export const Details = () => {
                               have a nice day.
                             </p>
                             <div className="flex items-center gap-3">
-                              <div className="flex cursor-pointer items-center gap-1 text-sm text-slate-500 hover:text-primary-color">
+                              <div className="flex cursor-pointer items-center gap-1 text-sm text-slate-500 hover:text-primary">
                                 <i className="bi bi-reply-fill flex"></i>
                                 <span>Reply</span>
                               </div>
@@ -723,31 +720,31 @@ export const Details = () => {
                         <div className="my-2 flex items-center gap-2">
                           <span>5</span>
                           <div className="relative h-5 w-full overflow-hidden rounded bg-primary-rgba">
-                            <div className="absolute left-0 top-0 h-full w-[50%] rounded bg-primary-color"></div>
+                            <div className="absolute left-0 top-0 h-full w-[50%] rounded bg-primary"></div>
                           </div>
                         </div>
                         <div className="my-2 flex items-center gap-2">
                           <span>4</span>
                           <div className="relative h-5 w-full overflow-hidden rounded bg-primary-rgba">
-                            <div className="absolute left-0 top-0 h-full w-[40%] rounded bg-primary-color"></div>
+                            <div className="absolute left-0 top-0 h-full w-[40%] rounded bg-primary"></div>
                           </div>
                         </div>
                         <div className="my-2 flex items-center gap-2">
                           <span>3</span>
                           <div className="relative h-5 w-full overflow-hidden rounded bg-primary-rgba">
-                            <div className="absolute left-0 top-0 h-full w-[30%] rounded bg-primary-color"></div>
+                            <div className="absolute left-0 top-0 h-full w-[30%] rounded bg-primary"></div>
                           </div>
                         </div>
                         <div className="my-2 flex items-center gap-2">
                           <span>2</span>
                           <div className="relative h-5 w-full overflow-hidden rounded bg-primary-rgba">
-                            <div className="absolute left-0 top-0 h-full w-[20%] rounded bg-primary-color"></div>
+                            <div className="absolute left-0 top-0 h-full w-[20%] rounded bg-primary"></div>
                           </div>
                         </div>
                         <div className="my-2 flex items-center gap-2">
                           <span>1</span>
                           <div className="relative h-5 w-full overflow-hidden rounded bg-primary-rgba">
-                            <div className="absolute left-0 top-0 h-full w-[10%] rounded bg-primary-color"></div>
+                            <div className="absolute left-0 top-0 h-full w-[10%] rounded bg-primary"></div>
                           </div>
                         </div>
                       </div>
@@ -799,7 +796,7 @@ export const Details = () => {
                         </div>
                         <div>
                           <button
-                            className="btn-effect rounded-lg bg-primary-color p-2 font-bold text-white"
+                            className="btn-effect rounded-lg bg-primary p-2 font-bold text-white"
                             type="submit"
                           >
                             <span>Post review</span>
@@ -862,10 +859,7 @@ export const Details = () => {
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <a
-                            className="font-bold hover:text-primary-color"
-                            href="#"
-                          >
+                          <a className="font-bold hover:text-primary" href="#">
                             John Doe
                           </a>
                           <span className="text-xs text-slate-400">
@@ -884,7 +878,7 @@ export const Details = () => {
                           I had no problem, very satisfied.
                         </p>
                         <div className="flex items-center gap-3">
-                          <div className="flex cursor-pointer items-center gap-1 text-sm text-slate-500 hover:text-primary-color">
+                          <div className="flex cursor-pointer items-center gap-1 text-sm text-slate-500 hover:text-primary">
                             <i className="bi bi-pencil-square flex"></i>
                             <span>Edit</span>
                           </div>
