@@ -23,9 +23,10 @@ export const SliderProducts = () => {
 
   return (
     <>
+    {/* <div className=""> */}
       <Swiper
         spaceBetween={30}
-        centeredSlides={true}
+        centeredSlides={false}
         autoplay={{
           delay: 2500,
           disableOnInteraction: false,
@@ -33,46 +34,21 @@ export const SliderProducts = () => {
         pagination={{
           clickable: true,
         }}
+        slidesPerView={4}
         navigation={true}
         modules={[Pagination, Navigation]}
-        className="mySwiper"
-
-        // slidesPerView={4}
-        // spaceBetween={30}
-        // navigation={true}
-        // pagination={{
-        //   clickable: true,
-        // }}
-        // modules={[Pagination, Navigation]}
-        // className="mySwiper"
+        className="mySwiper px-10"
+        
       >
         {off.map((off, index) => (
+          // <div key={index}>
           <SwiperSlide key={index}>
             <CardProduct></CardProduct>
           </SwiperSlide>
+          // </div>
         ))}
-        {/* <SwiperSlide>
-          <CardProduct></CardProduct>
-        </SwiperSlide>
-        <SwiperSlide>
-          <CardProduct></CardProduct>
-        </SwiperSlide>
-        <SwiperSlide>
-          <CardProduct></CardProduct>
-        </SwiperSlide>
-        <SwiperSlide>
-          <CardProduct></CardProduct>
-        </SwiperSlide>
-        <SwiperSlide>
-          <CardProduct></CardProduct>
-        </SwiperSlide>
-        <SwiperSlide>
-          <CardProduct></CardProduct>
-        </SwiperSlide>
-        <SwiperSlide>
-          <CardProduct></CardProduct>
-        </SwiperSlide> */}
       </Swiper>
+    {/* </div> */}
     </>
   );
 };

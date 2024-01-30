@@ -1,11 +1,11 @@
 import React from 'react'
-import sliderDesktop1 from "../assets/slider-desktop1.png";
+import sliderDesktop1 from "../assets/test_product2.png";
 
 
 export const CardProduct = ({ off, img, stars, stock, title, description, price, priceOff}) => {
     
   return (
-    <div className="card-container my-8 transition-all-300 translateY-2 relative flex h-full flex-col overflow-hidden rounded-lg bg-white p-5 shadow-md hover:z-[2] hover:shadow-xl">
+    <div className="card-container  my-8  transition-all-300 translateY-2 relative flex h-full flex-col overflow-hidden rounded-lg bg-white p-5 shadow-md hover:z-[2] hover:shadow-xl">
             <div className="absolute top-[10px] right-[10px]">
               <div className="p-[2px]">
                 <a className="tippy tippy-left-wishlist btn-wishlist transition-all-300 flex h-9 w-9 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[rgba(0,0,0,.3)] hover:bg-primary-hover">
@@ -29,7 +29,7 @@ export const CardProduct = ({ off, img, stars, stock, title, description, price,
             <div className="h-[190px] overflow-hidden rounded-lg">
               <a href="#">
                 <img
-                  className="card-object-fit h-full w-full"
+                  className="object-contain h-full w-full"
                   src={sliderDesktop1}
                   alt="product"
                 />

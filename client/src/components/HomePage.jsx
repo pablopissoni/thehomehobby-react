@@ -9,6 +9,9 @@ import { SliderComponents } from "./SliderComponent";
 // --- IMG ---
 import sliderMobile3 from "../assets/slider-mobile3.png";
 import { SliderProducts } from "./SliderProducts";
+// import sliderMobile3 from "../assets/slider-mobile3.png";
+import notebookBanner from '../assets/notebookBanner.jpg'
+
 
 // import { useDispatch, useSelector } from 'react-redux';
 // import { fetchProducts } from '../actions/productActions';
@@ -187,7 +190,7 @@ export const HomePage = () => {
         </div>
       </section>
       {/* img + slider de Productos */}
-      <SliderComponents />
+      <SliderComponents img={notebookBanner} title={"Notebooks"}/>
 
       {/* Sección de categorías */}
       <section>
