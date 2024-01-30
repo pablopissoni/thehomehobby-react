@@ -10,7 +10,7 @@ import { HomePage } from "./components/HomePage";
 import { Details } from "./components/page/Details";
 import { Register } from "./components/page/Register";
 import { ContactUs } from "./components/page/ContactUs";
-
+import { FAQs } from "./components/page/FAQs";
 
 const App = () => {
   // Obtengo las ubicaciones y guardo en una variable las que quiero ignorar despues
@@ -29,6 +29,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/details" element={<Details />} />
         <Route path="/ContactUs" element={<ContactUs />} />
+        <Route path="/FAQs" element={<FAQs />} />
         {/* <Route path="/detail/:id" element={<Login/>} /> */}
       </Routes>
       {/* <Footer/> */}
