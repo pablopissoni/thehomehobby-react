@@ -1,6 +1,11 @@
 import React, { useState } from "react";
+import logoHomeHobby from "../../assets/logo The Home Hobby.svg";
 
 export const Register = () => {
+  // Direciones URL LocalHost y Produccion
+  const isLocalhost = window.location.href.includes('localhost');
+  const urlHome = isLocalhost ? 'http://localhost:5173/' : 'https://thehomehobby.com';
+
   // Hooks
   const [errors, setErrors] = useState({});
   const [userRegister, setUserRegister] = useState({
@@ -100,11 +105,11 @@ export const Register = () => {
               <div className="card  lg:w-[800px] w-[300px]  flex-col justify-center shadow-lg">
                 {/* Logo img */}
                 <div className="">
-                  <a href="http://localhost:5173/">
+                  <a href={urlHome}>
                     <div className="auth-side-wrapper flex justify-center justify-content-center p-4">
                       <img
-                        src="https://thehomehobby.com/assets/images/the_home_hobby.svg"
-                        alt=""
+                        src={logoHomeHobby}
+                        alt="imagen home hobby"
                       />
                     </div>
                   </a>
@@ -113,7 +118,7 @@ export const Register = () => {
                 {/* <div className=""> */}
                 <div className="  px-3 py-5 ">
                   <a
-                    href="http://localhost:5173/"
+                    href={urlHome}
                     // href="https://thehomehobby.com"
                     className="noble-ui-logo block mb-2"
                   >
