@@ -5,7 +5,15 @@ import Logo from "../assets/Logo miniatura.svg";
 import LogoGrande from "../assets/logo The Home Hobby.svg";
 import Perfil from "../assets/perfil.png";
 import "bootstrap-icons/font/bootstrap-icons.css";
+
+
 export const NavBar = () => {
+
+  // Direciones URL LocalHost y Produccion
+  const isLocalhost = window.location.href.includes('localhost');
+  const urlLogin = isLocalhost ? 'http://localhost:5173/login' : 'https://thehomehobby/login';
+  const urlRegister = isLocalhost ? 'http://localhost:5173/register' : 'https://thehomehobby/register';
+
   return (
     <header className="header-section relative z-30 shadow-custom1">
       <div className="hidden bg-secondary sm:flex">
@@ -59,7 +67,7 @@ export const NavBar = () => {
             <form className="search" action="#">
               <div className="flex h-[40px] overflow-hidden rounded-[50px] bg-white">
                 <input
-                  class="search w-full border-none bg-transparent py-[5px] pl-5 text-black focus:border-none focus:ring-0 focus:ring-transparent"
+                  className="search w-full border-none bg-transparent py-[5px] pl-5 text-black focus:border-none focus:ring-0 focus:ring-transparent"
                   type="search"
                   placeholder="Search..."
                 />
@@ -114,7 +122,7 @@ export const NavBar = () => {
                   <ul className="overflow-hidden rounded-md bg-white p-[6px] shadow-custom1">
                     <li className="hover:font-semibold">
                       <a
-                        href="#"
+                      href={urlLogin} //LocalHost y Url de produccion
                         className="btn-open-modal"
                         data-tab="0"
                         data-target=".entry-modal"
@@ -127,7 +135,7 @@ export const NavBar = () => {
                     </li>
                     <li className="hover:font-semibold">
                       <a
-                        href="#"
+                        href={urlRegister} //LocalHost y Url de produccion
                         className="btn-open-modal"
                         data-tab="1"
                         data-target=".entry-modal"
