@@ -144,18 +144,45 @@ module.exports = function (connection) {
 
   router.delete("/productos/:id", (req, res) => {
     const productId = req.params.id;
-    const query = "DELETE FROM productos WHERE id = ?";
+    const selectQuery = "SELECT * FROM productos WHERE id = ?";
+    const deleteQuery = "DELETE FROM productos WHERE id = ?";
 
-    connection.query(query, [productId], (error, results) => {
-      if (error) {
-        console.error("Error al realizar la eliminación:", error);
-        res.status(500).json({ error: "Error en el servidor" });
-      } else if (results.affectedRows === 0) {
-        // No se encontró el producto con el ID proporcionado
-        res.status(404).json({ error: "El producto no fue encontrado" });
-      } else {
-        res.json({ mensaje: "Producto eliminado exitosamente" });
+    // Obtener la información del producto antes de eliminarlo
+    connection.query(selectQuery, [productId], (selectError, selectResults) => {
+      if (selectError) {
+        console.error(
+          "Error al obtener la información del producto:",
+          selectError
+        );
+        return res.status(500).json({ error: "Error en el servidor" });
       }
+
+      const deletedProduct = selectResults[0];
+
+      // Eliminar el producto
+      connection.query(
+        deleteQuery,
+        [productId],
+        (deleteError, deleteResults) => {
+          if (deleteError) {
+            console.error("Error al realizar la eliminación:", deleteError);
+            return res.status(500).json({ error: "Error en el servidor" });
+          }
+
+          if (deleteResults.affectedRows === 0) {
+            // No se encontró el producto con el ID proporcionado
+            return res
+              .status(404)
+              .json({ error: "El producto no fue encontrado" });
+          }
+
+          // Devolver la información del producto eliminado
+          res.json({
+            mensaje: "Producto eliminado exitosamente",
+            productoEliminado: deletedProduct,
+          });
+        }
+      );
     });
   });
 
