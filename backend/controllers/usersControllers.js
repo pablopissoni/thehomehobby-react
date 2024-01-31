@@ -1,16 +1,46 @@
-// usersController.js
-const bcrypt = require("bcrypt");
+const AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 const jwt = require("jsonwebtoken");
 const dbConnection = require("../dbConfig");
 
+const poolData = {
+  UserPoolId: process.env.COGNITO_USER_POOL_ID,
+  ClientId: process.env.COGNITO_CLIENT_ID,
+};
+
+const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
 const registerUser = async (req, res) => {
   try {
-    // Lógica para registrar un usuario en la base de datos
-    // Puedes acceder a req.body para obtener datos del usuario desde la solicitud
-    // y utilizar dbConnection para interactuar con la base de datos
-    // ...
+    const { name, lastName, phone, email, password } = req.body;
 
-    res.status(201).json({ message: "Usuario registrado exitosamente" });
+    // Crear los atributos del usuario
+    const attributeList = [
+      new AmazonCognitoIdentity.CognitoUserAttribute({
+        Name: "name",
+        Value: name,
+      }),
+      new AmazonCognitoIdentity.CognitoUserAttribute({
+        Name: "family_name",
+        Value: lastName,
+      }),
+      new AmazonCognitoIdentity.CognitoUserAttribute({
+        Name: "phone_number",
+        Value: phone,
+      }),
+      // Puedes agregar más atributos según tus necesidades
+    ];
+
+    // Registrar al usuario en Cognito
+    userPool.signUp(email, password, attributeList, null, (err, result) => {
+      if (err) {
+        console.error("Error al registrar usuario en Cognito:", err);
+        res.status(500).json({ error: "Error interno del servidor" });
+      } else {
+        const cognitoUser = result.user;
+        console.log("Usuario registrado en Cognito:", cognitoUser);
+        res.status(201).json({ message: "Usuario registrado exitosamente" });
+      }
+    });
   } catch (error) {
     console.error("Error al registrar usuario:", error);
     res.status(500).json({ error: "Error interno del servidor" });
@@ -19,12 +49,35 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    // Lógica para autenticar al usuario y generar un token JWT
-    // Puedes acceder a req.body para obtener credenciales del usuario
-    // y utilizar dbConnection para verificar las credenciales en la base de datos
-    // ...
+    const { email, password } = req.body;
 
-    res.status(200).json({ token: "token_generado" });
+    const authenticationData = {
+      Username: email,
+      Password: password,
+    };
+
+    const authenticationDetails =
+      new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
+
+    const userData = {
+      Username: email,
+      Pool: userPool,
+    };
+
+    const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+    // Autenticar al usuario con Cognito
+    cognitoUser.authenticateUser(authenticationDetails, {
+      onSuccess: (session) => {
+        const token = session.getIdToken().getJwtToken();
+        console.log("Usuario autenticado en Cognito. Token:", token);
+        res.status(200).json({ token });
+      },
+      onFailure: (err) => {
+        console.error("Error al autenticar usuario en Cognito:", err);
+        res.status(401).json({ error: "Credenciales inválidas" });
+      },
+    });
   } catch (error) {
     console.error("Error al autenticar usuario:", error);
     res.status(500).json({ error: "Error interno del servidor" });
