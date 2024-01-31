@@ -1,100 +1,4 @@
-// Función para parsear y formatear el contenido del campo "contenido"
-const parseContent = (contentString) => {
-  try {
-    const contentArray = JSON.parse(contentString);
-
-    // Formatear el contenido para una mejor visualización
-    const formattedContent = contentArray.map((item) => {
-      return {
-        idioma: item.idioma,
-        nombre: item.nombre,
-        slug: item.slug,
-        descripcion: item.descripcion,
-        ficha: item.ficha,
-      };
-    });
-
-    return formattedContent;
-  } catch (error) {
-    console.error("Error al parsear el contenido:", error);
-    return null;
-  }
-};
-
-const parseFilters = (filtersString) => {
-  try {
-    const filters = JSON.parse(filtersString);
-
-    // Verificar si los filtros son nulos o no
-    if (filters) {
-      // Formatear los filtros para una mejor visualización
-      const formattedFilters = Object.entries(filters).map(([key, value]) => {
-        return {
-          [key]: value,
-        };
-      });
-
-      return formattedFilters;
-    } else {
-      return null;
-    }
-  } catch (error) {
-    console.error("Error al parsear los filtros:", error);
-    return null;
-  }
-};
-
-// Función para parsear y formatear las etiquetas
-const parseTags = (tagsString) => {
-  try {
-    return JSON.parse(tagsString);
-  } catch (error) {
-    console.error("Error al parsear las etiquetas:", error);
-    return null;
-  }
-};
-
-// Función para parsear y formatear la galería de imágenes
-const parseGallery = (galleryString) => {
-  try {
-    return JSON.parse(galleryString);
-  } catch (error) {
-    console.error("Error al parsear la galería:", error);
-    return null;
-  }
-};
-
-const parseDescription = (descriptionString) => {
-  try {
-    const description = JSON.parse(descriptionString);
-
-    // Verificar si la descripción es un array o un solo objeto
-    if (Array.isArray(description)) {
-      // Formatear la descripción para una mejor visualización y eliminar &nbsp;
-      const formattedDescription = description.map((item) => {
-        return {
-          idioma: item.idioma,
-          nombre: item.nombre,
-          slug: item.slug,
-          descripcion: item.descripcion
-            ? item.descripcion.replace(/&nbsp;/g, "")
-            : null,
-          ficha: item.ficha,
-        };
-      });
-
-      return formattedDescription;
-    } else {
-      // La descripción es un solo objeto
-      return {
-        descripcion: description ? description.replace(/&nbsp;/g, "") : null,
-      };
-    }
-  } catch (error) {
-    console.error("Error al parsear la descripción:", error);
-    return null;
-  }
-};
+const parsers = require("../parsers/parsers");
 
 // Lógica para obtener todos los productos
 const getAllProducts = (req, res, connection) => {
@@ -156,15 +60,14 @@ const getAllProducts = (req, res, connection) => {
           });
         }
 
-        // Formatear el contenido, la descripción, las etiquetas, la galería y los filtros para cada producto
+        // Formatear el contenido, las etiquetas, la galería y los filtros para cada producto
         const formattedResults = results.map((product) => {
           return {
             ...product,
-            contenido: parseContent(product.contenido),
-            descripcion: parseDescription(product.descripcion),
-            tags: parseTags(product.tags),
-            galeria: parseGallery(product.galeria),
-            filtros: parseFilters(product.filtros),
+            contenido: parsers.parseContent(product.contenido),
+            tags: parsers.parseTags(product.tags),
+            galeria: parsers.parseGallery(product.galeria),
+            filtros: parsers.parseFilters(product.filtros),
           };
         });
 
