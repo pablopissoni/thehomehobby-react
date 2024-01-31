@@ -1,9 +1,12 @@
 import React from 'react'
 import sliderDesktop1 from "../assets/test_product2.png";
+import { Link } from 'react-router-dom';
 
 
-export const CardProduct = ({ off, img, stars, stock, title, description, price, priceOff}) => {
-    
+export const CardProduct = ({ id, off, img, stars, stock, title, description, price, priceOff}) => {
+
+
+
   return (
     <div className="card-container  my-8  transition-all-300 translateY-2 relative flex h-full flex-col overflow-hidden rounded-lg bg-white p-5 shadow-md hover:z-[2] hover:shadow-xl">
             <div className="absolute top-[10px] right-[10px]">
@@ -23,14 +26,15 @@ export const CardProduct = ({ off, img, stars, stock, title, description, price,
             </div>
             <div className="absolute top-0 left-0 flex h-[35px] w-[90px] items-center justify-center rounded-br-lg bg-primary">
               <span className="text-md text-center font-semibold uppercase text-white">
-                25% Off
+                {/* 25% Off */}
+                {off + '% Off'}
               </span>
             </div>
             <div className="h-[190px] overflow-hidden rounded-lg">
               <a href="#">
                 <img
                   className="object-contain h-full w-full"
-                  src={sliderDesktop1}
+                  src={img? img : sliderDesktop1}
                   alt="product"
                 />
               </a>
@@ -51,15 +55,13 @@ export const CardProduct = ({ off, img, stars, stock, title, description, price,
             </div>
             <div className="my-1">
               <a className="clamp break-all font-medium" href="#">
-                Moto e7i Power
+                {/* Moto e7i Power */}
+                {title}
               </a>
             </div>
             <div className="my-1">
               <p className="clamp-2 text-sm text-gray-400">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque
-                culpa, odio, qui praesentium dignissimos eaque dolorum porro
-                alias neque, eius animi ipsa voluptates. Optio repellat tempora
-                voluptas, dolores ipsam ad!
+                {description}
               </p>
             </div>
             <div className="my-2 flex gap-2">
@@ -78,18 +80,18 @@ export const CardProduct = ({ off, img, stars, stock, title, description, price,
               </ul>
             </div>
             <div className="my-1">
-              <span className="text-lg font-bold">$37.00</span>
-              <span className="text-sm text-primary line-through">$50.00</span>
+              <span className="text-lg font-bold">${priceOff}</span>
+              <span className="text-sm text-primary line-through">${price}</span>
             </div>
             <div className="mt-auto">
-              <a
+              <Link
                 className="btn-effect transition-all-300 flex w-full items-center justify-center rounded-lg bg-primary p-2"
-                href="#"
+                to={`http://localhost:5173/details/${id}`}
               >
                 <span className="font-bold uppercase text-white">
-                  View details
+                View details
                 </span>
-              </a>
+              </Link>
             </div>
           </div>
   )

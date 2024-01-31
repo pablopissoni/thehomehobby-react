@@ -3,14 +3,16 @@ import React, { useEffect } from "react";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Footer } from "./Footer";
 import { Slider } from "./Slider";
-
 import { SliderComponents } from "./SliderComponent";
+
+import TestProdObj from './TestProdObj' //* ----- OBJETO Productos test -----
 
 // --- IMG ---
 import sliderMobile3 from "../assets/slider-mobile3.png";
 import { SliderProducts } from "./SliderProducts";
 // import sliderMobile3 from "../assets/slider-mobile3.png";
 import notebookBanner from '../assets/notebookBanner.jpg'
+import hogarBanner from '../assets/Hogar-Banner.jpg'
 
 
 // import { useDispatch, useSelector } from 'react-redux';
@@ -24,6 +26,7 @@ export const HomePage = () => {
   // useEffect(() => {
   //   dispatch(fetchProducts());
   // }, [dispatch]);
+
 
   return (
     <div>
@@ -190,8 +193,10 @@ export const HomePage = () => {
         </div>
       </section>
       {/* img + slider de Productos */}
-      <SliderComponents img={notebookBanner} title={"Notebooks"}/>
-
+        {/* -- Sliders Notebooks -- */}
+      <SliderComponents img={notebookBanner} titleImg={"Notebooks"} title={"Notebooks"} products={TestProdObj}/>
+        {/* -- Sliders Hogar -- */}
+        <SliderComponents img={hogarBanner} titleImg={"Hogar"} title={"Hogar"} products={TestProdObj}/>
       {/* Sección de categorías */}
       <section>
         <div className="categories-section container mx-auto my-5 px-2 sm:px-8">
