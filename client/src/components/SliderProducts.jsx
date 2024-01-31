@@ -17,13 +17,14 @@ import sliderDesktop1 from "../assets/slider-desktop1.png";
 // import sliderMobile2 from "../assets/slider-mobile2.png";
 // import sliderMobile3 from "../assets/slider-mobile3.png";
 
-export const SliderProducts = () => {
-  const propsTest = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const off = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+export const SliderProducts = ({ products }) => {
+  // const propsTest = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  // const productos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  // const productos = products;
 
   return (
     <>
-    {/* <div className=""> */}
+      {/* <div className=""> */}
       <Swiper
         spaceBetween={30}
         centeredSlides={false}
@@ -38,17 +39,26 @@ export const SliderProducts = () => {
         navigation={true}
         modules={[Pagination, Navigation]}
         className="mySwiper px-10"
-        
       >
-        {off.map((off, index) => (
+        {products?.map((prod, index) => (
           // <div key={index}>
           <SwiperSlide key={index}>
-            <CardProduct></CardProduct>
+            <CardProduct
+              id={prod.id}
+              off={prod.off}
+              img={prod.img}
+              stars={prod.stars}
+              stock={prod.stock}
+              title={prod.title}
+              description={prod.description}
+              price={prod.price}
+              priceOff={prod.priceOff}
+            />
           </SwiperSlide>
           // </div>
         ))}
       </Swiper>
-    {/* </div> */}
+      {/* </div> */}
     </>
   );
 };
