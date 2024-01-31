@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const router = require("./routes/productsRoutes");
+const usersRouter = require("./routes/usersRoutes");
 const dbConnection = require("./dbConfig");
 
 const app = express();
@@ -33,3 +34,4 @@ dbConnection.connect((error) => {
 });
 
 app.use("/", router);
+app.use("/users", usersRouter);
