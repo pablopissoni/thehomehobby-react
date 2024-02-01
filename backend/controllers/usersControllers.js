@@ -74,8 +74,15 @@ const loginUser = async (req, res) => {
         res.status(200).json({ token });
       },
       onFailure: (err) => {
-        console.error("Error al autenticar usuario en Cognito:", err);
-        res.status(401).json({ error: "Credenciales inválidas" });
+        if (err.code === "UserNotConfirmedException") {
+          console.error("El usuario no está confirmado en Cognito:", err);
+          res.status(401).json({
+            error: "Usuario no confirmado. Por favor, confirme su cuenta.",
+          });
+        } else {
+          console.error("Error al autenticar usuario en Cognito:", err);
+          res.status(401).json({ error: "Credenciales inválidas" });
+        }
       },
     });
   } catch (error) {
