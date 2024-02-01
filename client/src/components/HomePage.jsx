@@ -1,31 +1,64 @@
 // components/HomePage.jsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import axios from "axios";
+// Import Componentes
 import { Footer } from "./Footer";
 import { Slider } from "./Slider";
 import { SliderComponents } from "./SliderComponent";
+import { SliderProducts } from "./SliderProducts";
 
-import TestProdObj from './TestProdObj' //* ----- OBJETO Productos test -----
+import TestProdObj from "./TestProdObj"; //* ----- OBJETO Productos test -----
 
 // --- IMG ---
 import sliderMobile3 from "../assets/slider-mobile3.png";
-import { SliderProducts } from "./SliderProducts";
 // import sliderMobile3 from "../assets/slider-mobile3.png";
-import notebookBanner from '../assets/notebookBanner.jpg'
-import hogarBanner from '../assets/Hogar-Banner.jpg'
-
+import notebookBanner from "../assets/notebookBanner.jpg";
+import hogarBanner from "../assets/Hogar-Banner.jpg";
 
 // import { useDispatch, useSelector } from 'react-redux';
 // import { fetchProducts } from '../actions/productActions';
 // import ProductList from './ProductList';
 
 export const HomePage = () => {
+  //* -- USE STATE --------
+  const [products, setProducts] = useState([]); // Get Productos
+  //* -- USE STATE --------
   // const dispatch = useDispatch();
   // const products = useSelector((state) => state.products);
 
   // useEffect(() => {
   //   dispatch(fetchProducts());
   // }, [dispatch]);
+
+  //* ----- GET Productos -------------
+  function getProducts() {
+    // peticion desde localhost o deploy
+    const isLocalhost = window.location.href.includes("localhost");
+    const url = isLocalhost
+      ? "http://localhost:3001/productos"
+      : "http://localhost:3001/productos";
+
+    axios
+      .get(url)
+      .then((res) => {
+        // console.log(res.data);
+        setProducts(res.data);
+        products.data
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+    console.log("🚀 ~ .then ~ products.data:", products.data)
+  //* ----- GET Productos -------------
+  
+  //* ----- USE EFFECT -------------
+  useEffect(() => {
+    console.log("HomePage");
+    getProducts()
+  }, []);
+  //* ----- USE EFFECT -------------
 
 
   return (
@@ -132,7 +165,8 @@ export const HomePage = () => {
           </div>
           <div className="swiper-container">
             <div className="swiper swiper-cards group relative flex items-center py-5 swiper-initialized swiper-horizontal swiper-free-mode swiper-backface-hidden">
-              <SliderProducts slidesToShow={4} />
+              {/* <SliderProducts slidesToShow={4} /> */}
+              <SliderProducts products={TestProdObj} /> {/* Productos test */}
             </div>
           </div>
         </div>
@@ -193,10 +227,20 @@ export const HomePage = () => {
         </div>
       </section>
       {/* img + slider de Productos */}
-        {/* -- Sliders Notebooks -- */}
-      <SliderComponents img={notebookBanner} titleImg={"Notebooks"} title={"Notebooks"} products={TestProdObj}/>
-        {/* -- Sliders Hogar -- */}
-        <SliderComponents img={hogarBanner} titleImg={"Hogar"} title={"Hogar"} products={TestProdObj}/>
+      {/* -- Sliders Notebooks -- */}
+      <SliderComponents
+        img={notebookBanner}
+        titleImg={"Notebooks"}
+        title={"Notebooks"}
+        products={products.data}
+      />
+      {/* -- Sliders Hogar -- */}
+      <SliderComponents
+        img={hogarBanner}
+        titleImg={"Hogar"}
+        title={"Hogar"}
+        products={TestProdObj}
+      />
       {/* Sección de categorías */}
       <section>
         <div className="categories-section container mx-auto my-5 px-2 sm:px-8">

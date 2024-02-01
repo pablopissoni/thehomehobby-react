@@ -13,6 +13,7 @@ export const NavBar = () => {
   const isLocalhost = window.location.href.includes('localhost');
   const urlLogin = isLocalhost ? 'http://localhost:5173/login' : 'https://thehomehobby/login';
   const urlRegister = isLocalhost ? 'http://localhost:5173/register' : 'https://thehomehobby/register';
+  const home = isLocalhost ? 'http://localhost:5173' : 'https://thehomehobby';
 
   return (
     <header className="header-section relative z-30 shadow-custom1">
@@ -55,7 +56,7 @@ export const NavBar = () => {
       <div className="bg-secondary">
         <div className="container mx-auto grid h-full grid-cols-4 gap-1 px-2 py-5 sm:px-8 lg:grid-cols-12 lg:gap-0">
           <div className="order-1 col-span-2 self-center lg:order-1 lg:col-span-3">
-            <a href="index.html">
+            <a href={home}>
               <img
                 className="inline bg-white rounded-md"
                 src={LogoGrande}

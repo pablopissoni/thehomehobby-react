@@ -421,75 +421,7 @@ export const Details = () => {
               </div>
             </div>
           </div>
-          <div className="col-span-12">
-            <div className="liner-container mb-5 flex border-b-2 border-[rgba(119,119,119,.17)]">
-              <h1 className="mb-[-2px] inline-block border-b-2 border-primary pb-3 text-xl font-bold uppercase">
-                Specifications
-              </h1>
-            </div>
-            <div className="grid grid-cols-3 gap-5">
-              <div className="col-span-12 sm:col-span-1">
-                <span>
-                  <b>Aplication:</b> Desktop
-                </span>
-              </div>
-              <div className="col-span-12 sm:col-span-1">
-                <span>
-                  <b># of CPU cores:</b> 3.8GHz
-                </span>
-              </div>
-              <div className="col-span-12 sm:col-span-1">
-                <span>
-                  <b>Total L3 cache:</b> 32MB
-                </span>
-              </div>
-              <div className="col-span-12 sm:col-span-1">
-                <span>
-                  <b># of threads:</b> 12
-                </span>
-              </div>
-              <div className="col-span-12 sm:col-span-1">
-                <span>
-                  <b>Total L1 cache:</b> 384KB
-                </span>
-              </div>
-              <div className="col-span-12 sm:col-span-1">
-                <span>
-                  <b>TDP/Default TDP:</b> 95W
-                </span>
-              </div>
-              <div className="col-span-12 sm:col-span-1">
-                <span>
-                  <b>CPU Socket:</b> AM4
-                </span>
-              </div>
-              <div className="col-span-12 sm:col-span-1">
-                <span>
-                  <b>Temp. max:</b> 95°C
-                </span>
-              </div>
-              <div className="col-span-12 sm:col-span-1">
-                <span>
-                  <b>Product line:</b> AMD Ryzen™ 5 Desktop Processors
-                </span>
-              </div>
-              <div className="col-span-12 sm:col-span-1">
-                <span>
-                  <b>Max Magnification Clock:</b> Up to 4.4GHz
-                </span>
-              </div>
-              <div className="col-span-12 sm:col-span-1">
-                <span>
-                  <b>Total L2 cache:</b> 3MB
-                </span>
-              </div>
-              <div className="col-span-12 sm:col-span-1">
-                <span>
-                  <b>Gamer:</b> Yes
-                </span>
-              </div>
-            </div>
-          </div>
+
           <div className="col-span-12">
             <div className="liner-container mb-5 flex border-b-2 border-[rgba(119,119,119,.17)]">
               <h1 className="mb-[-2px] inline-block border-b-2 border-primary pb-3 text-xl font-bold uppercase">
@@ -499,54 +431,9 @@ export const Details = () => {
             <div className="see-more relative pb-5">
               <div className="see-more-container gradient-bottom max-h-[220px] overflow-hidden">
                 <div className="see-more-content">
-                  <p>
-                    Lorem Unde sapiente quisquam placeat excepturi sunt mollitia
-                    vero cumque, aliquam libero ipsum dolor sit amet consectetur
-                    adipisicing elit. Unde sapiente quisquam placeat excepturi
-                    sunt mollitia vero cumque, aliquam libero veniam odit
-                    inventore totam quis! Hic quis perferendis quaerat enim
-                    magni.
-                  </p>
-                  <p>
-                    Lorem Unde sapiente quisquam placeat excepturi sunt mollitia
-                    vero cumque, aliquam libero ipsum dolor sit amet consectetur
-                    adipisicing elit. Repellat culpa quidem reprehenderit dolor
-                    aperiam, eius consequatur est deserunt. Nisi nesciunt
-                    repellendus dolorem quam obcaecati atque animi quas debitis
-                    qui harum.
-                  </p>
-                  <p>
-                    Lorem Unde sapiente quisquam placeat excepturi sunt mollitia
-                    vero cumque, aliquam libero ipsum, dolor sit amet
-                    consectetur adipisicing elit. Aut, veritatis. Ea
-                    voluptatibus eveniet, quam dicta quisquam repellat maxime
-                    libero. Enim omnis quis, cumque facilis doloremque doloribus
-                    tempore expedita quia accusantium.
-                  </p>
-                  <p>
-                    Lorem Unde sapiente quisquam placeat excepturi sunt mollitia
-                    vero cumque, aliquam libero ipsum dolor sit amet consectetur
-                    adipisicing elit. Unde sapiente quisquam placeat excepturi
-                    sunt mollitia vero cumque, aliquam libero veniam odit
-                    inventore totam quis! Hic quis perferendis quaerat enim
-                    magni.
-                  </p>
-                  <p>
-                    Lorem Unde sapiente quisquam placeat excepturi sunt mollitia
-                    vero cumque, aliquam libero ipsum dolor sit amet consectetur
-                    adipisicing elit. Repellat culpa quidem reprehenderit dolor
-                    aperiam, eius consequatur est deserunt. Nisi nesciunt
-                    repellendus dolorem quam obcaecati atque animi quas debitis
-                    qui harum.
-                  </p>
-                  <p>
-                    Lorem Unde sapiente quisquam placeat excepturi sunt mollitia
-                    vero cumque, aliquam libero ipsum, dolor sit amet
-                    consectetur adipisicing elit. Aut, veritatis. Ea
-                    voluptatibus eveniet, quam dicta quisquam repellat maxime
-                    libero. Enim omnis quis, cumque facilis doloremque doloribus
-                    tempore expedita quia accusantium.
-                  </p>
+                {/* VARIABLE DESCRIPCION AQUI  */}
+                
+                {/* VARIABLE DESCRIPCION AQUI  */}
                 </div>
               </div>
               <button className="btn-see-more absolute bottom-0 z-10 flex w-full justify-center hover:text-primary">

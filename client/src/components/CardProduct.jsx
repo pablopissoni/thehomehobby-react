@@ -8,7 +8,7 @@ export const CardProduct = ({ id, off, img, stars, stock, title, description, pr
 
 
   return (
-    <div className="card-container  my-8  transition-all-300 translateY-2 relative flex h-full flex-col overflow-hidden rounded-lg bg-white p-5 shadow-md hover:z-[2] hover:shadow-xl">
+    <div className="card-container  my-8  transition-all-300 translateY-2 relative flex h-[500px] flex-col overflow-hidden rounded-lg bg-white p-5 shadow-md hover:z-[2] hover:shadow-xl">
             <div className="absolute top-[10px] right-[10px]">
               <div className="p-[2px]">
                 <a className="tippy tippy-left-wishlist btn-wishlist transition-all-300 flex h-9 w-9 cursor-pointer items-center justify-center gap-2 rounded-lg bg-[rgba(0,0,0,.3)] hover:bg-primary-hover">
@@ -24,12 +24,12 @@ export const CardProduct = ({ id, off, img, stars, stock, title, description, pr
                 </a>
               </div>
             </div>
-            <div className="absolute top-0 left-0 flex h-[35px] w-[90px] items-center justify-center rounded-br-lg bg-primary">
+            {off && <div className="absolute top-0 left-0 flex h-[35px] w-[90px] items-center justify-center rounded-br-lg bg-primary">
               <span className="text-md text-center font-semibold uppercase text-white">
                 {/* 25% Off */}
-                {off + '% Off'}
+                {off + ' ID % Off'}
               </span>
-            </div>
+            </div>}
             <div className="h-[190px] overflow-hidden rounded-lg">
               <a href="#">
                 <img

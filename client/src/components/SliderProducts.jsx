@@ -44,15 +44,15 @@ export const SliderProducts = ({ products }) => {
           // <div key={index}>
           <SwiperSlide key={index}>
             <CardProduct
-              id={prod.id}
-              off={prod.off}
-              img={prod.img}
-              stars={prod.stars}
-              stock={prod.stock}
-              title={prod.title}
-              description={prod.description}
-              price={prod.price}
-              priceOff={prod.priceOff}
+              id={prod?.id}
+              off={prod?.oferta_id}
+              img={prod?.img}
+              stars={prod?.stars}
+              stock={prod?.stock}
+              title={prod?.nombre_ingles ? prod?.nombre_ingles : prod?.nombre_es}
+              description={prod?.description}
+              price={prod?.precio_base}
+              priceOff={prod?.priceOff}
             />
           </SwiperSlide>
           // </div>
