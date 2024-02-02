@@ -1,6 +1,7 @@
 const AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 const jwt = require("jsonwebtoken");
 const dbConnection = require("../dbConfig");
+const app = require("../server");
 
 const poolData = {
   UserPoolId: process.env.COGNITO_USER_POOL_ID,
@@ -105,18 +106,28 @@ const loginUser = async (req, res) => {
 
     const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
 
-    const session = await new Promise((resolve, reject) => {
-      cognitoUser.authenticateUser(authenticationDetails, {
-        onSuccess: (session) => resolve(session),
-        onFailure: (err) => reject(err),
-      });
+    cognitoUser.authenticateUser(authenticationDetails, {
+      onSuccess: (session) => {
+        console.log("Usuario autenticado en Cognito");
+        const accessToken = session.getAccessToken().getJwtToken();
+        res.status(200).json({
+          success: true,
+          message: "Usuario autenticado correctamente",
+          accessToken: accessToken,
+        });
+      },
+      onFailure: (err) => {
+        console.error("Error al autenticar usuario en Cognito:", err);
+        res
+          .status(401)
+          .json({ success: false, error: "Credenciales inválidas" });
+      },
     });
-
-    console.log("Usuario autenticado en Cognito");
-    res.status(200).json({ success: true });
   } catch (error) {
-    console.error("Error al autenticar usuario en Cognito:", error);
-    res.status(401).json({ success: false, error: "Credenciales inválidas" });
+    console.error("Error general en el login:", error);
+    res
+      .status(500)
+      .json({ success: false, error: "Error interno del servidor" });
   }
 };
 
