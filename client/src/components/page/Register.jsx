@@ -1,10 +1,14 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
+import axios from "axios";
 import logoHomeHobby from "../../assets/logo The Home Hobby.svg";
 
 export const Register = () => {
   // Direciones URL LocalHost y Produccion
-  const isLocalhost = window.location.href.includes('localhost');
-  const urlHome = isLocalhost ? 'http://localhost:5173/' : 'https://thehomehobby.com';
+  const isLocalhost = window.location.href.includes("localhost");
+  const urlHome = isLocalhost
+    ? "http://localhost:5173/"
+    : "https://thehomehobby.com";
 
   // Hooks
   const [errors, setErrors] = useState({});
@@ -84,12 +88,65 @@ export const Register = () => {
   // ------------------------
 
   // Funcion para enviar el formulario
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    validation(); // Devuelve un true si no hay errores y false si hay alguno
+
+    // Validación de formularios
+    const isValid = validation();
+    if (!isValid) {
+      return;
+    }
+
+    try {
+      // Realizar la solicitud HTTP con axios
+      const response = await axios.post(
+        "http://localhost:3001/users/register",
+        userRegister
+      );
+
+      console.log("Respuesta del servidor:", response.data);
+
+      // Set the flag for successful registration
+      setRegistrationSuccess(true);
+
+      // You can handle the response as needed
+      // For example, redirect the user or display a success message
+    } catch (error) {
+      console.error("Error al enviar solicitud:", error);
+
+      // Handle the error, e.g., show an error message to the user
+    }
   }
 
   console.log("DATOS DE USUARIO: ", userRegister);
+
+  // eslint-disable-next-line no-unused-vars
+  const [confirmationCode, setConfirmationCode] = useState("");
+  // eslint-disable-next-line no-unused-vars
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+
+  // eslint-disable-next-line no-unused-vars
+  const handleConfirmation = async () => {
+    try {
+      const confirmResponse = await axios.post(
+        "http://localhost:3001/users/confirm",
+        {
+          email: userRegister.email,
+          confirmationCode: confirmationCode,
+        }
+      );
+
+      console.log("Confirmation Response:", confirmResponse.data);
+
+      // Close the modal
+      setShowConfirmationModal(false);
+    } catch (error) {
+      console.error("Error confirming registration:", error);
+      // Handle the error, e.g., display an error message to the user
+    }
+  };
 
   return (
     <main
@@ -107,10 +164,7 @@ export const Register = () => {
                 <div className="">
                   <a href={urlHome}>
                     <div className="auth-side-wrapper flex justify-center justify-content-center p-4">
-                      <img
-                        src={logoHomeHobby}
-                        alt="imagen home hobby"
-                      />
+                      <img src={logoHomeHobby} alt="imagen home hobby" />
                     </div>
                   </a>
                 </div>
@@ -282,6 +336,25 @@ export const Register = () => {
                     >
                       <button className="">Register</button>
                     </div>
+                    {registrationSuccess && (
+                      <div className="confirmation-modal">
+                        <div>
+                          <input
+                            type="text"
+                            value={confirmationCode}
+                            onChange={(e) =>
+                              setConfirmationCode(e.target.value)
+                            }
+                          />
+                          <button onClick={handleConfirmation}>Confirm</button>
+                          <button
+                            onClick={() => setShowConfirmationModal(false)}
+                          >
+                            Close
+                          </button>
+                        </div>
+                      </div>
+                    )}
                     {/* I already have an account */}
                     <div className="text-center  mt-3">
                       <a
