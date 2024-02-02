@@ -44,22 +44,21 @@ export const HomePage = () => {
       .then((res) => {
         // console.log(res.data);
         setProducts(res.data);
-        products.data
+        products.data;
       })
       .catch((err) => {
         console.log(err);
       });
-    }
-    console.log("🚀 ~ .then ~ products.data:", products.data)
+  }
+  console.log("🚀 ~ .then ~ products.data:", products.data);
   //* ----- GET Productos -------------
-  
+
   //* ----- USE EFFECT -------------
   useEffect(() => {
     console.log("HomePage");
-    getProducts()
+    getProducts();
   }, []);
   //* ----- USE EFFECT -------------
-
 
   return (
     <div>
@@ -254,9 +253,6 @@ export const HomePage = () => {
           </div>
         </div>
       </section>
-      <div>
-        <Footer />
-      </div>
     </div>
   );
 };
