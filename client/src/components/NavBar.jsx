@@ -1,5 +1,9 @@
 import React, { useState } from "react";
+<<<<<<< Updated upstream
 import { Link } from "react-router-dom";
+=======
+import { useNavigate  } from 'react-router-dom';
+>>>>>>> Stashed changes
 // --- imgages ---
 import Logo from "../assets/Logo miniatura.svg";
 import LogoGrande from "../assets/logo The Home Hobby.svg";
@@ -8,6 +12,23 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { ShoppingCart } from "./ShoppingCart";
 
 export const NavBar = () => {
+<<<<<<< Updated upstream
+=======
+
+  const [searchTerm, setSearchTerm] = useState('');
+  console.log("🚀 ~ NavBar ~ searchTerm:", searchTerm)
+  const navigate = useNavigate ();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm !== '') {
+      return
+    } else {
+      navigate(`/${searchTerm}`)
+    }
+  }
+
+>>>>>>> Stashed changes
   // Direciones URL LocalHost y Produccion
   const isLocalhost = window.location.href.includes("localhost");
   const urlLogin = isLocalhost
@@ -67,11 +88,14 @@ export const NavBar = () => {
               />
             </a>
           </div>
+          {/* Search Bar */}
           <div className="header-search transition-all-300 order-3 col-span-4 mt-[10px] hidden self-center lg:order-2 lg:col-span-6 lg:mt-0 lg:block">
-            <form className="search" action="#">
+            <form className="search" onSubmit={handleSearch} action="#">
               <div className="flex h-[40px] overflow-hidden rounded-[50px] bg-white">
                 <input
                   className="search w-full border-none bg-transparent py-[5px] pl-5 text-black focus:border-none focus:ring-0 focus:ring-transparent"
+                  value={searchTerm}
+                  onChange={e => (setSearchTerm(e.target.value))}
                   type="search"
                   placeholder="Search..."
                 />
