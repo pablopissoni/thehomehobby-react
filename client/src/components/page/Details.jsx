@@ -142,7 +142,7 @@ export const Details = () => {
                   role="group"
                   aria-label="1 / 3"
                 >
-                  <img src="images/product/prod-1.jpg" alt="product" />
+                  <img src={test_img[0]} alt="product" />
                 </div>
                 <div
                   className="swiper-slide cursor-pointer rounded-lg swiper-slide-visible swiper-slide-fully-visible swiper-slide-next"
@@ -150,7 +150,7 @@ export const Details = () => {
                   role="group"
                   aria-label="2 / 3"
                 >
-                  <img src="images/product/prod-2.jpg" alt="product" />
+                  <img src={test_img[0]} alt="product" />
                 </div>
                 <div
                   className="swiper-slide cursor-pointer rounded-lg swiper-slide-visible swiper-slide-fully-visible"
@@ -158,7 +158,7 @@ export const Details = () => {
                   aria-label="3 / 3"
                   style={{ width: "99.5px", marginRight: "10px" }}
                 >
-                  <img src="images/product/prod-3.jpg" alt="product" />
+                  <img src={test_img[0]} alt="product" />
                 </div>
               </div>
               <div className="button-next btn-slider-1 transition-all-300 -right-16 group-hover:right-4">

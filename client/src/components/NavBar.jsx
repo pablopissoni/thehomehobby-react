@@ -873,10 +873,10 @@ export const NavBar = () => {
               </div>
             </li>
             <li className="underlined-animated">
-              <a href="faqs.html">FAQ's</a>
+              <a href="FAQs">FAQ's</a>
             </li>
             <li className="underlined-animated">
-              <a href="contact-us.html">Contact Us</a>
+              <a href="/ContactUs">Contact Us</a>
             </li>
           </ul>
         </nav>
