@@ -32,7 +32,7 @@ export const ContactUs = () => {
               <div>
                 <h6 className="font-bold capitalize">E-mail</h6>
                 <p className="break-all text-sm text-gray-400">
-                  megabyte@example.com
+                  example@example.com
                 </p>
               </div>
             </div>

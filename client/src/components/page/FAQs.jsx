@@ -4,50 +4,44 @@ import { useState } from "react";
 export const FAQs = () => {
   const faqData = [
     {
-      question: "¿Qué es el software de señalización digital y cómo funciona?",
+      question: "vitae porttitor diam. Donec eu erat?",
       answer:
-        "El software de señalización digital Upper DS es una plataforma que permite crear, programar y gestionar contenido multimedia (imágenes y videos.) en pantallas digitales. Funciona mediante la carga de contenido en la plataforma web, la programación de reproducción y la distribución a pantallas conectadas.",
+        "Phasellus consequat, odio sagittis accumsan tempus, diam leo semper elit, eu ullamcorper leo tortor et dolor. Pellentesque metus erat, mattis ut est eget, commodo porta libero. Donec sit amet quam.",
     },
     // Agrega más preguntas y respuestas aquí
     {
-      question:
-        "¿Cuáles son los beneficios de usar software de señalización digital?",
+      question: "Morbi sit amet lobortis tellus. Sed?",
       answer:
-        "Los beneficios incluyen la capacidad de transmitir información en tiempo real, la flexibilidad para cambiar contenido de forma remota, la mejora de la experiencia del cliente, el aumento de la visibilidad de la marca y la capacidad de medir el rendimiento del contenido.",
+        "Proin sed augue a sem tempus hendrerit. Morbi et vestibulum lacus, ornare fermentum ante. Mauris ligula eros, ultricies at orci eget, bibendum semper erat. Nulla ultrices mauris eu est pretium, vitae luctus nunc viverra. Cras eleifend tristique sem, eget porta dolor aliquam ut. Vivamus tempor eget arcu ut egestas.",
     },
     {
-      question:
-        "¿Qué tipo de contenido se puede mostrar con el software de señalización digital?",
+      question: "arcu sed egestas pharetra, est ante placerat?",
       answer:
         "Se puede mostrar una amplia variedad de contenido, como anuncios publicitarios, promociones, información de productos, noticias, clima, horarios, contenido educativo, entretenimiento, y más. La versatilidad es una de las fortalezas de la señalización digital.",
     },
     {
-      question:
-        "¿Qué hardware se necesita para utilizar el software de señalización digital?",
+      question: "arcu sed egestas pharetra, est ante placerat?",
       answer:
         "El hardware necesario incluye pantallas digitales (monitores, videowalls, etc.), reproductores de medios digitales (como reproductores multimedia, computadoras o TV Box) los cuales requieren estar conectados a Internet​",
     },
     {
-      question:
-        "¿Cómo se gestiona el contenido en el software de señalización digital en Upper DS?",
+      question: "Maecenas ut ipsum ut lectus dictum ?",
       answer:
         "El contenido se gestiona a través de una interfaz de usuario en una plataforma web. Los usuarios pueden cargar, organizar y programar contenido para que se reproduzca en las pantallas. ",
     },
     {
-      question:
-        "¿Es seguro el uso del software de señalización digital en términos de privacidad y seguridad?",
+      question: "Maecenas ut ipsum ut lectus dictum ?",
       answer:
         "La seguridad y privacidad son preocupaciones importantes. Upper DS ofrece características de seguridad, como autenticación de usuarios, certificado de seguridad y gestión de permisos para proteger la privacidad y prevenir el acceso no autorizado.",
     },
     {
-      question:
-        "¿Cuál es la diferencia entre señalización digital basada en la nube y en sitio?",
+      question: "erat at nisl gravida elementum?",
       answer:
         "La señalización digital basada en la nube almacena y gestiona contenido en servidores remotos, lo que permite un acceso más fácil y la gestión desde cualquier lugar con conexión a Internet. La señalización en sitio, en cambio, utiliza servidores locales y suele ser adecuada para redes cerradas.",
     },
     {
       question:
-        "¿Cómo se pueden medir los resultados y el impacto del contenido de señalización digital?",
+        "Donec imperdiet egestas nisl sit amet iaculis. Ut id nulla congue, rutrum lorem sed, sodales nulla.?",
       answer:
         "Puedes medir el impacto mediante métricas como el número de reproducciones, la interacción del usuario (si es interactivo), el tiempo de visualización y el retorno de inversión (ROI) si estás utilizando la señalización digital con fines comerciales. ",
     },
@@ -65,11 +59,10 @@ export const FAQs = () => {
       <div className="pt-24 px-4 mx-auto max-w-screen-xl ">
         <div className="mx-auto max-w-screen-md text-center mb-8 lg:mb-12">
           <h2 className="mb-4 text-lg md:text-4xl tracking-tight font-extrabold text-custom">
-            Preguntas frecuentes
+            Lorem ipsum dolor
           </h2>
           <p className="mb-5 font-light text-sm md:text-xl text-gray-400">
-            Aquí encontrarás respuestas a las dudas más comunes que nuestros
-            clientes suelen tener.
+            Phasellus consequat, odio sagittis accumsan
           </p>
         </div>
 
@@ -116,13 +109,13 @@ export const FAQs = () => {
         </div>
 
         <p className="text-center text-gray-600 text-sm md:text-base mt-9">
-          No encontraste una respuesta para tus preguntas?
+          Donec sodales mauris a nisi
           <a
             href="#contacto"
             title=""
             className="font-medium text-blue-600 transition-all duration-200 hover:text-blue-700 focus:text-blue-700 hover:underline"
           >
-            Contacta a el soporte
+            contact the support
           </a>
         </p>
       </div>

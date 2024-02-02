@@ -11,7 +11,7 @@ import { Details } from "./components/page/Details";
 import { Register } from "./components/page/Register";
 import { ContactUs } from "./components/page/ContactUs";
 import { FAQs } from "./components/page/FAQs";
-
+import { Checkout } from "./components/page/Checkout";
 const App = () => {
   // Obtengo las ubicaciones y guardo en una variable las que quiero ignorar despues
   const { pathname } = useLocation();
@@ -30,6 +30,7 @@ const App = () => {
         <Route path="/details/:id" element={<Details />} />
         <Route path="/ContactUs" element={<ContactUs />} />
         <Route path="/FAQs" element={<FAQs />} />
+        <Route path="/Checkout" element={<Checkout />} />
         {/* <Route path="/detail/:id" element={<Login/>} /> */}
       </Routes>
       {/* <Footer/> */}
