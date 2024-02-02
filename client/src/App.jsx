@@ -13,6 +13,7 @@ import { ContactUs } from "./components/page/ContactUs";
 import { FAQs } from "./components/page/FAQs";
 import { Checkout } from "./components/page/Checkout";
 import { UserProfile } from "./components/page/UserProfile";
+import { SearchProducts } from "./components/page/SearchProducts";
 
 const App = () => {
   // Obtengo las ubicaciones y guardo en una variable las que quiero ignorar despues
@@ -27,6 +28,7 @@ const App = () => {
       {!isIgnored && <NavBar />} {/* No aparece en las URLs de "ignorePaths" */}
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/:product" element={<SearchProducts />} /> {/* Se renderiza la lista de produtos relacionados con el producto de la busqueda */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/details/:id" element={<Details />} />

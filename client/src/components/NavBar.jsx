@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // --- imgages ---
 import Logo from "../assets/Logo miniatura.svg";
 import LogoGrande from "../assets/logo The Home Hobby.svg";
@@ -16,8 +16,24 @@ export const NavBar = () => {
   const urlRegister = isLocalhost
     ? "http://localhost:5173/register"
     : "https://thehomehobby/register";
+
   const home = isLocalhost ? "http://localhost:5173" : "https://thehomehobby";
   const [showShoppingCart, setShowShoppingCart] = useState(false);
+  //--------------------
+
+  const [searchTerm, setSearchTerm] = useState('');
+  console.log("🚀 ~ NavBar ~ searchTerm:", searchTerm)
+  const navigate = useNavigate ();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm == '') {
+      return
+    } else {
+      navigate(`/${searchTerm}`)
+    }
+  }
+
   return (
     <header className="header-section relative z-30 shadow-custom1">
       <div className="hidden bg-secondary sm:flex">
@@ -67,12 +83,15 @@ export const NavBar = () => {
               />
             </a>
           </div>
+          {/* SearchBar  */}
           <div className="header-search transition-all-300 order-3 col-span-4 mt-[10px] hidden self-center lg:order-2 lg:col-span-6 lg:mt-0 lg:block">
-            <form className="search" action="#">
+            <form className="search" onSubmit={handleSearch}>
               <div className="flex h-[40px] overflow-hidden rounded-[50px] bg-white">
                 <input
                   className="search w-full border-none bg-transparent py-[5px] pl-5 text-black focus:border-none focus:ring-0 focus:ring-transparent"
                   type="search"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search..."
                 />
                 <button className="btn-search px-3 text-red-600" type="submit">
