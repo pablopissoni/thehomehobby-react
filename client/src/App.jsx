@@ -15,6 +15,7 @@ import { Checkout } from "./components/page/Checkout";
 import { UserProfile } from "./components/page/UserProfile";
 import { SearchProducts } from "./components/page/SearchProducts";
 import { Footer } from "./components/Footer";
+import { AdminDashboard } from "./components/page/AdminDashboard";
 
 const App = () => {
   // Obtengo las ubicaciones y guardo en una variable las que quiero ignorar después
@@ -38,6 +39,7 @@ const App = () => {
         <Route path="/FAQs" element={<FAQs />} />
         <Route path="/Checkout" element={<Checkout />} />
         <Route path="/UserProfile" element={<UserProfile />} />
+        <Route path="/AdminDashboard" element={<AdminDashboard />} />
         {/* <Route path="/detail/:id" element={<Login/>} /> */}
       </Routes>
       <Footer />
