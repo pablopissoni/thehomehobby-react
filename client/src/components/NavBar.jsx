@@ -1,20 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 // --- imgages ---
 import Logo from "../assets/Logo miniatura.svg";
 import LogoGrande from "../assets/logo The Home Hobby.svg";
 import Perfil from "../assets/perfil.png";
 import "bootstrap-icons/font/bootstrap-icons.css";
-
+import { ShoppingCart } from "./ShoppingCart";
 
 export const NavBar = () => {
-
   // Direciones URL LocalHost y Produccion
-  const isLocalhost = window.location.href.includes('localhost');
-  const urlLogin = isLocalhost ? 'http://localhost:5173/login' : 'https://thehomehobby/login';
-  const urlRegister = isLocalhost ? 'http://localhost:5173/register' : 'https://thehomehobby/register';
-  const home = isLocalhost ? 'http://localhost:5173' : 'https://thehomehobby';
-
+  const isLocalhost = window.location.href.includes("localhost");
+  const urlLogin = isLocalhost
+    ? "http://localhost:5173/login"
+    : "https://thehomehobby/login";
+  const urlRegister = isLocalhost
+    ? "http://localhost:5173/register"
+    : "https://thehomehobby/register";
+  const home = isLocalhost ? "http://localhost:5173" : "https://thehomehobby";
+  const [showShoppingCart, setShowShoppingCart] = useState(false);
   return (
     <header className="header-section relative z-30 shadow-custom1">
       <div className="hidden bg-secondary sm:flex">
@@ -101,7 +104,11 @@ export const NavBar = () => {
                   0
                 </span>
               </div>
-              <div className="relative">
+
+              <button
+                className="relative"
+                onClick={() => setShowShoppingCart(true)}
+              >
                 <a
                   className="btn-open-modal"
                   data-target=".shopping-cart-modal"
@@ -111,7 +118,7 @@ export const NavBar = () => {
                 <span className="badge absolute top-0 right-[-6px] h-[15px] min-w-[15px] px-[2px]">
                   0
                 </span>
-              </div>
+              </button>
             </div>
             <div className="group relative hidden lg:flex">
               <div className="flex cursor-pointer select-none items-center gap-1">
@@ -123,7 +130,7 @@ export const NavBar = () => {
                   <ul className="overflow-hidden rounded-md bg-white p-[6px] shadow-custom1">
                     <li className="hover:font-semibold">
                       <a
-                      href={urlLogin} //LocalHost y Url de produccion
+                        href={urlLogin} //LocalHost y Url de produccion
                         className="btn-open-modal"
                         data-tab="0"
                         data-target=".entry-modal"
@@ -855,6 +862,7 @@ export const NavBar = () => {
           </ul>
         </nav>
       </div>
+      {showShoppingCart && <ShoppingCart setShow={setShowShoppingCart} />}
     </header>
   );
 };
