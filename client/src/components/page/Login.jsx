@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import LogoGrande from "../../assets/logo The Home Hobby.svg";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 export const Login = () => {
   //* URL local o deploy
@@ -72,19 +73,19 @@ export const Login = () => {
           <div className="w-full">
             <div className="card w-full lg:flex">
               {/* Logo */}
-              <a
-                href="/"
+              <Link
+                to="/"
                 className="flex p-4 lg:w-1/3 transition-transform duration-300 hover:scale-110"
               >
                 <img className="" src={LogoGrande} alt="Logo" />
-              </a>
+              </Link>
               {/* Text card */}
               <div className="p-4 lg:w-2/3">
-                <a href="/" className="noble-ui-logo block mb-2">
+                <Link to="/" className="noble-ui-logo block mb-2">
                   <h2 className="text-2xl font-bold transition-transform duration-300 hover:scale-105">
                     The <span className="text-red-700">Home Hobby </span>
                   </h2>
-                </a>
+                </Link>
                 {/* Form */}
                 <form
                   className="forms-sample lg:w-[400px] lg:w-auto"
@@ -134,9 +135,9 @@ export const Login = () => {
                   {/* Button for Login */}
                   <div className="lg:flex justify-between lg:w-2/3 mt-5 lg:px-2">
                     <div className="lg:w-2/5 hidden leading-none lg:flex items-center justify-center text-center bg-blue-500 hover:bg-sky-500 hover:shadow-xl h-10  rounded-sm">
-                      <a href="/register" className="text-white ">
+                      <Link to="/register" className="text-white ">
                         Create an account
-                      </a>
+                      </Link>
                     </div>
                     {/* <div className="lg:w-1/3 flex items-center justify-center bg-blue-500  hover:bg-sky-500 hover:shadow-xl h-10 rounded-sm"> */}
                       <button type="submit" className="boton text-white w-full lg:w-1/3 flex items-center justify-center bg-blue-500  hover:bg-sky-500 hover:shadow-xl h-10 rounded-sm">
@@ -159,12 +160,12 @@ export const Login = () => {
 
                   {/* Link for Forgot Password */}
                   <div className="text-end mt-3 flex justify-center lg:w-2/3">
-                    <a
-                      href="/password/reset"
+                    <Link
+                      to="/password/reset"
                       className="text-dark text-center hover:text-blue-600"
                     >
                       Forgot your password?
-                    </a>
+                    </Link>
                   </div>
                 </form>
               </div>
@@ -182,9 +183,9 @@ export const Login = () => {
 
         {/* Link for Register - Hidden in Desktop Mode */}
         <div className="mt-3 bg-white lg:hidden border border-gray-300 hover:bg-sky-300 hover:shadow-xl rounded-md cursor-pointer text-center py-2">
-          <a href="/register" className="text-dark ">
+          <Link to="/register" className="text-dark ">
             Create an account
-          </a>
+          </Link>
         </div>
       </div>
     </div>
