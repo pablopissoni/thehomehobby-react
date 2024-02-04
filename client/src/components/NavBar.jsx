@@ -30,7 +30,7 @@ export const NavBar = () => {
     if (searchTerm == '') {
       return
     } else {
-      navigate(`/${searchTerm}`)
+      navigate(`products/${searchTerm}`)
     }
   }
 
