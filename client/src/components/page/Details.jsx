@@ -1,17 +1,82 @@
 import React from "react";
+
+import Quill from "quill/core"; // Quill JS
+import "quill/dist/quill.snow.css"; // Quill JS
+import ReactQuill from "react-quill"; // Quill React
+import "react-quill/dist/quill.snow.css"; // Quill React
+import "react-quill/dist/quill.bubble.css"; // Quill React
+import Toolbar from "quill/modules/toolbar";
+import Snow from "quill/themes/snow";
+
+import Bold from "quill/formats/bold";
+import Italic from "quill/formats/italic";
+import Header from "quill/formats/header";
+
+// Import Swiper React components
+import { Swiper, SwiperSlide } from "swiper/react";
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
+// import required modules
+import { FreeMode, Navigation, Thumbs } from "swiper/modules";
+
 // Importa react-modal
 // import Modal from "react-modal";
-import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
 //? test img
 import test_product1 from "../../assets/test_product1.png";
 import test_product2 from "../../assets/test_product2.png";
 import test_product3 from "../../assets/test_product3.png";
 
 export const Details = () => {
+  //* ---- HOOKS ----
+  const { id } = useParams();
+  const [valueHTML, setValueHTML] = useState("");
+  const [thumbsSwiper, setThumbsSwiper] = useState(null); //Swiper
+
   // Define el estado para controlar la apertura/cierre de los modales
   const [commentModalIsOpen, setCommentModalIsOpen] = useState(false);
   const [reviewModalIsOpen, setReviewModalIsOpen] = useState(false);
+  const [product, setProduct] = useState({
+    contenido: [{ ficha: "Cargando" }],
+  });
+  // product?.contenido[0]?.ficha
+  // ---- HOOKS ----
 
+  //* ----- GET Producto -------------
+  async function getProductId() {
+    try {
+      const isLocalhost = window.location.href.includes("localhost");
+      const urlDetailsId = isLocalhost
+        ? `http://localhost:3001/productos/${id}`
+        : `XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX${id}`;
+
+      const response = await axios.get(urlDetailsId);
+      setProduct(response.data[0]); // Solo el primer objeto encontrado
+      console.log("response.data[0]", response.data[0]);
+      // console.log("response.data[0]?.contenido[0]?.ficha: ", response.data[0]?.contenido[0]?.ficha)
+      setValueHTML(response.data[0]?.contenido[0]?.ficha);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  console.log("🚀 ~ PRODUCT: >>", product);
+  // console.log("🚀 ~ Details ~ valueHTML:", valueHTML)
+
+  // ----- GET Productos -------------
+
+  //* ------- USE EFFECTS ------
+  useEffect(() => {
+    getProductId();
+    // console.log("🚀 ~ Details ~ product:", product);
+  }, []);
+  // -------- USE EFFECTS ------
+
+  //* ---- HANDLES ----
   const handleCommentClick = () => {
     setCommentModalIsOpen(true);
     setReviewModalIsOpen(false);
@@ -31,156 +96,112 @@ export const Details = () => {
     e.preventDefault();
     console.log("Form Submitted");
   };
+  // ---- HANDLES ----
 
+  //* ---- QUILL REACT ----
+
+  // ---- QUILL REACT ----
+
+  //* ---- QUILL HTML ----
+  // Quill.register({
+  //   "modules/toolbar": Toolbar,
+  //   "themes/snow": Snow,
+  //   "formats/bold": Bold,
+  //   "formats/italic": Italic,
+  //   "formats/header": Header,
+  // });
+
+  // var quill = new Quill("#editor", {
+  //   theme: "snow",
+  // });
+
+  // Pasar el contenido HTML al editor Quill
+  // quill.root.innerHTML = product?.contenido[0]?.ficha; //! al agregar se rompe porque parece leerlo antes de cargar la peticion
+  // ---- QUILL HTML ----
+
+  console.log("VIDEO: >>", product?.video);
   return (
     <div className="flex min-h-full flex-col bg-body font-poppins text-txt bg-gray-100">
       <div className="product-details container mx-auto my-5 px-2 sm:px-8">
         <div className="grid grid-cols-12 gap-5 rounded-lg bg-white p-2 xs:p-8">
-          <div className="col-span-12 max-h-[500px] md:col-span-6">
-            <div className="swiper swiper-top group relative flex items-center rounded-lg swiper-fade swiper-initialized swiper-horizontal swiper-watch-progress swiper-backface-hidden">
-              {/* Imagen ampliada producto */}
-              <div
-                className="swiper-wrapper"
-                id="swiper-wrapper-665e837d73bd3f06"
-                aria-live="polite"
-              >
-                <div
-                  className="swiper-slide swiper-slide-visible swiper-slide-fully-visible swiper-slide-active"
-                  style={{
-                    width: "438px",
-                    opacity: 1,
-                    transform: "translate3d(0px, 0px, 0px)",
-                  }}
-                  role="group"
-                  aria-label="1 / 3"
-                >
-                  <div
-                    className="swiper-zoom-container"
-                    style={{
-                      transitionDuration: "300ms",
-                      transform: "translate3d(0px, 0px, 0px)",
-                    }}
-                  >
-                    <img
-                      src={test_img[0]}
-                      alt="product"
-                      style={{
-                        transitionDuration: "300ms",
-                        transform: "translate3d(0px, 0px, 0px) scale(1)",
-                      }}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="swiper-slide swiper-slide-next"
-                  style={{
-                    width: "438px",
-                    opacity: 0,
-                    transform: "translate3d(-438px, 0px, 0px)",
-                  }}
-                  role="group"
-                  aria-label="2 / 3"
-                >
-                  <div className="swiper-zoom-container">
-                    <img src="images/product/prod-2.jpg" alt="product" />
-                  </div>
-                </div>
-                <div
-                  className="swiper-slide"
-                  role="group"
-                  aria-label="3 / 3"
-                  style={{
-                    width: "438px",
-                    opacity: 0,
-                    transform: "translate3d(-876px, 0px, 0px)",
-                  }}
-                >
-                  <div className="swiper-zoom-container">
-                    <img src="images/product/prod-3.jpg" alt="product" />
-                  </div>
-                </div>
-              </div>
-              {/* buttons slide img */}
-              <div
-                className="button-next btn-slider-1 transition-all-300 -right-16 group-hover:right-4"
-                tabIndex="0"
-                role="button"
-                aria-label="Next slide"
-                aria-controls="swiper-wrapper-665e837d73bd3f06"
-                aria-disabled="false"
-              >
-                ❯
-              </div>
-              <div
-                className="button-prev btn-slider-1 transition-all-300 -left-16 group-hover:left-4 swiper-button-disabled"
-                tabIndex="-1"
-                role="button"
-                aria-label="Previous slide"
-                aria-controls="swiper-wrapper-665e837d73bd3f06"
-                aria-disabled="true"
-              >
-                ❮
-              </div>
-              {/* revisar span */}
-              <span
-                className="swiper-notification"
-                aria-live="assertive"
-                aria-atomic="true"
-              ></span>
-            </div>
-            {/* miniaturas del producto */}
-            <div className="swiper swiper-thumbs swiper-initialized swiper-horizontal swiper-free-mode swiper-watch-progress swiper-backface-hidden">
-              <div
-                className="swiper-wrapper"
-                id="swiper-wrapper-54b8d94b6b328c4d"
-                aria-live="polite"
-                style={{ transform: "translate3d(0px, 0px, 0px)" }}
-              >
-                <div
-                  className="swiper-slide cursor-pointer rounded-lg swiper-slide-visible swiper-slide-fully-visible swiper-slide-active swiper-slide-thumb-active"
-                  style={{ width: "99.5px", marginRight: "10px" }}
-                  role="group"
-                  aria-label="1 / 3"
-                >
-                  <img src={test_img[0]} alt="product" />
-                </div>
-                <div
-                  className="swiper-slide cursor-pointer rounded-lg swiper-slide-visible swiper-slide-fully-visible swiper-slide-next"
-                  style={{ width: "99.5px", marginRight: "10px" }}
-                  role="group"
-                  aria-label="2 / 3"
-                >
-                  <img src={test_img[0]} alt="product" />
-                </div>
-                <div
-                  className="swiper-slide cursor-pointer rounded-lg swiper-slide-visible swiper-slide-fully-visible"
-                  role="group"
-                  aria-label="3 / 3"
-                  style={{ width: "99.5px", marginRight: "10px" }}
-                >
-                  <img src={test_img[0]} alt="product" />
-                </div>
-              </div>
-              <div className="button-next btn-slider-1 transition-all-300 -right-16 group-hover:right-4">
-                ❯
-              </div>
-              <div className="button-prev btn-slider-1 transition-all-300 -left-16 group-hover:left-4">
-                ❮
-              </div>
-              <span
-                className="swiper-notification"
-                aria-live="assertive"
-                aria-atomic="true"
-              ></span>
-            </div>
+          {/* SWIPER */}
+          <div className="col-span-12 h-auto md:col-span-6">
+            {/* Swiper Grande */}
+            <Swiper
+              style={{
+                "--swiper-navigation-color": "#fff",
+                "--swiper-pagination-color": "#fff",
+              }}
+              spaceBetween={10}
+              navigation={true}
+              thumbs={{ swiper: thumbsSwiper }}
+              modules={[FreeMode, Navigation, Thumbs]}
+              className="mySwiper2 w-auto h-72 mb-2"
+            >
+              {/* img principal */}
+              <SwiperSlide>
+                <img
+                  className=" w-full h-full object-contain  "
+                  src={product?.imagen}
+                />
+              </SwiperSlide>
+              {/* video */}
+              {product?.video && (
+                <SwiperSlide>
+                  <video className="w-full h-full object-cover" controls>
+                    <source src={product?.video} type="video/mp4" />
+                    Tu navegador no admite el elemento de video.
+                  </video>
+                </SwiperSlide>
+              )}
+              {/* galeria img */}
+              {product?.galeria?.map((img, index) => (
+                <SwiperSlide key={index}>
+                  <img
+                    className="w-full h-full object-contain "
+                    src={img.url}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            {/* Swiper Miniaturas */}
+            <Swiper
+              onSwiper={setThumbsSwiper}
+              spaceBetween={10}
+              // navigation={true}
+              slidesPerView={4}
+              freeMode={true}
+              watchSlidesProgress={true}
+              modules={[FreeMode, Navigation, Thumbs]}
+              className="mySwiper max-w-[400px]"
+            >
+              <SwiperSlide>
+                <img src={product?.imagen} />
+              </SwiperSlide>
+              {/* video */}
+              {product?.video && (
+                <SwiperSlide>
+                  <video className="w-full h-full object-contain " controls={false}>
+                    <source src={product?.video} type="video/mp4" />
+                    Tu navegador no admite el elemento de video.
+                  </video>
+                </SwiperSlide>
+              )}
+              {product?.galeria?.map((img, index) => (
+                <SwiperSlide key={index}>
+                  <img src={img.url} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
           <div className="col-span-12 md:col-span-6">
+            {/* Titulo Producto */}
             <div className="my-1">
               <a
                 className="clamp-2 transition-all-300 break-all text-2xl font-medium hover:text-primary"
                 href="#"
               >
-                Ryzen 5 3600x
+                {product?.nombre_ingles || product?.nombre_es}
               </a>
             </div>
             <div className="product-val-stock my-2 flex justify-between">
@@ -197,10 +218,13 @@ export const Details = () => {
                 </span>
               </div>
             </div>
+            {/* --- Precios --- */}
             <div className="my-5 flex items-center gap-5">
               <div className="flex rounded-lg bg-white px-3 py-2 text-primary shadow">
                 <span className="text-sm">$</span>
-                <span className="text-2xl font-semibold leading-7">37.00</span>
+                <span className="text-2xl font-semibold leading-7">
+                  {product?.precio_base}
+                </span>
               </div>
               <div className="flex flex-col">
                 <span className="text-md font-semibold uppercase text-green-400">
@@ -211,14 +235,17 @@ export const Details = () => {
                 </span>
               </div>
             </div>
-            <div className="my-4">
-              <p className="clamp-5 break-all">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum
-                cupiditate repellat magni exercitationem non, quaerat
-                consequatur. Lorem ipsum dolor sit amet consectetur adipisicing
-                elit. Earum cupiditate.
-              </p>
-            </div>
+            {/* --- Mini Descripcion --- */}
+            {product && (
+              <div className="my-4">
+                <p
+                  // dangerouslySetInnerHTML={{ __html: product?.contenido[0]?.descripcion }}
+                  className="clamp-5 break-all"
+                >
+                  {/* Mini Descripcion aqui con dangerouslySetInnerHTML */}
+                </p>
+              </div>
+            )}
             <div className="flex gap-1">
               <form action="#" onClick={handleFormSubmit}>
                 <div className="block">
@@ -425,15 +452,28 @@ export const Details = () => {
           <div className="col-span-12">
             <div className="liner-container mb-5 flex border-b-2 border-[rgba(119,119,119,.17)]">
               <h1 className="mb-[-2px] inline-block border-b-2 border-primary pb-3 text-xl font-bold uppercase">
-                Description
+                characteristic
               </h1>
             </div>
-            <div className="see-more relative pb-5">
-              <div className="see-more-container gradient-bottom max-h-[220px] overflow-hidden">
-                <div className="see-more-content">
-                {/* VARIABLE DESCRIPCION AQUI  */}
-                
-                {/* VARIABLE DESCRIPCION AQUI  */}
+            <div className="see-more relative pb-5 h-[1000px]">
+              {" "}
+              {/* altura 1000px temporal */}
+              <div className="see-more-container gradient-bottom max-h-[1000px] overflow-hidden">
+                <div
+                  className="h-full "
+                  // dangerouslySetInnerHTML={{
+                  //   __html: product?.contenido[0]?.ficha,
+                  // }}
+                  // id="editor" className="bg-gray-200 h-[300px]"
+                >
+                  <ReactQuill
+                    theme="bubble"
+                    value={valueHTML}
+                    onChange={setValueHTML}
+                    className="h-full"
+                  />
+                  {/* {product?.contenido[0]?.ficha} */}
+                  {/* VARIABLE DESCRIPCION AQUI CON dangerouslySetInnerHTML */}
                 </div>
               </div>
               <button className="btn-see-more absolute bottom-0 z-10 flex w-full justify-center hover:text-primary">
