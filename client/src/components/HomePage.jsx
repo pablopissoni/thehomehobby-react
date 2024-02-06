@@ -55,7 +55,6 @@ export const HomePage = () => {
 
   //* ----- USE EFFECT -------------
   useEffect(() => {
-    console.log("HomePage");
     getProducts();
   }, []);
   //* ----- USE EFFECT -------------

@@ -5,9 +5,6 @@ import TestProdObj from "../TestProdObj";
 export const SearchProducts = () => {
   const location = useLocation();
   console.log("🚀 ~ SearchProducts ~ location:", location);
-  const searchPathName = new URLSearchParams(location.pathname);
-  const searchTerm = searchPathName.get("product");
-  console.log("🚀 ~ SearchProducts ~ searchTerm:", searchTerm);
 
   return (
     <div className="m-20 max-w-[1500px]">

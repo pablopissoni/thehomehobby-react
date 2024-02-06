@@ -30,7 +30,7 @@ const App = () => {
       {!isIgnored && <NavBar />} {/* No aparece en las URLs de "ignorePaths" */}
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/products/:product" element={<SearchProducts />} />{" "}
+        <Route path="/products/:id" element={<SearchProducts />} />{" "}
         {/* Se renderiza la lista de produtos relacionados con el producto de la busqueda */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

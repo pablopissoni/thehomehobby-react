@@ -22,7 +22,7 @@ export const NavBar = () => {
   //--------------------
 
   const [searchTerm, setSearchTerm] = useState('');
-  console.log("🚀 ~ NavBar ~ searchTerm:", searchTerm)
+  // console.log("🚀 ~ NavBar ~ searchTerm:", searchTerm)
   const navigate = useNavigate ();
 
   const handleSearch = (e) => {
