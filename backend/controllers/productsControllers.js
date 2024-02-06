@@ -73,6 +73,7 @@ const getAllProducts = (req, res, connection) => {
             galeria: JSON.parse(product.galeria).map((item) => ({
               url: `https://thehomehobby.s3.amazonaws.com${item.url}`,
             })),
+            video: `https://thehomehobby.s3.amazonaws.com${product.video}`,
             filtros: parsers.parseFilters(product.filtros),
           };
 
@@ -123,6 +124,7 @@ const getProductById = (req, res, connection) => {
         galeria: JSON.parse(product.galeria).map((item) => ({
           url: `https://thehomehobby.s3.amazonaws.com${item.url}`,
         })),
+        video: `https://thehomehobby.s3.amazonaws.com${product.video}`,
         filtros: parsers.parseFilters(product.filtros),
       };
 
