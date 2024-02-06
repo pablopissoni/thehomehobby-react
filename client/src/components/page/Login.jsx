@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
 import LogoGrande from "../../assets/logo The Home Hobby.svg";
@@ -19,6 +20,8 @@ export const Login = () => {
     email: "",
     password: "",
   });
+
+  const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState({
     message: "",
     error: "",
@@ -37,24 +40,34 @@ export const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      // Send login request to the backend
       const response = await axios.post(urlLogin, loginData);
-
       console.log("Login Response:", response.data);
-
-      // Set success message
-      setSuccessMessage({ message: "Login successful!" });
-
-      // Redirect user after 5 seconds
-      setTimeout(() => {
-        window.location.href = url;
-      }, 5000);
+      if (response.status === 201) {
+        // Clear any previous error messages
+        setErrorMessage("");
+        // Redirect the user to the main page if authentication is successful
+        setTimeout(() => {
+          window.location.href = url;
+        }, 5000);
+      } else if (response.status === 202) {
+        // Set error message for incorrect email or password
+        setErrorMessage("Incorrect email or password.");
+      } else if (response.status === 203) {
+        // Set an error message specifically for unconfirmed accounts
+        setErrorMessage(
+          "Your account has not been confirmed. Please check your email and enter the 6-digit code."
+        );
+      } else if (response.status === 404) {
+        // Set error message for server error
+        setErrorMessage("An error occurred. Please try again later.");
+      }
     } catch (error) {
-      setSuccessMessage({ error: "Login the email or password is wrong!" });
+      // Set error message for any unexpected errors
+      setErrorMessage("An error occurred. Please try again later.");
       console.error("Error during login:", error);
-      // Handle login error, display a message, etc.
     }
   };
+
   // --- HANDLES ----------------
 
   // Clear success message after component unmounts
@@ -140,10 +153,13 @@ export const Login = () => {
                       </Link>
                     </div>
                     {/* <div className="lg:w-1/3 flex items-center justify-center bg-blue-500  hover:bg-sky-500 hover:shadow-xl h-10 rounded-sm"> */}
-                      <button type="submit" className="boton text-white w-full lg:w-1/3 flex items-center justify-center bg-blue-500  hover:bg-sky-500 hover:shadow-xl h-10 rounded-sm">
-                        Login
-                      </button>
-                    </div>
+                    <button
+                      type="submit"
+                      className="boton text-white w-full lg:w-1/3 flex items-center justify-center bg-blue-500  hover:bg-sky-500 hover:shadow-xl h-10 rounded-sm"
+                    >
+                      Login
+                    </button>
+                  </div>
                   {/* </div> */}
                   {/* Success Message */}
                   {successMessage?.message && (
@@ -155,6 +171,11 @@ export const Login = () => {
                   {successMessage?.error && (
                     <div className="text-red-600 mt-3 lg:ml-4">
                       {successMessage.error}
+                    </div>
+                  )}
+                  {errorMessage && (
+                    <div className="text-red-600 mt-3 lg:ml-4">
+                      {errorMessage}
                     </div>
                   )}
 
