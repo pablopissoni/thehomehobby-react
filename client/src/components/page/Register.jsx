@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import logoHomeHobby from "../../assets/logo The Home Hobby.svg";
 import { Link } from "react-router-dom";
-import { validateRegistration } from "./validationRegistration";
+import { validateRegistration } from "./validationRegister";
 
 export const Register = () => {
   //* Direciones URL LocalHost y Produccion
@@ -299,11 +299,13 @@ export const Register = () => {
                       )}
                     </div>
                     {showConfirmationModal && (
-                      <div className="confirmation-modal flex flex-col">
+                      <div className="confirmation-modal flex flex-col items-center justify-center">
                         <div className="h-full w-full px-5 py-3 bg-slate-100 border border-gray-300 shadow-lg mt-4 rounded-lg">
-                          {/* </div> */}
+                          <h3 className="text-lg font-medium mb-2">
+                            Confirm email verification code
+                          </h3>
                           <input
-                            className="mt-2 w-auto border  border-gray-200  rounded-sm pl-2 outline-none focus:border-2 focus:border-b-cyan-500"
+                            className="mt-2 w-full max-w-xs border border-gray-200 rounded-sm pl-2 outline-none focus:border-2 focus:border-b-cyan-500"
                             type="text"
                             placeholder="Code..."
                             value={confirmationCode}
@@ -311,15 +313,9 @@ export const Register = () => {
                               setConfirmationCode(e.target.value)
                             }
                           />
-                          <div className="flex justify-between align-middle mt-2">
+                          <div className="mt-4 flex justify-center">
                             <button
-                              className="text-center text-white px-3 rounded-sm bg-red-600 py-1 transition-transform duration-200 hover:scale-105 hover:bg-red-700"
-                              onClick={() => setShowConfirmationModal(false)}
-                            >
-                              Close
-                            </button>
-                            <button
-                              className="text-center text-white px-3 rounded-sm bg-red-600 py-1 transition-transform duration-200 hover:scale-105 hover:bg-red-700"
+                              className="text-center text-white px-2 py-1 rounded-sm bg-red-600 transition-transform duration-200 hover:scale-105 hover:bg-red-600"
                               onClick={handleConfirmation}
                             >
                               Confirm
@@ -328,6 +324,7 @@ export const Register = () => {
                         </div>
                       </div>
                     )}
+
                     {/* Register */}
                     <button
                       type="submit"
