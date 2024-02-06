@@ -108,7 +108,7 @@ const loginUser = async (req, res) => {
       onSuccess: (session) => {
         console.log("Usuario autenticado en Cognito");
         const accessToken = session.getAccessToken().getJwtToken();
-        return res.status(200).json({
+        return res.status(201).json({
           success: true,
           message: "Usuario autenticado correctamente",
           accessToken: accessToken,
@@ -116,16 +116,25 @@ const loginUser = async (req, res) => {
       },
       onFailure: (err) => {
         console.error("Error al autenticar usuario en Cognito:", err);
-        return res
-          .status(401)
-          .json({ success: false, error: "Credenciales inválidas" });
+        if (err.code === "UserNotConfirmedException") {
+          return res.status(203).json({
+            success: false,
+            error: "El usuario aún no ha confirmado su cuenta",
+          });
+        } else {
+          return res.status(202).json({
+            success: false,
+            error: "Credenciales inválidas",
+          });
+        }
       },
     });
   } catch (error) {
     console.error("Error general en el login:", error);
-    return res
-      .status(400)
-      .json({ success: false, error: "Error al autenticar usuario" });
+    return res.status(404).json({
+      success: false,
+      error: "Error al autenticar usuario",
+    });
   }
 };
 
