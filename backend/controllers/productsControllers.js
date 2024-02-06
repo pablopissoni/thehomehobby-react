@@ -62,13 +62,18 @@ const getAllProducts = (req, res, connection) => {
 
         // Formatear el contenido, las etiquetas, la galería y los filtros para cada producto
         const formattedResults = results.map((product) => {
-          return {
+          // Agregar la URL base a los campos de "imagen" y "galeria"
+          const formattedProduct = {
             ...product,
             contenido: parsers.parseContent(product.contenido),
             tags: parsers.parseTags(product.tags),
+            // Agregar la URL base a la imagen
+            imagen: `https://thehomehobby.s3.amazonaws.com${product.imagen}`,
             galeria: parsers.parseGallery(product.galeria),
             filtros: parsers.parseFilters(product.filtros),
           };
+
+          return formattedProduct;
         });
 
         const response = {
@@ -105,13 +110,18 @@ const getProductById = (req, res, connection) => {
 
     // Formatear el contenido, las etiquetas, la galería y los filtros para cada producto
     const formattedResults = results.map((product) => {
-      return {
+      // Agregar la URL base a los campos de "imagen" y "galeria"
+      const formattedProduct = {
         ...product,
         contenido: parsers.parseContent(product.contenido),
         tags: parsers.parseTags(product.tags),
+        // Agregar la URL base a la imagen
+        imagen: `https://thehomehobby.s3.amazonaws.com${product.imagen}`,
         galeria: parsers.parseGallery(product.galeria),
         filtros: parsers.parseFilters(product.filtros),
       };
+
+      return formattedProduct;
     });
 
     res.json(formattedResults);
