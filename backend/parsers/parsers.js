@@ -57,19 +57,8 @@ const parseTags = (tagsString) => {
   }
 };
 
-// Función para parsear y formatear la galería de imágenes
-const parseGallery = (galleryString) => {
-  try {
-    return JSON.parse(galleryString);
-  } catch (error) {
-    console.error("Error al parsear la galería:", error);
-    return null;
-  }
-};
-
 module.exports = {
   parseContent,
   parseFilters,
   parseTags,
-  parseGallery,
 };
