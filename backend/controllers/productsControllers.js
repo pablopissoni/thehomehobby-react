@@ -106,11 +106,8 @@ const getProductById = (req, res, connection) => {
       console.error("Error al realizar la consulta:", error);
       res.status(500).json({ error: "Error en el servidor" });
     } else if (results.length === 0) {
-      res.status(404).json({ error: "El producto no fue encontrado" });
+      return res.status(404).json({ error: "El producto no fue encontrado" });
     }
-    // } else {
-    //   res.json(results[0]);
-    // }
 
     // Formatear el contenido, las etiquetas, la galería y los filtros para cada producto
     const formattedResults = results.map((product) => {
