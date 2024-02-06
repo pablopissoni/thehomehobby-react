@@ -46,7 +46,7 @@ export const SliderProducts = ({ products }) => {
             <CardProduct
               id={prod?.id}
               off={prod?.oferta_id}
-              img={prod?.img}
+              img={prod?.imagen}
               stars={prod?.stars}
               stock={prod?.stock}
               title={prod?.nombre_ingles ? prod?.nombre_ingles : prod?.nombre_es}
