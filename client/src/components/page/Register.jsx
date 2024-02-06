@@ -40,6 +40,8 @@ export const Register = () => {
   // eslint-disable-next-line no-unused-vars
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   // eslint-disable-next-line no-unused-vars
+  const [confirmationMessage, setConfirmationMessage] = useState("");
+  // eslint-disable-next-line no-unused-vars
   // const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
   //* -------- Validaciones de los Inputs en Form --------
@@ -96,11 +98,19 @@ export const Register = () => {
       });
 
       console.log("Confirmation Response:", confirmResponse.data);
-      // Close the modal
-      setShowConfirmationModal(false);
+      // Mostrar mensaje de éxito
+      setConfirmationMessage(
+        "Confirmation successful. Redirecting to login..."
+      );
+      // Cerrar el modal después de 3 segundos y redirigir al usuario
+      setTimeout(() => {
+        setShowConfirmationModal(false);
+        window.location.href = "/login";
+      }, 3000);
     } catch (error) {
       console.error("Error confirming registration:", error);
-      // Handle the error, e.g., display an error message to the user
+      // Mostrar mensaje de error si el código es incorrecto
+      setConfirmationMessage("Invalid confirmation code. Please try again.");
     }
   };
   // ----- HANDLEs ----------
@@ -313,9 +323,21 @@ export const Register = () => {
                               setConfirmationCode(e.target.value)
                             }
                           />
+                          {/* Mostrar mensaje de error o éxito */}
+                          {confirmationMessage && (
+                            <p
+                              className={`text-center text-${
+                                confirmationMessage.includes("successful")
+                                  ? "green"
+                                  : "red"
+                              }-600 text-sm mt-2`}
+                            >
+                              {confirmationMessage}
+                            </p>
+                          )}
                           <div className="mt-4 flex justify-center">
                             <button
-                              className="text-center text-white px-2 py-1 rounded-sm bg-red-600 transition-transform duration-200 hover:scale-105 hover:bg-red-600"
+                              className="text-center text-white px-2 py-1 rounded-sm bg-red-600 transition-transform duration-200 hover:scale-105 hover:bg-red-700"
                               onClick={handleConfirmation}
                             >
                               Confirm
