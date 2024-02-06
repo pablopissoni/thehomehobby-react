@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import axios from "axios";
@@ -41,6 +42,7 @@ export const Register = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [confirmationMessage, setConfirmationMessage] = useState("");
+  const [registrationError, setRegistrationError] = useState("");
   // eslint-disable-next-line no-unused-vars
   // const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
@@ -60,30 +62,27 @@ export const Register = () => {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    // Validación de formularios
     const errorsObj = validateRegistration(userRegister);
     setErrors(errorsObj);
+
     if (Object.keys(errorsObj).length > 0) {
-      console.log("✕✕✕ ERROR DE VALIDACIONES ****: ", errors);
+      console.log("Validation errors:", errorsObj);
       return;
     }
 
     try {
-      // Realizar la solicitud HTTP con axios
       const response = await axios.post(urlUserRegister, userRegister);
-
-      console.log("Respuesta del servidor:", response.data);
-
-      // Set the flag for successful registration
-      // setRegistrationSuccess(true);
-      setShowConfirmationModal(true); // Abre modal para codigo de confirmacion
-
-      // You can handle the response as needed
-      // For example, redirect the user or display a success message
+      console.log("Server response:", response.data);
+      setShowConfirmationModal(true);
+      // Clear registration error message upon successful registration
+      setRegistrationError("");
     } catch (error) {
-      console.error("Error al enviar solicitud:", error);
-
-      // Handle the error, e.g., show an error message to the user
+      console.error("Error sending request:", error);
+      if (error.response.status === 420) {
+        setRegistrationError("User already exists");
+      } else {
+        setRegistrationError("Error registering user");
+      }
     }
   }
 
@@ -308,6 +307,9 @@ export const Register = () => {
                         </span>
                       )}
                     </div>
+                    {registrationError && (
+                      <p className="text-red-600">{registrationError}</p>
+                    )}
                     {showConfirmationModal && (
                       <div className="confirmation-modal flex flex-col items-center justify-center">
                         <div className="h-full w-full px-5 py-3 bg-slate-100 border border-gray-300 shadow-lg mt-4 rounded-lg">
