@@ -14,7 +14,6 @@ const registerUser = async (req, res) => {
   try {
     const { name, lastName, phone, email, password } = req.body;
 
-    // Crear los atributos del usuario
     const attributeList = [
       new AmazonCognitoIdentity.CognitoUserAttribute({
         Name: "name",
@@ -28,36 +27,33 @@ const registerUser = async (req, res) => {
         Name: "phone_number",
         Value: phone,
       }),
-      // Puedes agregar más atributos según tus necesidades
     ];
 
-    // Registrar al usuario en Cognito
     userPool.signUp(email, password, attributeList, null, (err, result) => {
       if (err) {
         console.error("Error al registrar usuario en Cognito:", err);
-        res.status(500).json({ error: "Error interno del servidor" });
-      } else {
-        const cognitoUser = result.user;
-        console.log("Usuario registrado en Cognito:", cognitoUser);
-
-        // Manejar la confirmación del usuario
-        if (result.userConfirmed) {
-          // El usuario está confirmado, puedes devolver un token u otro dato según tus necesidades
-          const token = result.getIdToken().getJwtToken();
-          res
-            .status(201)
-            .json({ message: "Usuario registrado exitosamente", token });
-        } else {
-          // El usuario aún no está confirmado, debes manejar esto apropiadamente
-          res.status(201).json({
-            message: "Usuario registrado. Por favor, confirme su cuenta.",
-          });
+        if (err.code === "UsernameExistsException") {
+          return res.status(420).json({ error: "El usuario ya existe" });
         }
+        return res.status(400).json({ error: "Error al registrar usuario" });
+      }
+      const cognitoUser = result.user;
+      console.log("Usuario registrado en Cognito:", cognitoUser);
+
+      if (result.userConfirmed) {
+        const token = result.getIdToken().getJwtToken();
+        return res
+          .status(201)
+          .json({ message: "Usuario registrado exitosamente", token });
+      } else {
+        return res.status(201).json({
+          message: "Usuario registrado. Por favor, confirme su cuenta.",
+        });
       }
     });
   } catch (error) {
     console.error("Error al registrar usuario:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    return res.status(400).json({ error: "Error al registrar usuario" });
   }
 };
 
@@ -75,15 +71,17 @@ const confirmAccount = async (req, res) => {
     cognitoUser.confirmRegistration(confirmationCode, true, (err, result) => {
       if (err) {
         console.error("Error al confirmar cuenta en Cognito:", err);
-        res.status(400).json({ error: "Error al confirmar cuenta" });
+        return res.status(400).json({ error: "Error al confirmar cuenta" });
       } else {
         console.log("Cuenta confirmada:", result);
-        res.status(200).json({ message: "Cuenta confirmada exitosamente" });
+        return res
+          .status(200)
+          .json({ message: "Cuenta confirmada exitosamente" });
       }
     });
   } catch (error) {
     console.error("Error al confirmar cuenta:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    return res.status(400).json({ error: "Error al confirmar cuenta" });
   }
 };
 
@@ -110,7 +108,7 @@ const loginUser = async (req, res) => {
       onSuccess: (session) => {
         console.log("Usuario autenticado en Cognito");
         const accessToken = session.getAccessToken().getJwtToken();
-        res.status(200).json({
+        return res.status(200).json({
           success: true,
           message: "Usuario autenticado correctamente",
           accessToken: accessToken,
@@ -118,16 +116,16 @@ const loginUser = async (req, res) => {
       },
       onFailure: (err) => {
         console.error("Error al autenticar usuario en Cognito:", err);
-        res
+        return res
           .status(401)
           .json({ success: false, error: "Credenciales inválidas" });
       },
     });
   } catch (error) {
     console.error("Error general en el login:", error);
-    res
-      .status(500)
-      .json({ success: false, error: "Error interno del servidor" });
+    return res
+      .status(400)
+      .json({ success: false, error: "Error al autenticar usuario" });
   }
 };
 
