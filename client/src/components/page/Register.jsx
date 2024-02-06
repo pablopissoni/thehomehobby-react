@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import logoHomeHobby from "../../assets/logo The Home Hobby.svg";
 import { Link } from "react-router-dom";
+import { validateRegistration } from "./validationRegistration";
 
 export const Register = () => {
   //* Direciones URL LocalHost y Produccion
@@ -42,60 +43,6 @@ export const Register = () => {
   // const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
   //* -------- Validaciones de los Inputs en Form --------
-  function validation() {
-    const regexEmail = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-    const errorsObj = {};
-    setErrors(errorsObj);
-
-    // Validacion Name
-    if (userRegister.name === "") {
-      errorsObj.name = "El nombre es obligatorio";
-      console.log("!!!!! Name", errors);
-    }
-
-    // Validacion LastName
-    if (userRegister.lastName === "") {
-      errorsObj.lastName = "El apellido es obligatorio";
-      console.log("!!!!! Last Name", errors);
-    }
-
-    // Validacion Email
-    if (userRegister.email === "") {
-      errorsObj.email = "El email es obligatorio";
-      console.log("!!!!! Email", errorsObj);
-    } else {
-      if (!regexEmail.test(userRegister.email)) {
-        errorsObj.email = "Formato de email incorrecto";
-        console.log("!!!!! Format Mail", errorsObj.email);
-      }
-    }
-
-    // Validacion Password
-    if (userRegister.password.length < 8) {
-      errorsObj.password = "La contraseña debe tener al menos 8 caracteres";
-      console.log("!!!!! Password", errorsObj.password);
-    }
-    if (userRegister.password !== userRegister.passwordConfirmation) {
-      errorsObj.passwordConfirmation = "La contraseña no coincide";
-      console.log("!!!!! La contraseña no coincide", errorsObj);
-    }
-    if (userRegister.passwordConfirmation === "") {
-      errorsObj.passwordConfirmation = "Repita su contraseña";
-      console.log("!!!!! Password Confirmation", errorsObj);
-    }
-
-    setErrors(errorsObj);
-    // Verificar si 'errorsObj' tiene propiedades
-    if (errorsObj && Object.keys(errorsObj).length > 0) {
-      console.log("✕✕✕ ERROR DE VALIDACIONES ****: ", errors);
-      return false; // No se puede enviar el formulario si hay errores de validaciones
-    } else {
-      console.log("✓✓✓ No hubo error de validaciones");
-      return true; // Se puede enviar el formulario si no hay errores de validaciones
-    }
-    // console.log("OBJECT KEY", Object.keys(errors));
-  }
-  // ------------------------
 
   //* ----- HANDLEs ----------
   // Manejo los valores del formulario
@@ -112,8 +59,12 @@ export const Register = () => {
     event.preventDefault();
 
     // Validación de formularios
-    const isError = validation(); // True: no tiene errores
-    if (!isError) { return; }
+    const errorsObj = validateRegistration(userRegister);
+    setErrors(errorsObj);
+    if (Object.keys(errorsObj).length > 0) {
+      console.log("✕✕✕ ERROR DE VALIDACIONES ****: ", errors);
+      return;
+    }
 
     try {
       // Realizar la solicitud HTTP con axios
@@ -123,7 +74,7 @@ export const Register = () => {
 
       // Set the flag for successful registration
       // setRegistrationSuccess(true);
-      setShowConfirmationModal(true) // Abre modal para codigo de confirmacion
+      setShowConfirmationModal(true); // Abre modal para codigo de confirmacion
 
       // You can handle the response as needed
       // For example, redirect the user or display a success message
@@ -147,7 +98,6 @@ export const Register = () => {
       console.log("Confirmation Response:", confirmResponse.data);
       // Close the modal
       setShowConfirmationModal(false);
-
     } catch (error) {
       console.error("Error confirming registration:", error);
       // Handle the error, e.g., display an error message to the user
