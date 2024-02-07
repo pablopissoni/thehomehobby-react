@@ -47,9 +47,8 @@ export const Login = () => {
         // Clear any previous error messages
         setErrorMessage("");
         // Redirect the user to the main page if authentication is successful
-        setTimeout(() => {
-          window.location.href = url;
-        }, 5000);
+
+        window.location.href = url;
       } else if (response.status === 202) {
         // Set error message for incorrect email or password
         setErrorMessage("Incorrect email or password.");
