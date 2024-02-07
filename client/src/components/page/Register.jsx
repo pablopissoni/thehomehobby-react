@@ -36,15 +36,19 @@ export const Register = () => {
     password: "",
     passwordConfirmation: "",
   });
-  // eslint-disable-next-line no-unused-vars
-  const [confirmationCode, setConfirmationCode] = useState("");
-  // eslint-disable-next-line no-unused-vars
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  // eslint-disable-next-line no-unused-vars
+  const [showModal, setShowModal] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState("");
   const [registrationError, setRegistrationError] = useState("");
   // eslint-disable-next-line no-unused-vars
   // const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  // Función para cerrar el modal
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
   //* -------- Validaciones de los Inputs en Form --------
 
@@ -73,9 +77,18 @@ export const Register = () => {
     try {
       const response = await axios.post(urlUserRegister, userRegister);
       console.log("Server response:", response.data);
-      setShowConfirmationModal(true);
-      // Clear registration error message upon successful registration
+      // Limpiar mensaje de error de registro al registrarse con éxito
       setRegistrationError("");
+      setUserRegister({
+        name: "",
+        lastName: "",
+        phone: "",
+        email: "",
+        password: "",
+        passwordConfirmation: "",
+      });
+      // Mostrar el modal de registro exitoso
+      openModal();
     } catch (error) {
       console.error("Error sending request:", error);
       if (error.response.status === 420) {
@@ -88,30 +101,6 @@ export const Register = () => {
 
   console.log("DATOS DE USUARIO: ", userRegister);
 
-  // eslint-disable-next-line no-unused-vars
-  const handleConfirmation = async () => {
-    try {
-      const confirmResponse = await axios.post(urlUserConfirm, {
-        email: userRegister.email,
-        confirmationCode: confirmationCode,
-      });
-
-      console.log("Confirmation Response:", confirmResponse.data);
-      // Mostrar mensaje de éxito
-      setConfirmationMessage(
-        "Confirmation successful. Redirecting to login..."
-      );
-      // Cerrar el modal después de 3 segundos y redirigir al usuario
-      setTimeout(() => {
-        setShowConfirmationModal(false);
-        window.location.href = "/login";
-      }, 3000);
-    } catch (error) {
-      console.error("Error confirming registration:", error);
-      // Mostrar mensaje de error si el código es incorrecto
-      setConfirmationMessage("Invalid confirmation code. Please try again.");
-    }
-  };
   // ----- HANDLEs ----------
 
   return (
@@ -310,40 +299,28 @@ export const Register = () => {
                     {registrationError && (
                       <p className="text-red-600">{registrationError}</p>
                     )}
-                    {showConfirmationModal && (
-                      <div className="confirmation-modal flex flex-col items-center justify-center">
-                        <div className="h-full w-full px-5 py-3 bg-slate-100 border border-gray-300 shadow-lg mt-4 rounded-lg">
-                          <h3 className="text-lg font-medium mb-2">
-                            Confirm email verification code
-                          </h3>
-                          <input
-                            className="mt-2 w-full max-w-xs border border-gray-200 rounded-sm pl-2 outline-none focus:border-2 focus:border-b-cyan-500"
-                            type="text"
-                            placeholder="Code..."
-                            value={confirmationCode}
-                            onChange={(e) =>
-                              setConfirmationCode(e.target.value)
-                            }
-                          />
-                          {/* Mostrar mensaje de error o éxito */}
-                          {confirmationMessage && (
-                            <p
-                              className={`text-center text-${
-                                confirmationMessage.includes("successful")
-                                  ? "green"
-                                  : "red"
-                              }-600 text-sm mt-2`}
-                            >
-                              {confirmationMessage}
-                            </p>
-                          )}
-                          <div className="mt-4 flex justify-center">
+                    {showModal && (
+                      <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="bg-white p-8 rounded-md shadow-md">
+                          <p className="text-center text-green-600 font-bold mb-4">
+                            Registration Successful!
+                          </p>
+                          <p className="text-center mb-4">
+                            Please check your email for the confirmation link.
+                          </p>
+                          <div className="flex justify-center">
                             <button
-                              className="text-center text-white px-2 py-1 rounded-sm bg-red-600 transition-transform duration-200 hover:scale-105 hover:bg-red-700"
-                              onClick={handleConfirmation}
+                              className="bg-red-600 text-white px-6 py-2 rounded-md mr-4"
+                              onClick={closeModal}
                             >
-                              Confirm
+                              Close
                             </button>
+                            <Link
+                              to={urlLogin}
+                              className="bg-green-600 text-white px-6 py-2 rounded-md mr-4"
+                            >
+                              Go to Login
+                            </Link>
                           </div>
                         </div>
                       </div>
