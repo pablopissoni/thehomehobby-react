@@ -16,11 +16,7 @@ export const NavBar = () => {
   const [showWishlist, setShowWishlist] = useState(false);
   //Mostrar ShoppingCart
   const [showShoppingCart, setShowShoppingCart] = useState(false);
-  // Searchbar en mobile
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const handleToggleSearch = () => {
-    setIsSearchVisible(!isSearchVisible);
-  };
+
   // Direciones URL LocalHost y Produccion
   const isLocalhost = window.location.href.includes("localhost");
   const urlLogin = isLocalhost
@@ -98,8 +94,7 @@ export const NavBar = () => {
           </div>
           {/* SearchBar  */}
           <div
-            className={`header-search transition-all-300 order-3 col-span-4 mt-[10px] self-center lg:order-2 lg:col-span-6 lg:mt-0 lg:block ${
-              isSearchVisible ? "" : "hidden"
+            className={`header-search transition-all-300 order-3 col-span-4 mt-[10px] self-center lg:order-2 lg:col-span-6 lg:mt-0
             }`}
           >
             <form className="search" onSubmit={handleSearch}>
@@ -118,14 +113,6 @@ export const NavBar = () => {
             </form>
           </div>
           <div className="order-2 col-span-2 flex gap-2 self-center justify-self-end lg:order-3 lg:col-span-3 xl:gap-5">
-            <div className="flex items-center lg:hidden">
-              <button
-                className="btn-search-mob p-[5px] text-white"
-                onClick={handleToggleSearch}
-              >
-                <i className="bi bi-search pointer-events-none flex text-2xl"></i>
-              </button>
-            </div>
             <div className="flex items-center lg:hidden">
               <button
                 className="btn-open-modal text-white"
