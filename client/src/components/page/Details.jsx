@@ -35,7 +35,10 @@ import test_product3 from "../../assets/test_product3.png";
 export const Details = () => {
   //* ---- HOOKS ----
   const { id } = useParams();
-  const [valueHTML, setValueHTML] = useState("");
+  const [valueHTML, setValueHTML] = useState({
+    descripcion: "Cargando",
+    ficha: "Cargando",
+  });
   const [thumbsSwiper, setThumbsSwiper] = useState(null); //Swiper
 
   // Define el estado para controlar la apertura/cierre de los modales
@@ -58,14 +61,28 @@ export const Details = () => {
       const response = await axios.get(urlDetailsId);
       setProduct(response.data[0]); // Solo el primer objeto encontrado
       console.log("response.data[0]", response.data[0]);
-      // console.log("response.data[0]?.contenido[0]?.ficha: ", response.data[0]?.contenido[0]?.ficha)
-      setValueHTML(response.data[0]?.contenido[0]?.ficha);
+      
+      // Ficha y Descripcion HTML en Español e Ingles
+      //! la base de datos no respeta el orden de idioma
+      const fichaES = response.data[0]?.contenido[0]?.ficha;
+      const fichaEN = response.data[0]?.contenido[1]?.ficha;
+      const descripcionES = response.data[0]?.contenido[0]?.descripcion;
+      const descripcionEN = response.data[0]?.contenido[1]?.descripcion;
+      setValueHTML({
+        spanish: {
+          ficha: fichaES,
+          descripcion: descripcionES,
+        },
+        english: {
+          ficha: fichaEN,
+          descripcion: descripcionEN,
+        }
+      });
     } catch (error) {
       console.log(error);
     }
   }
-  console.log("🚀 ~ PRODUCT: >>", product);
-  // console.log("🚀 ~ Details ~ valueHTML:", valueHTML)
+  // console.log("🚀 ~ PRODUCT: >>", product);
 
   // ----- GET Productos -------------
 
@@ -75,6 +92,8 @@ export const Details = () => {
     // console.log("🚀 ~ Details ~ product:", product);
   }, []);
   // -------- USE EFFECTS ------
+
+  console.log("🚀 valueHTML:>> ", valueHTML);
 
   //* ---- HANDLES ----
   const handleCommentClick = () => {
@@ -119,7 +138,6 @@ export const Details = () => {
   // quill.root.innerHTML = product?.contenido[0]?.ficha; //! al agregar se rompe porque parece leerlo antes de cargar la peticion
   // ---- QUILL HTML ----
 
-  console.log("VIDEO: >>", product?.video);
   return (
     <div className="flex min-h-full flex-col bg-body font-poppins text-txt bg-gray-100">
       <div className="product-details container mx-auto my-5 px-2 sm:px-8">
@@ -181,7 +199,10 @@ export const Details = () => {
               {/* video */}
               {product?.video && (
                 <SwiperSlide>
-                  <video className="w-full h-full object-contain " controls={false}>
+                  <video
+                    className="w-full h-full object-contain "
+                    controls={false}
+                  >
                     <source src={product?.video} type="video/mp4" />
                     Tu navegador no admite el elemento de video.
                   </video>
@@ -243,6 +264,12 @@ export const Details = () => {
                   className="clamp-5 break-all"
                 >
                   {/* Mini Descripcion aqui con dangerouslySetInnerHTML */}
+                  <ReactQuill
+                    theme="bubble"
+                    value={valueHTML?.english?.descripcion || valueHTML?.espanish?.descripcion}
+                    // onChange={setValueHTML}
+                    className="h-full"
+                  />
                 </p>
               </div>
             )}
@@ -468,8 +495,8 @@ export const Details = () => {
                 >
                   <ReactQuill
                     theme="bubble"
-                    value={valueHTML}
-                    onChange={setValueHTML}
+                    value={valueHTML?.english?.ficha || valueHTML?.espanish?.ficha}
+                    // onChange={setValueHTML}
                     className="h-full"
                   />
                   {/* {product?.contenido[0]?.ficha} */}
