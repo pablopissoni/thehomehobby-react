@@ -2,16 +2,18 @@ import React from "react";
 
 import Quill from "quill/core"; // Quill JS
 import "quill/dist/quill.snow.css"; // Quill JS
+
 import ReactQuill from "react-quill"; // Quill React
 import "react-quill/dist/quill.snow.css"; // Quill React
 import "react-quill/dist/quill.bubble.css"; // Quill React
 import Toolbar from "quill/modules/toolbar";
 import Snow from "quill/themes/snow";
-
 import Bold from "quill/formats/bold";
 import Italic from "quill/formats/italic";
 import Header from "quill/formats/header";
 
+// Dompurify
+import DOMPurify from "dompurify";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
@@ -35,6 +37,7 @@ import test_product3 from "../../assets/test_product3.png";
 export const Details = () => {
   //* ---- HOOKS ----
   const { id } = useParams();
+  const [ count, setCount ] = useState(0)
   const [valueHTML, setValueHTML] = useState({
     descripcion: "Cargando",
     ficha: "Cargando",
@@ -44,6 +47,8 @@ export const Details = () => {
   // Define el estado para controlar la apertura/cierre de los modales
   const [commentModalIsOpen, setCommentModalIsOpen] = useState(false);
   const [reviewModalIsOpen, setReviewModalIsOpen] = useState(false);
+  const [charactModalIsOpen, setCharactModalIsOpen] = useState(false);
+
   const [product, setProduct] = useState({
     contenido: [{ ficha: "Cargando" }],
   });
@@ -61,7 +66,7 @@ export const Details = () => {
       const response = await axios.get(urlDetailsId);
       setProduct(response.data[0]); // Solo el primer objeto encontrado
       console.log("response.data[0]", response.data[0]);
-      
+
       // Ficha y Descripcion HTML en Español e Ingles
       //! la base de datos no respeta el orden de idioma
       const fichaES = response.data[0]?.contenido[0]?.ficha;
@@ -76,7 +81,7 @@ export const Details = () => {
         english: {
           ficha: fichaEN,
           descripcion: descripcionEN,
-        }
+        },
       });
     } catch (error) {
       console.log(error);
@@ -108,7 +113,7 @@ export const Details = () => {
     console.log("🚀 ~ Details ~ reviewModalIsOpen:", reviewModalIsOpen);
   };
   //? test array img
-  const test_img = [test_product1, test_product2, test_product3];
+  // const test_img = [test_product1, test_product2, test_product3];
 
   // handleSubmit Form
   const handleFormSubmit = (e) => {
@@ -116,6 +121,22 @@ export const Details = () => {
     console.log("Form Submitted");
   };
   // ---- HANDLES ----
+
+  // Limpio con Dompurify
+  const fichaEnHTML = DOMPurify.sanitize(valueHTML?.english?.ficha, {
+    USE_PROFILES: { html: true },
+  });
+  const fichaEsHTML = DOMPurify.sanitize(valueHTML?.spanish?.ficha, {
+    USE_PROFILES: { html: true },
+  });
+  const descripcionEnHTML = DOMPurify.sanitize(
+    valueHTML?.english?.descripcion,
+    { USE_PROFILES: { html: true } }
+  );
+  const descripcionEsHTML = DOMPurify.sanitize(
+    valueHTML?.spanish?.descripcion,
+    { USE_PROFILES: { html: true } }
+  );
 
   //* ---- QUILL REACT ----
 
@@ -263,20 +284,27 @@ export const Details = () => {
                   // dangerouslySetInnerHTML={{ __html: product?.contenido[0]?.descripcion }}
                   className="clamp-5 break-all"
                 >
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: descripcionEnHTML || descripcionEsHTML,
+                    }}
+                  />
                   {/* Mini Descripcion aqui con dangerouslySetInnerHTML */}
-                  <ReactQuill
+                  {/* <ReactQuill
                     theme="bubble"
                     value={valueHTML?.english?.descripcion || valueHTML?.espanish?.descripcion}
+                    placeholder="loading description..."
+                    readOnly={true}
                     // onChange={setValueHTML}
                     className="h-full"
-                  />
+                  /> */}
                 </p>
               </div>
             )}
             <div className="flex gap-1">
               <form action="#" onClick={handleFormSubmit}>
                 <div className="block">
-                  <div className="my-3 flex flex-col gap-1">
+                  {/* <div className="my-3 flex flex-col gap-1">
                     <span className="font-bold">Size:</span>
                     <ul className="flex flex-wrap gap-3">
                       <li className="relative">
@@ -341,8 +369,8 @@ export const Details = () => {
                         </label>
                       </li>
                     </ul>
-                  </div>
-                  <div className="my-3 flex gap-2">
+                  </div> */}
+                  {/* <div className="my-3 flex gap-2">
                     <div>
                       <label className="inline-flex items-center">
                         <input
@@ -384,25 +412,27 @@ export const Details = () => {
                         />
                       </label>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="flex flex-wrap justify-start gap-5">
                   <div className="quantity inline-flex rounded-lg bg-white shadow">
                     <input
                       className="quantity-value input-number w-12 border-none bg-transparent p-1 text-center text-lg text-gray-400 focus:border-none focus:ring-0"
                       type="number"
-                      value="0"
+                      value={count}
                     />
                     <div className="flex w-5 flex-col justify-between">
                       <button
                         className="quantity-btn increment text-primary"
                         type="button"
-                      >
+                        onClick={() => setCount(count + 1)}
+                        >
                         <i className="bi bi-caret-up-fill"></i>
                       </button>
                       <button
                         className="quantity-btn decrement text-primary"
                         type="button"
+                        onClick={count > 0? () => setCount(count - 1) : null}
                       >
                         <i className="bi bi-caret-down-fill"></i>
                       </button>
@@ -482,368 +512,27 @@ export const Details = () => {
                 characteristic
               </h1>
             </div>
-            <div className="see-more relative pb-5 h-[1000px]">
-              {" "}
-              {/* altura 1000px temporal */}
-              <div className="see-more-container gradient-bottom max-h-[1000px] overflow-hidden">
-                <div
-                  className="h-full "
-                  // dangerouslySetInnerHTML={{
-                  //   __html: product?.contenido[0]?.ficha,
-                  // }}
-                  // id="editor" className="bg-gray-200 h-[300px]"
-                >
-                  <ReactQuill
-                    theme="bubble"
-                    value={valueHTML?.english?.ficha || valueHTML?.espanish?.ficha}
-                    // onChange={setValueHTML}
-                    className="h-full"
-                  />
-                  {/* {product?.contenido[0]?.ficha} */}
-                  {/* VARIABLE DESCRIPCION AQUI CON dangerouslySetInnerHTML */}
+            <div className="see-more relative pb-5 h-auto bg-slate-50">
+              {charactModalIsOpen && (
+                <div className="see-more-container gradient-bottom h-auto ">
+                  <div className="h-auto ">
+                    {/* VARIABLE DESCRIPCION AQUI CON dangerouslySetInnerHTML */}
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: fichaEnHTML || fichaEsHTML,
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-              <button className="btn-see-more absolute bottom-0 z-10 flex w-full justify-center hover:text-primary">
-                <i className="bi bi-chevron-compact-down text-stroke-medium transition-all-300 flex text-xl"></i>
+              )}
+              <button className="btn-see-more absolute bottom-0 z-10 flex w-full justify-center hover:text-primary"
+                onClick={() => setCharactModalIsOpen(!charactModalIsOpen)}
+              >
+                <i className={`bi bi-chevron-compact-down transition-transform duration-300 flex text-3xl  ${charactModalIsOpen ? 'rotate-180' : 'animate-bounce'}`}></i>
               </button>
             </div>
           </div>
-          <div className="col-span-12">
-            <div className="tabs-container">
-              <ul className="flex justify-between">
-                <li
-                  className="btn-tabs tab-active-1 transition-all-300 active w-full cursor-pointer bg-gray-200 p-2 text-center text-gray-400"
-                  onClick={handleCommentClick}
-                >
-                  Comments
-                </li>
-                <li
-                  onClick={handleReviewClick}
-                  className="btn-tabs tab-active-1 transition-all-300 w-full cursor-pointer bg-gray-200 p-2 text-center text-gray-400"
-                >
-                  Reviews
-                </li>
-              </ul>
-              <div className="tabs-content mt-5">
-                {/* Modal Comentarios */}
-                {commentModalIsOpen && (
-                  <div className="tab-content active absolute w-full ">
-                    {/* <div className="tab-content active invisible absolute w-full opacity-0"> */}
-                    <div className="flex gap-5">
-                      <div className="hidden h-14 w-14 min-w-[3.5rem] overflow-hidden rounded-full shadow-md sm:block">
-                        <img
-                          className="h-full w-full object-cover"
-                          src="images/comments/profile_1.png"
-                          alt="profile_logo"
-                        />
-                      </div>
-                      <form className="w-full">
-                        <div className="h-20">
-                          <textarea
-                            className="input resize-none"
-                            placeholder="Add a comment..."
-                            required=""
-                          ></textarea>
-                        </div>
-                        <button
-                          className="btn-effect mt-2 rounded-lg bg-primary p-2 font-bold text-white"
-                          type="submit"
-                        >
-                          <span>Comment</span>
-                        </button>
-                      </form>
-                    </div>
-                    <form className="my-5 flex flex-col xs:flex-row xs:items-center xs:justify-between">
-                      <span className="text-lg font-bold uppercase">
-                        Comments
-                      </span>
-                      <select
-                        className="nice-select select order-by"
-                        style={{ display: "none" }}
-                      >
-                        <option value="0">Most recent</option>
-                        <option value="1">Oldest</option>
-                      </select>
-                      <div className="nice-select select order-by">
-                        <span className="current">Order by</span>
-                        <div className="nice-select-dropdown">
-                          <ul className="list">
-                            <li data-value="0" className="option null">
-                              Most recent
-                            </li>
-                            <li data-value="1" className="option null">
-                              Oldest
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </form>
-                    <div className="mt-5 flex gap-5">
-                      <div className="hidden h-14 w-14 min-w-[3.5rem] overflow-hidden rounded-full shadow-md sm:block">
-                        <img
-                          className="h-full w-full object-cover"
-                          src="images/comments/profile_1.png"
-                          alt="profile_logo"
-                        />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <a className="font-bold hover:text-primary" href="#">
-                            John Doe
-                          </a>
-                          <span className="text-xs text-slate-400">
-                            2 feb. 11:28am
-                          </span>
-                        </div>
-                        <p className="my-2">
-                          Hello, how are you? I am interested in the product. Is
-                          there stock available?
-                        </p>
-                        <div className="flex items-center gap-3">
-                          <div className="flex cursor-pointer items-center gap-1 text-sm text-slate-500 hover:text-primary">
-                            <i className="bi bi-reply-fill flex"></i>
-                            <span>Reply</span>
-                          </div>
-                          <div className="flex cursor-pointer items-center gap-1 text-sm text-slate-500 hover:text-primary">
-                            <i className="bi bi-pencil-square flex"></i>
-                            <span>Edit</span>
-                          </div>
-                        </div>
-                        <div className="mt-5 flex gap-5">
-                          <div className="hidden h-14 w-14 min-w-[3.5rem] overflow-hidden rounded-full shadow-md sm:block">
-                            <img
-                              className="h-full w-full object-cover"
-                              src="images/comments/profile_2.png"
-                              alt="profile_logo"
-                            />
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <a
-                                className="font-bold text-blue-400 hover:text-primary"
-                                href="#"
-                              >
-                                Megabyte
-                              </a>
-                              <span className="text-xs text-slate-400">
-                                Just now
-                              </span>
-                            </div>
-                            <small className="flex items-center gap-1 text-slate-400">
-                              <i className="bi bi-reply-fill flex"></i>
-                              Responding to
-                              <a className="hover:text-primary" href="#">
-                                John Doe
-                              </a>
-                            </small>
-                            <p className="my-2">
-                              Hi John Doe! If there is stock available, any
-                              other questions please feel free to contact us,
-                              have a nice day.
-                            </p>
-                            <div className="flex items-center gap-3">
-                              <div className="flex cursor-pointer items-center gap-1 text-sm text-slate-500 hover:text-primary">
-                                <i className="bi bi-reply-fill flex"></i>
-                                <span>Reply</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                {/* Modal Reviews */}
-                {reviewModalIsOpen && (
-                  <div className="tab-content  absolute w-full bg-white">
-                    <div className="my-5 flex flex-col items-center justify-center gap-5 sm:flex-row">
-                      <div className="flex flex-col items-center gap-2">
-                        <span className="text-5xl">4,0</span>
-                        <div className="flex">
-                          <i className="bi bi-star-fill flex text-base text-star"></i>
-                          <i className="bi bi-star-fill flex text-base text-star"></i>
-                          <i className="bi bi-star-fill flex text-base text-star"></i>
-                          <i className="bi bi-star-fill flex text-base text-star"></i>
-                          <i className="bi bi-star-fill flex text-base text-gray-200"></i>
-                        </div>
-                        <span className="flex items-center gap-1">
-                          <i className="bi bi-chat-quote flex"></i> 93 Reviews
-                        </span>
-                      </div>
-                      <div className="w-full max-w-[600px]">
-                        <div className="my-2 flex items-center gap-2">
-                          <span>5</span>
-                          <div className="relative h-5 w-full overflow-hidden rounded bg-primary-rgba">
-                            <div className="absolute left-0 top-0 h-full w-[50%] rounded bg-primary"></div>
-                          </div>
-                        </div>
-                        <div className="my-2 flex items-center gap-2">
-                          <span>4</span>
-                          <div className="relative h-5 w-full overflow-hidden rounded bg-primary-rgba">
-                            <div className="absolute left-0 top-0 h-full w-[40%] rounded bg-primary"></div>
-                          </div>
-                        </div>
-                        <div className="my-2 flex items-center gap-2">
-                          <span>3</span>
-                          <div className="relative h-5 w-full overflow-hidden rounded bg-primary-rgba">
-                            <div className="absolute left-0 top-0 h-full w-[30%] rounded bg-primary"></div>
-                          </div>
-                        </div>
-                        <div className="my-2 flex items-center gap-2">
-                          <span>2</span>
-                          <div className="relative h-5 w-full overflow-hidden rounded bg-primary-rgba">
-                            <div className="absolute left-0 top-0 h-full w-[20%] rounded bg-primary"></div>
-                          </div>
-                        </div>
-                        <div className="my-2 flex items-center gap-2">
-                          <span>1</span>
-                          <div className="relative h-5 w-full overflow-hidden rounded bg-primary-rgba">
-                            <div className="absolute left-0 top-0 h-full w-[10%] rounded bg-primary"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex gap-5">
-                      <div className="hidden h-14 w-14 min-w-[3.5rem] overflow-hidden rounded-full shadow-md sm:block">
-                        <img
-                          className="h-full w-full object-cover"
-                          src="images/comments/profile_1.png"
-                          alt="profile_logo"
-                        />
-                      </div>
-                      <form
-                        className="form-review flex w-full flex-col gap-2"
-                        method="GET"
-                      >
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm uppercase">
-                            Your Valoration:
-                          </span>
-                          <div
-                            id="rater"
-                            className="star-rating"
-                            style={{
-                              width: "160px",
-                              height: "32px",
-                              backgroundSize: "32px",
-                            }}
-                          >
-                            <div
-                              className="star-value"
-                              style={{ backgroundSize: "32px", width: "0px" }}
-                            ></div>
-                          </div>
-                          <input
-                            name="ratingvalue"
-                            className="rating-value hidden"
-                            type="number"
-                            // value=""
-                          />
-                        </div>
-                        <div className="h-20">
-                          <textarea
-                            name="reviewvalue"
-                            className="input resize-none"
-                            placeholder="Add a review..."
-                            required=""
-                          ></textarea>
-                        </div>
-                        <div>
-                          <button
-                            className="btn-effect rounded-lg bg-primary p-2 font-bold text-white"
-                            type="submit"
-                          >
-                            <span>Post review</span>
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                    <form className="my-5 flex flex-col xs:flex-row xs:items-center xs:justify-between">
-                      <span className="text-lg font-bold uppercase">
-                        Reviews
-                      </span>
-                      <select
-                        className="nice-select select order-by"
-                        style={{ display: "none" }}
-                      >
-                        <option value="0">Most recent</option>
-                        <option value="1">Oldest</option>
-                        <option value="2">5 ★</option>
-                        <option value="3">4 ★</option>
-                        <option value="4">3 ★</option>
-                        <option value="5">2 ★</option>
-                        <option value="6">1 ★</option>
-                      </select>
-                      <div className="nice-select select order-by" tabIndex="0">
-                        <span className="current">Order by</span>
-                        <div className="nice-select-dropdown">
-                          <ul className="list">
-                            <li data-value="0" className="option null">
-                              Most recent
-                            </li>
-                            <li data-value="1" className="option null">
-                              Oldest
-                            </li>
-                            <li data-value="2" className="option null">
-                              5 ★
-                            </li>
-                            <li data-value="3" className="option null">
-                              4 ★
-                            </li>
-                            <li data-value="4" className="option null">
-                              3 ★
-                            </li>
-                            <li data-value="5" className="option null">
-                              2 ★
-                            </li>
-                            <li data-value="6" className="option null">
-                              1 ★
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </form>
-                    <div className="mt-5 flex gap-5">
-                      <div className="hidden h-14 w-14 min-w-[3.5rem] overflow-hidden rounded-full shadow-md sm:block">
-                        <img
-                          className="h-full w-full object-cover"
-                          src="images/comments/profile_1.png"
-                          alt="profile_logo"
-                        />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <a className="font-bold hover:text-primary" href="#">
-                            John Doe
-                          </a>
-                          <span className="text-xs text-slate-400">
-                            2 feb. 11:28am
-                          </span>
-                        </div>
-                        <div className="flex">
-                          <i className="bi bi-star-fill flex text-base text-star"></i>
-                          <i className="bi bi-star-fill flex text-base text-star"></i>
-                          <i className="bi bi-star-fill flex text-base text-star"></i>
-                          <i className="bi bi-star-fill flex text-base text-star"></i>
-                          <i className="bi bi-star-fill flex text-base text-gray-200"></i>
-                        </div>
-                        <p className="my-2">
-                          Everything perfect, the product arrived impeccable and
-                          I had no problem, very satisfied.
-                        </p>
-                        <div className="flex items-center gap-3">
-                          <div className="flex cursor-pointer items-center gap-1 text-sm text-slate-500 hover:text-primary">
-                            <i className="bi bi-pencil-square flex"></i>
-                            <span>Edit</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+
         </div>
       </div>
     </div>
