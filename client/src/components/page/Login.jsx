@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 // eslint-disable-next-line no-unused-vars
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import LogoGrande from "../../assets/logo The Home Hobby.svg";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -22,11 +22,8 @@ export const Login = () => {
   });
 
   const [errorMessage, setErrorMessage] = useState("");
-  
-  const [successMessage, setSuccessMessage] = useState({
-    message: "",
-    error: "",
-  });
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [confirmationCode, setConfirmationCode] = useState("");
   // ---- HOOKs --------
 
   //* --- HANDLES ----------------
@@ -54,10 +51,8 @@ export const Login = () => {
         // Set error message for incorrect email or password
         setErrorMessage("Incorrect email or password.");
       } else if (response.status === 203) {
-        // Set an error message specifically for unconfirmed accounts
-        setErrorMessage(
-          "Your account has not been confirmed. Please check your email and enter the 6-digit code."
-        );
+        // Show confirmation modal if account is unconfirmed
+        setShowConfirmationModal(true);
       } else if (response.status === 404) {
         // Set error message for server error
         setErrorMessage("An error occurred. Please try again later.");
@@ -69,15 +64,22 @@ export const Login = () => {
     }
   };
 
-  // --- HANDLES ----------------
+  const handleConfirmation = async () => {
+    try {
+      // Aquí iría la lógica para enviar el código de confirmación al servidor
+      console.log("Confirmation code:", confirmationCode);
+      // Suponiendo que el código de confirmación se envía correctamente al servidor
+      // Se cierra el modal de confirmación
+      setShowConfirmationModal(false);
+      // Aquí podrías redirigir al usuario a la página de inicio de sesión u otra página según tu lógica
+    } catch (error) {
+      console.error("Error confirming account:", error);
+      // Mostrar un mensaje de error al usuario si el código de confirmación es incorrecto
+      setErrorMessage("Invalid confirmation code. Please try again.");
+    }
+  };
 
-  // Clear success message after component unmounts
-  // useEffect(() => {
-  //   return () => {
-  //     setSuccessMessage("");
-  //   };
-  // }, []);
-  console.log("🚀 ~ Login ~ successMessage:", successMessage);
+  // --- HANDLES ----------------
 
   return (
     <div className="bg-slate-100 flex items-center justify-center h-screen">
@@ -162,18 +164,7 @@ export const Login = () => {
                     </button>
                   </div>
                   {/* </div> */}
-                  {/* Success Message */}
-                  {successMessage?.message && (
-                    <div className="text-green-600 text-center mt-3 lg:ml-4">
-                      {successMessage.message}
-                    </div>
-                  )}
                   {/* Error Message */}
-                  {successMessage?.error && (
-                    <div className="text-red-600 mt-3 lg:ml-4">
-                      {successMessage.error}
-                    </div>
-                  )}
                   {errorMessage && (
                     <div className="text-red-600 mt-3 lg:ml-4">
                       {errorMessage}
@@ -210,6 +201,32 @@ export const Login = () => {
           </Link>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      {showConfirmationModal && (
+        <div className="confirmation-modal flex flex-col items-center justify-center">
+          <div className="h-full w-full px-5 py-3 bg-slate-100 border border-gray-300 shadow-lg mt-4 rounded-lg">
+            <h3 className="text-lg font-medium mb-2">
+              Confirm email verification code
+            </h3>
+            <input
+              className="mt-2 w-full max-w-xs border border-gray-200 rounded-sm pl-2 outline-none focus:border-2 focus:border-b-cyan-500"
+              type="text"
+              placeholder="Code..."
+              value={confirmationCode}
+              onChange={(e) => setConfirmationCode(e.target.value)}
+            />
+            <div className="mt-4 flex justify-center">
+              <button
+                className="text-center text-white px-2 py-1 rounded-sm bg-red-600 transition-transform duration-200 hover:scale-105 hover:bg-red-700"
+                onClick={handleConfirmation}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
