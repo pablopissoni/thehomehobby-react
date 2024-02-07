@@ -138,4 +138,44 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser, confirmAccount };
+const resendConfirmationEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const userData = {
+      Username: email,
+      Pool: userPool,
+    };
+
+    const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+    cognitoUser.resendConfirmationCode((err, result) => {
+      if (err) {
+        console.error(
+          "Error al reenviar correo de confirmación en Cognito:",
+          err
+        );
+        return res
+          .status(400)
+          .json({ error: "Error al reenviar correo de confirmación" });
+      } else {
+        console.log("Correo de confirmación reenviado:", result);
+        return res
+          .status(200)
+          .json({ message: "Correo de confirmación reenviado exitosamente" });
+      }
+    });
+  } catch (error) {
+    console.error("Error al reenviar correo de confirmación:", error);
+    return res
+      .status(400)
+      .json({ error: "Error al reenviar correo de confirmación" });
+  }
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  confirmAccount,
+  resendConfirmationEmail,
+};
