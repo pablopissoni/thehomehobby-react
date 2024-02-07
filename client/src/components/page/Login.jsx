@@ -22,7 +22,7 @@ export const Login = () => {
   });
 
   const [errorMessage, setErrorMessage] = useState("");
-  
+
   const [successMessage, setSuccessMessage] = useState({
     message: "",
     error: "",
@@ -56,7 +56,7 @@ export const Login = () => {
       } else if (response.status === 203) {
         // Set an error message specifically for unconfirmed accounts
         setErrorMessage(
-          "Your account has not been confirmed. Please check your email and enter the 6-digit code."
+          "Your account has not been confirmed. Please check your email for the confirmation link."
         );
       } else if (response.status === 404) {
         // Set error message for server error
@@ -78,6 +78,23 @@ export const Login = () => {
   //   };
   // }, []);
   console.log("🚀 ~ Login ~ successMessage:", successMessage);
+
+  const handleResendConfirmation = async () => {
+    try {
+      await axios.post(
+        "http://localhost:3001/users/resend_confirmation_email",
+        {
+          email: loginData.email,
+        }
+      );
+      setErrorMessage("Confirmation email resent successfully!");
+    } catch (error) {
+      console.error("Error resending confirmation email:", error);
+      setErrorMessage(
+        "Failed to resend confirmation email. Please try again later."
+      );
+    }
+  };
 
   return (
     <div className="bg-slate-100 flex items-center justify-center h-screen">
@@ -174,9 +191,20 @@ export const Login = () => {
                       {successMessage.error}
                     </div>
                   )}
+
                   {errorMessage && (
                     <div className="text-red-600 mt-3 lg:ml-4">
                       {errorMessage}
+                      {/* Botón para reenviar el correo de confirmación */}
+                      {errorMessage ===
+                        "Your account has not been confirmed. Please check your email for the confirmation link." && (
+                        <button
+                          onClick={handleResendConfirmation}
+                          className="text-blue-600 hover:underline ml-2 focus:outline-none"
+                        >
+                          Resend confirmation email
+                        </button>
+                      )}
                     </div>
                   )}
 
