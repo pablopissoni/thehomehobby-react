@@ -6,8 +6,21 @@ import LogoGrande from "../assets/logo The Home Hobby.svg";
 import Perfil from "../assets/perfil.png";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { ShoppingCart } from "./ShoppingCart";
+import { Wishlist } from "./Wishlist";
+import { NavBarMobile } from "./NavBarMobile";
 
 export const NavBar = () => {
+  //Mostrar NavBarMobile
+  const [showNavBarMobile, setShowNavBarMobile] = useState(false);
+  //Mostrar WishList
+  const [showWishlist, setShowWishlist] = useState(false);
+  //Mostrar ShoppingCart
+  const [showShoppingCart, setShowShoppingCart] = useState(false);
+  // Searchbar en mobile
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const handleToggleSearch = () => {
+    setIsSearchVisible(!isSearchVisible);
+  };
   // Direciones URL LocalHost y Produccion
   const isLocalhost = window.location.href.includes("localhost");
   const urlLogin = isLocalhost
@@ -18,21 +31,21 @@ export const NavBar = () => {
     : "https://thehomehobby/register";
 
   const home = isLocalhost ? "http://localhost:5173" : "https://thehomehobby";
-  const [showShoppingCart, setShowShoppingCart] = useState(false);
+
   //--------------------
 
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   // console.log("🚀 ~ NavBar ~ searchTerm:", searchTerm)
-  const navigate = useNavigate ();
+  const navigate = useNavigate();
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (searchTerm == '') {
-      return
+    if (searchTerm == "") {
+      return;
     } else {
-      navigate(`products/${searchTerm}`)
+      navigate(`products/${searchTerm}`);
     }
-  }
+  };
 
   return (
     <header className="header-section relative z-30 shadow-custom1">
@@ -84,7 +97,11 @@ export const NavBar = () => {
             </a>
           </div>
           {/* SearchBar  */}
-          <div className="header-search transition-all-300 order-3 col-span-4 mt-[10px] hidden self-center lg:order-2 lg:col-span-6 lg:mt-0 lg:block">
+          <div
+            className={`header-search transition-all-300 order-3 col-span-4 mt-[10px] self-center lg:order-2 lg:col-span-6 lg:mt-0 lg:block ${
+              isSearchVisible ? "" : "hidden"
+            }`}
+          >
             <form className="search" onSubmit={handleSearch}>
               <div className="flex h-[40px] overflow-hidden rounded-[50px] bg-white">
                 <input
@@ -102,27 +119,33 @@ export const NavBar = () => {
           </div>
           <div className="order-2 col-span-2 flex gap-2 self-center justify-self-end lg:order-3 lg:col-span-3 xl:gap-5">
             <div className="flex items-center lg:hidden">
-              <button className="btn-search-mob p-[5px] text-white">
+              <button
+                className="btn-search-mob p-[5px] text-white"
+                onClick={handleToggleSearch}
+              >
                 <i className="bi bi-search pointer-events-none flex text-2xl"></i>
               </button>
             </div>
             <div className="flex items-center lg:hidden">
               <button
                 className="btn-open-modal text-white"
-                data-target=".menu-mob"
+                onClick={() => setShowNavBarMobile(true)}
               >
                 <i className="bi bi-list pointer-events-none flex text-3xl"></i>
               </button>
             </div>
             <div className="group-items hidden items-center gap-5 text-white lg:flex">
-              <div className="relative">
+              <button
+                className="relative"
+                onClick={() => setShowWishlist(true)}
+              >
                 <a className="btn-open-modal" data-target=".wishlist-modal">
                   <i className="bi bi-heart pointer-events-none flex translate-y-1 transform text-[32px] text-white"></i>
                 </a>
                 <span className="badge absolute top-0 right-[-6px] h-[15px] min-w-[15px] px-[2px]">
                   0
                 </span>
-              </div>
+              </button>
 
               <button
                 className="relative"
@@ -881,6 +904,9 @@ export const NavBar = () => {
           </ul>
         </nav>
       </div>
+
+      {showNavBarMobile && <NavBarMobile setShow={setShowNavBarMobile} />}
+      {showWishlist && <Wishlist setShow={setShowWishlist} />}
       {showShoppingCart && <ShoppingCart setShow={setShowShoppingCart} />}
     </header>
   );
