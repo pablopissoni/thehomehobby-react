@@ -9,6 +9,7 @@ import { NavBar } from "./components/NavBar";
 import { HomePage } from "./components/HomePage";
 import { Details } from "./components/page/Details";
 import { Register } from "./components/page/Register";
+import { PasswordReset } from "./components/page/PasswordReset";
 import { ContactUs } from "./components/page/ContactUs";
 import { FAQs } from "./components/page/FAQs";
 import { Checkout } from "./components/page/Checkout";
@@ -20,7 +21,7 @@ import { AdminDashboard } from "./components/page/AdminDashboard";
 const App = () => {
   // Obtengo las ubicaciones y guardo en una variable las que quiero ignorar después
   const { pathname } = useLocation();
-  const ignorePaths = ["/login", "/register"];
+  const ignorePaths = ["/login", "/register", "/password-reset"];
   const isIgnored = ignorePaths.includes(pathname);
   //-------------------------------
 
@@ -34,6 +35,7 @@ const App = () => {
         {/* Se renderiza la lista de produtos relacionados con el producto de la busqueda */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/password-reset" element={<PasswordReset />} />
         <Route path="/details/:id" element={<Details />} />
         <Route path="/ContactUs" element={<ContactUs />} />
         <Route path="/FAQs" element={<FAQs />} />
