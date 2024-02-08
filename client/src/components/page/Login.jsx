@@ -47,14 +47,13 @@ export const Login = () => {
         // Clear any previous error messages
         setErrorMessage("");
         // Redirect the user to the main page if authentication is successful
-        setTimeout(() => {
-          window.location.href = url;
-        }, 5000);
+        window.location.href = url;
       } else if (response.status === 202) {
         // Set error message for incorrect email or password
         setErrorMessage("Incorrect email or password.");
       } else if (response.status === 203) {
         // Set an error message specifically for unconfirmed accounts
+        setErrorMessage(""); // Limpiar el mensaje de error antes de establecer uno nuevo
         setErrorMessage(
           "Your account has not been confirmed. Please check your email for the confirmation link."
         );
@@ -87,12 +86,23 @@ export const Login = () => {
           email: loginData.email,
         }
       );
-      setErrorMessage("Confirmation email resent successfully!");
+      setSuccessMessage({
+        message: "Confirmation email resent successfully!",
+        error: "",
+      });
+      setErrorMessage(""); // Limpiar el mensaje de error después de un éxito
     } catch (error) {
       console.error("Error resending confirmation email:", error);
-      setErrorMessage(
-        "Failed to resend confirmation email. Please try again later."
-      );
+      if (error.response && error.response.status === 404) {
+        // Aquí, si se recibe el código de estado 404, significa que el usuario no está confirmado.
+        // En lugar de mostrar un mensaje de error, simplemente limpiamos los mensajes existentes.
+        setSuccessMessage({ message: "", error: "" });
+      } else {
+        // Si hay algún otro error, mostramos el mensaje de error.
+        setErrorMessage(
+          "Failed to resend confirmation email. Please try again later."
+        );
+      }
     }
   };
 
@@ -211,7 +221,7 @@ export const Login = () => {
                   {/* Link for Forgot Password */}
                   <div className="text-end mt-3 flex justify-center lg:w-2/3">
                     <Link
-                      to="/password/reset"
+                      to="/password-reset"
                       className="text-dark text-center hover:text-blue-600"
                     >
                       Forgot your password?

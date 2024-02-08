@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import logoHomeHobby from "../../assets/logo The Home Hobby.svg";
 import { Link } from "react-router-dom";
-import { validateRegistration } from "./validationRegister";
+import { validateRegistration } from "../../utils/validationRegister";
 
 export const Register = () => {
   //* Direciones URL LocalHost y Produccion

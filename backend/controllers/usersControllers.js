@@ -173,9 +173,90 @@ const resendConfirmationEmail = async (req, res) => {
   }
 };
 
+const recoverAccount = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const userData = {
+      Username: email,
+      Pool: userPool,
+    };
+
+    const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+    cognitoUser.forgotPassword({
+      onSuccess: () => {
+        console.log(
+          "Se ha enviado un correo electrónico con el enlace para restablecer la contraseña"
+        );
+        return res.status(200).json({
+          message:
+            "Se ha enviado un correo electrónico con el enlace para restablecer la contraseña.",
+        });
+      },
+      onFailure: (err) => {
+        if (err.code === "UserNotFoundException") {
+          return res.status(404).json({
+            error:
+              "El correo electrónico ingresado no se encuentra registrado.",
+          });
+        } else {
+          console.error(
+            "Error al solicitar el enlace de restablecimiento de contraseña:",
+            err
+          );
+          return res.status(400).json({
+            error:
+              "Error al solicitar el enlace de restablecimiento de contraseña. Por favor, inténtalo de nuevo más tarde.",
+          });
+        }
+      },
+    });
+  } catch (error) {
+    console.error("Error al recuperar la cuenta:", error);
+    return res.status(500).json({
+      error:
+        "Error al recuperar la cuenta. Por favor, inténtalo de nuevo más tarde.",
+    });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { email, code, newPassword } = req.body;
+
+    const userData = {
+      Username: email,
+      Pool: userPool,
+    };
+
+    const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+    cognitoUser.confirmPassword(code, newPassword, {
+      onSuccess: () => {
+        console.log("Contraseña cambiada exitosamente");
+        return res
+          .status(200)
+          .json({ message: "Contraseña cambiada exitosamente" });
+      },
+      onFailure: (err) => {
+        console.error("Error al cambiar la contraseña:", err);
+        return res
+          .status(400)
+          .json({ error: "Error al cambiar la contraseña" });
+      },
+    });
+  } catch (error) {
+    console.error("Error general al cambiar la contraseña:", error);
+    return res.status(400).json({ error: "Error al cambiar la contraseña" });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   confirmAccount,
   resendConfirmationEmail,
+  recoverAccount,
+  resetPassword,
 };
