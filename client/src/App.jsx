@@ -22,6 +22,7 @@ const App = () => {
   // Obtengo las ubicaciones y guardo en una variable las que quiero ignorar después
   const { pathname } = useLocation();
   const ignorePaths = ["/login", "/register", "/password-reset"];
+  const ignoreFooter = ["/adminDashboard"];
   const isIgnored = ignorePaths.includes(pathname);
   //-------------------------------
 
@@ -41,10 +42,10 @@ const App = () => {
         <Route path="/FAQs" element={<FAQs />} />
         <Route path="/Checkout" element={<Checkout />} />
         <Route path="/UserProfile" element={<UserProfile />} />
-        <Route path="/AdminDashboard" element={<AdminDashboard />} />
+        <Route path="/adminDashboard" element={<AdminDashboard />} />
         {/* <Route path="/detail/:id" element={<Login/>} /> */}
       </Routes>
-      <Footer />
+      {!ignoreFooter && <Footer />}
     </div>
     // </Provider>
   );
