@@ -173,9 +173,54 @@ const resendConfirmationEmail = async (req, res) => {
   }
 };
 
+const recoverAccount = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Define el usuario con los datos necesarios
+    const userData = {
+      Username: email,
+      Pool: userPool, // Asegúrate de que 'userPool' esté definido y accesible en este módulo
+    };
+
+    // Crea una instancia del usuario cognito
+    const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+    // Solicita un enlace de restablecimiento de contraseña
+    cognitoUser.forgotPassword({
+      onSuccess: () => {
+        console.log(
+          "Se ha enviado un correo electrónico con el enlace para restablecer la contraseña"
+        );
+        return res.status(200).json({
+          message:
+            "Se ha enviado un correo electrónico con el enlace para restablecer la contraseña.",
+        });
+      },
+      onFailure: (err) => {
+        console.error(
+          "Error al solicitar el enlace de restablecimiento de contraseña:",
+          err
+        );
+        return res.status(400).json({
+          error:
+            "Error al solicitar el enlace de restablecimiento de contraseña. Por favor, inténtalo de nuevo más tarde.",
+        });
+      },
+    });
+  } catch (error) {
+    console.error("Error al recuperar la cuenta:", error);
+    return res.status(400).json({
+      error:
+        "Error al recuperar la cuenta. Por favor, inténtalo de nuevo más tarde.",
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   confirmAccount,
   resendConfirmationEmail,
+  recoverAccount,
 };
