@@ -217,10 +217,42 @@ const recoverAccount = async (req, res) => {
   }
 };
 
+const resetPassword = async (req, res) => {
+  try {
+    const { email, code, newPassword } = req.body;
+
+    const userData = {
+      Username: email,
+      Pool: userPool,
+    };
+
+    const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+    cognitoUser.confirmPassword(code, newPassword, {
+      onSuccess: () => {
+        console.log("Contraseña cambiada exitosamente");
+        return res
+          .status(200)
+          .json({ message: "Contraseña cambiada exitosamente" });
+      },
+      onFailure: (err) => {
+        console.error("Error al cambiar la contraseña:", err);
+        return res
+          .status(400)
+          .json({ error: "Error al cambiar la contraseña" });
+      },
+    });
+  } catch (error) {
+    console.error("Error general al cambiar la contraseña:", error);
+    return res.status(400).json({ error: "Error al cambiar la contraseña" });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   confirmAccount,
   resendConfirmationEmail,
   recoverAccount,
+  resetPassword,
 };
