@@ -30,19 +30,20 @@ export const PasswordReset = () => {
       const response = await axios.post("http://localhost:3001/users/recover", {
         email: formData.email,
       });
-      const { data } = response;
-      if (data.message === "Email found") {
+      if (response.status === 200) {
         setEmailSent(true);
         setErrorMessage("");
-      } else {
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
         setErrorMessage(
           "El correo electrónico ingresado no se encuentra registrado."
         );
+      } else {
+        setErrorMessage(
+          "Error al enviar el correo electrónico. Por favor, inténtalo de nuevo."
+        );
       }
-    } catch (error) {
-      setErrorMessage(
-        "Error al enviar el correo electrónico. Por favor, inténtalo de nuevo."
-      );
     }
   };
 
