@@ -47,7 +47,6 @@ export const Login = () => {
         // Clear any previous error messages
         setErrorMessage("");
         // Redirect the user to the main page if authentication is successful
-
         window.location.href = url;
       } else if (response.status === 202) {
         // Set error message for incorrect email or password
@@ -222,7 +221,7 @@ export const Login = () => {
                   {/* Link for Forgot Password */}
                   <div className="text-end mt-3 flex justify-center lg:w-2/3">
                     <Link
-                      to="/password/reset"
+                      to="/password-reset"
                       className="text-dark text-center hover:text-blue-600"
                     >
                       Forgot your password?
