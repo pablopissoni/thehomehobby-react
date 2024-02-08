@@ -3,7 +3,7 @@ const parsers = require("../parsers/parsers");
 // Lógica para obtener todos los productos
 const getAllProducts = (req, res, connection) => {
   const page = req.query.page || 1;
-  const pageSize = 10;
+  const pageSize = 100;
   const offset = (page - 1) * pageSize;
   const searchTerm = req.query.name || "";
   const colorFilter = req.query.color || ""; // Nuevo filtro por color
