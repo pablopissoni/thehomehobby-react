@@ -13,6 +13,7 @@ export const PasswordReset = () => {
 
   const [resetSuccess, setResetSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,12 +23,30 @@ export const PasswordReset = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleEmailSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Envía la solicitud para verificar si el correo existe y enviar el código
+      const response = await axios.post("http://localhost:3001/users/recover", {
+        email: formData.email,
+      });
+      setEmailSent(true);
+      setErrorMessage("");
+    } catch (error) {
+      setErrorMessage(
+        "Error al enviar el correo electrónico. Por favor, inténtalo de nuevo."
+      );
+    }
+  };
+
+  const handleResetSubmit = async (e) => {
     e.preventDefault();
     try {
       // Envía la solicitud para restablecer la contraseña al backend
-      // eslint-disable-next-line no-unused-vars
-      const response = await axios.post("/api/reset-password", formData);
+      const response = await axios.post(
+        "http://localhost:3001/users/reset-password",
+        formData
+      );
       setResetSuccess(true);
       setErrorMessage("");
     } catch (error) {
@@ -42,12 +61,8 @@ export const PasswordReset = () => {
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
         <img src={LogoGrande} alt="Logo" className="w-24 mx-auto mb-4" />
         <h2 className="text-2xl font-bold mb-4">Restablecer Contraseña</h2>
-        {resetSuccess ? (
-          <p className="text-green-600 mb-4">
-            Tu contraseña ha sido restablecida exitosamente.
-          </p>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
+        {!emailSent ? (
+          <form onSubmit={handleEmailSubmit} className="space-y-4">
             <div>
               <label htmlFor="email" className="block">
                 Correo Electrónico:
@@ -62,6 +77,15 @@ export const PasswordReset = () => {
                 required
               />
             </div>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+            >
+              Enviar Correo de Restablecimiento
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleResetSubmit} className="space-y-4">
             <div>
               <label htmlFor="code" className="block">
                 Código de 6 dígitos:
