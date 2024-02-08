@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import LogoGrande from "../../assets/logo The Home Hobby.svg";
+import { Link } from "react-router-dom";
 
 export const PasswordReset = () => {
   const [formData, setFormData] = useState({
@@ -49,18 +50,33 @@ export const PasswordReset = () => {
 
   const handleResetSubmit = async (e) => {
     e.preventDefault();
+
+    const { newPassword, confirmPassword, code } = formData;
+
+    // Verificar si las contraseñas coinciden
+    if (newPassword !== confirmPassword) {
+      setErrorMessage("Las contraseñas no coinciden.");
+      return;
+    }
+
     try {
       // Envía la solicitud para restablecer la contraseña al backend
       const response = await axios.post(
         "http://localhost:3001/users/reset-password",
-        formData
+        { email: formData.email, newPassword, code }
       );
       setResetSuccess(true);
       setErrorMessage("");
     } catch (error) {
-      setErrorMessage(
-        "Error al restablecer la contraseña. Por favor, inténtalo de nuevo."
-      );
+      if (error.response && error.response.status === 400) {
+        setErrorMessage(
+          "El código de verificación es incorrecto o ha expirado. Por favor, solicita otro código."
+        );
+      } else {
+        setErrorMessage(
+          "Error al restablecer la contraseña. Por favor, inténtalo de nuevo."
+        );
+      }
     }
   };
 
@@ -149,6 +165,35 @@ export const PasswordReset = () => {
           </form>
         )}
         {errorMessage && <p className="text-red-600 mt-4">{errorMessage}</p>}
+        {resetSuccess && (
+          <div
+            className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+            role="alert"
+          >
+            <p className="font-bold">Contraseña restablecida exitosamente.</p>
+            <p className="text-sm">
+              Por favor,{" "}
+              <Link
+                to="/login"
+                className="text-green-800 hover:text-green-900 font-semibold"
+              >
+                inicia sesión
+              </Link>
+              .
+            </p>
+            <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+              <svg
+                className="fill-current h-6 w-6 text-green-500"
+                role="button"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <title>Cerrar</title>
+                <path d="M14.348 14.849a1 1 0 0 1-1.414 1.414L10 11.414l-2.93 2.93a1 1 0 1 1-1.414-1.414L8.586 10 5.656 7.071a1 1 0 0 1 1.414-1.414L10 8.586l2.93-2.93a1 1 0 0 1 1.414 1.414L11.414 10l2.93 2.929z" />
+              </svg>
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );
