@@ -116,12 +116,14 @@ const getProductById = (req, res, connection) => {
         ...product,
         contenido: parsers.parseContent(product.contenido),
         tags: parsers.parseTags(product.tags),
-        // Agregar la URL base a la imagen
-        imagen: `https://thehomehobby.s3.amazonaws.com${product.imagen}`,
+        // Formatear la URL de la imagen
+        imagen: formatURL(product.imagen),
+        // Mapear sobre la galería y formatear las URL de cada enlace
         galeria: JSON.parse(product.galeria).map((item) => ({
-          url: `https://thehomehobby.s3.amazonaws.com${item.url}`,
+          url: formatURL(item.url),
         })),
-        video: `https://thehomehobby.s3.amazonaws.com${product.video}`,
+        // Formatear la URL del video
+        video: formatURL(product.video),
         filtros: parsers.parseFilters(product.filtros),
       };
 
@@ -131,6 +133,19 @@ const getProductById = (req, res, connection) => {
     res.json(formattedResults);
   });
 };
+
+// Función para formatear una URL según los criterios especificados
+// Función para formatear una URL según los criterios especificados
+function formatURL(url) {
+  // Verificar si la URL contiene "/storage"
+  if (url.includes("/storage")) {
+    // Si contiene "/storage", agregar el prefijo
+    return `https://thehomehobby.s3.amazonaws.com${url}`;
+  } else {
+    // Si la URL no contiene "/storage", dejar la URL como está
+    return url;
+  }
+}
 
 const createProduct = (req, res, connection) => {
   const {
