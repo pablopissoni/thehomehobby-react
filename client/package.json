@@ -11,15 +11,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tippyjs/react": "^4.2.6",
     "axios": "^1.6.5",
     "bootstrap-icons": "^1.11.3",
     "dompurify": "^3.0.8",
     "express": "^4.18.2",
     "lodash": "^4.17.21",
+    "metismenujs": "^1.4.0",
     "mysql": "^2.18.1",
     "quill": "^2.0.0-rc.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
     "react-modal": "^3.16.1",
     "react-quill": "^2.0.0",
     "react-router-dom": "^6.21.3",
