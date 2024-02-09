@@ -12,7 +12,6 @@ const getAllProducts = (req, res, connection) => {
     "SELECT COUNT(*) as total FROM productos WHERE (nombre_es LIKE ? OR nombre_ingles LIKE ?)";
   let countParams = [`%${searchTerm}%`, `%${searchTerm}%`];
 
-  // Agregar filtro por categoría si se proporciona
   if (categoryFilter) {
     countQuery += " AND categoria_id = ?";
     countParams.push(categoryFilter);
@@ -37,7 +36,6 @@ const getAllProducts = (req, res, connection) => {
       "SELECT * FROM productos WHERE (nombre_es LIKE ? OR nombre_ingles LIKE ?)";
     let queryParams = [`%${searchTerm}%`, `%${searchTerm}%`];
 
-    // Agregar filtro por categoría si se proporciona
     if (categoryFilter) {
       query += " AND categoria_id = ?";
       queryParams.push(categoryFilter);
@@ -59,17 +57,12 @@ const getAllProducts = (req, res, connection) => {
             error: "No se encontraron productos en esta página",
           });
         }
-
-        // Formatear el contenido, las etiquetas, la galería y los filtros para cada producto
         const formattedResults = results.map((product) => {
-          // Agregar la URL base a los campos de "imagen" y "galeria"
           const formattedProduct = {
             ...product,
             contenido: parsers.parseContent(product.contenido),
             tags: parsers.parseTags(product.tags),
-            // Agregar la URL base a la imagen
             imagen: `https://thehomehobby.s3.amazonaws.com${product.imagen}`,
-            // Mapear sobre la galería y agregar la URL base a cada enlace
             galeria: JSON.parse(product.galeria).map((item) => ({
               url: `https://thehomehobby.s3.amazonaws.com${item.url}`,
             })),
@@ -134,15 +127,10 @@ const getProductById = (req, res, connection) => {
   });
 };
 
-// Función para formatear una URL según los criterios especificados
-// Función para formatear una URL según los criterios especificados
 function formatURL(url) {
-  // Verificar si la URL contiene "/storage"
   if (url.includes("/storage")) {
-    // Si contiene "/storage", agregar el prefijo
     return `https://thehomehobby.s3.amazonaws.com${url}`;
   } else {
-    // Si la URL no contiene "/storage", dejar la URL como está
     return url;
   }
 }
