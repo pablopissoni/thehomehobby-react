@@ -62,11 +62,11 @@ const getAllProducts = (req, res, connection) => {
             ...product,
             contenido: parsers.parseContent(product.contenido),
             tags: parsers.parseTags(product.tags),
-            imagen: `https://thehomehobby.s3.amazonaws.com${product.imagen}`,
+            imagen: formatURL(product.imagen),
             galeria: JSON.parse(product.galeria).map((item) => ({
-              url: `https://thehomehobby.s3.amazonaws.com${item.url}`,
+              url: formatURL(item.url),
             })),
-            video: `https://thehomehobby.s3.amazonaws.com${product.video}`,
+            video: formatURL(product.video),
             filtros: parsers.parseFilters(product.filtros),
           };
 
@@ -127,10 +127,20 @@ const getProductById = (req, res, connection) => {
   });
 };
 
+// Función para formatear una URL según los criterios especificados
 function formatURL(url) {
+  // Verificar si la URL es null o undefined
+  if (url == null) {
+    // Si la URL es null o undefined, devolver null
+    return null;
+  }
+
+  // Verificar si la URL contiene "/storage"
   if (url.includes("/storage")) {
+    // Si contiene "/storage", agregar el prefijo
     return `https://thehomehobby.s3.amazonaws.com${url}`;
   } else {
+    // Si la URL no contiene "/storage", dejar la URL como está
     return url;
   }
 }
