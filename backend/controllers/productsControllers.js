@@ -215,42 +215,55 @@ const createProduct = (req, res, connection) => {
       .json({ error: "El campo 'categoria_id' debe ser un número entero" });
   }
 
-  // Otras validaciones necesarias para los demás campos...
+  const lastIdQuery = "SELECT MAX(id) AS lastId FROM productos";
 
-  // Si todas las validaciones pasan, crear el nuevo producto
-  const nuevoProducto = {
-    contenido: JSON.stringify(contenido),
-    nombre_es,
-    nombre_ingles,
-    tags: JSON.stringify(tags),
-    marca_id,
-    sub_categoria_id,
-    imagen,
-    galeria: JSON.stringify(galeria),
-    categoria_id,
-    status,
-    video,
-    oferta_id,
-    precio_base,
-    filtros: JSON.stringify(filtros),
-    envio_free,
-    envio_rapido,
-    created_at: new Date(),
-    updated_at: new Date(),
-  };
-
-  const query = "INSERT INTO productos SET ?";
-
-  connection.query(query, nuevoProducto, (error, results) => {
+  connection.query(lastIdQuery, (error, results) => {
     if (error) {
-      console.error("Error al realizar la inserción:", error);
+      console.error("Error al obtener el último ID:", error);
       return res.status(500).json({ error: "Error en el servidor" });
     }
 
-    const nuevoProductoId = results.insertId;
-    res
-      .status(201)
-      .json({ id: nuevoProductoId, mensaje: "Producto creado exitosamente" });
+    // Obtener el último ID y asignar el siguiente
+    const lastId = results[0].lastId || 0;
+    const nuevoProductoId = lastId + 1;
+
+    // Si todas las validaciones pasan, crear el nuevo producto
+    const nuevoProducto = {
+      id: nuevoProductoId, // Asignar el nuevo ID
+      contenido: JSON.stringify(contenido),
+      nombre_es,
+      nombre_ingles,
+      tags: JSON.stringify(tags),
+      marca_id,
+      sub_categoria_id,
+      imagen,
+      galeria: JSON.stringify(galeria),
+      categoria_id,
+      status,
+      video,
+      oferta_id,
+      precio_base,
+      filtros: JSON.stringify(filtros),
+      envio_free,
+      envio_rapido,
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+
+    const query = "INSERT INTO productos SET ?";
+
+    connection.query(query, nuevoProducto, (error, results) => {
+      if (error) {
+        console.error("Error al realizar la inserción:", error);
+        return res.status(500).json({ error: "Error en el servidor" });
+      }
+
+      // Respuesta exitosa
+      res.status(201).json({
+        id: nuevoProductoId,
+        mensaje: "Producto creado exitosamente",
+      });
+    });
   });
 };
 
