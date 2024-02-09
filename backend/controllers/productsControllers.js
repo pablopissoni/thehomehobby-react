@@ -270,10 +270,68 @@ const updateProduct = (req, res, connection) => {
   });
 };
 
+// Función para analizar el contenido JSON
+const parseContent = (content) => {
+  try {
+    const parsedContent = JSON.parse(content);
+    return parsedContent.map((item) => ({
+      idioma: item.idioma,
+      nombre: item.nombre,
+      descripcion: item.descripcion,
+      slug: item.slug,
+    }));
+  } catch (error) {
+    console.error("Error al analizar el contenido JSON:", error);
+    return [];
+  }
+};
+
+// Función para analizar los filtros JSON
+const parseFilters = (filters) => {
+  try {
+    const parsedFilters = JSON.parse(filters);
+    return parsedFilters.map((filter) => ({
+      value: filter.value,
+      nombre: filter.nombre,
+      filtros: filter.filtros,
+      visible: filter.visible,
+    }));
+  } catch (error) {
+    console.error("Error al analizar los filtros JSON:", error);
+    return [];
+  }
+};
+
+// Lógica para obtener todas las categorías
+const getAllCategories = (req, res, connection) => {
+  const query = "SELECT * FROM newschema.categorias";
+
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.error("Error al realizar la consulta:", error);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+
+    // Formatear el contenido y los filtros para cada categoría
+    const formattedResults = results.map((category) => ({
+      id: category.id,
+      image: category.image,
+      status: category.status,
+      created_at: category.created_at,
+      updated_at: category.updated_at,
+      contenido: parseContent(category.contenido),
+      filtros: parseFilters(category.filtros),
+    }));
+
+    res.json(formattedResults);
+  });
+};
+
 module.exports = {
   getAllProducts: getAllProducts,
   getProductById: getProductById,
   createProduct: createProduct,
   deleteProduct: deleteProduct,
   updateProduct: updateProduct,
+  getAllCategories: getAllCategories,
 };
