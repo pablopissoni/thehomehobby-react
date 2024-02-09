@@ -132,7 +132,6 @@ const getProductById = (req, res, connection) => {
   });
 };
 
-// Lógica para crear un nuevo producto
 const createProduct = (req, res, connection) => {
   const {
     contenido,
@@ -153,28 +152,87 @@ const createProduct = (req, res, connection) => {
     envio_rapido,
   } = req.body;
 
-  // Verifica que se haya proporcionado al menos el nombre_es
-  if (!nombre_es) {
-    return res
-      .status(400)
-      .json({ error: "El campo 'nombre_es' es obligatorio" });
+  // Validaciones de los campos
+
+  // Verificar que el nombre en español esté presente y sea una cadena de texto
+  if (!nombre_es || typeof nombre_es !== "string") {
+    return res.status(400).json({
+      error:
+        "El campo 'nombre_es' es obligatorio y debe ser una cadena de texto",
+    });
   }
 
+  // Verificar que el nombre en inglés, si está presente, sea una cadena de texto
+  if (nombre_ingles && typeof nombre_ingles !== "string") {
+    return res
+      .status(400)
+      .json({ error: "El campo 'nombre_ingles' debe ser una cadena de texto" });
+  }
+
+  // Verificar que las etiquetas sean un arreglo
+  if (!Array.isArray(tags)) {
+    return res
+      .status(400)
+      .json({ error: "El campo 'tags' debe ser un arreglo" });
+  }
+
+  // Verificar que el ID de la marca sea un número entero
+  if (marca_id && !Number.isInteger(marca_id)) {
+    return res
+      .status(400)
+      .json({ error: "El campo 'marca_id' debe ser un número entero" });
+  }
+
+  // Verificar que el ID de la subcategoría, si está presente, sea un número entero
+  if (sub_categoria_id && !Number.isInteger(sub_categoria_id)) {
+    return res
+      .status(400)
+      .json({ error: "El campo 'sub_categoria_id' debe ser un número entero" });
+  }
+
+  // Verificar que la imagen esté presente y sea una URL válida
+  if (!imagen || typeof imagen !== "string" || !isValidURL(imagen)) {
+    return res.status(400).json({
+      error: "El campo 'imagen' es obligatorio y debe ser una URL válida",
+    });
+  }
+
+  // Verificar que la galería sea un arreglo de objetos con URLs válidas
+  if (
+    !Array.isArray(galeria) ||
+    !galeria.every((item) => typeof item === "object" && isValidURL(item.url))
+  ) {
+    return res.status(400).json({
+      error:
+        "El campo 'galeria' debe ser un arreglo de objetos con URLs válidas",
+    });
+  }
+
+  // Verificar que el ID de la categoría sea un número entero
+  if (!Number.isInteger(categoria_id)) {
+    return res
+      .status(400)
+      .json({ error: "El campo 'categoria_id' debe ser un número entero" });
+  }
+
+  // Otras validaciones necesarias para los demás campos...
+
+  // Si todas las validaciones pasan, crear el nuevo producto
   const nuevoProducto = {
-    contenido,
+    contenido: JSON.stringify(contenido),
     nombre_es,
     nombre_ingles,
-    tags: JSON.stringify(tags), // Convertir el array a formato JSON
+    tags: JSON.stringify(tags),
     marca_id,
     sub_categoria_id,
     imagen,
-    galeria: JSON.stringify(galeria), // Convertir el array a formato JSON
+    galeria: JSON.stringify(galeria),
     categoria_id,
     status,
     video,
     oferta_id,
     precio_base,
-    filtros: JSON.stringify(filtros), // Convertir el objeto a formato JSON
+    filtros: JSON.stringify(filtros),
     envio_free,
     envio_rapido,
     created_at: new Date(),
@@ -195,6 +253,22 @@ const createProduct = (req, res, connection) => {
       .json({ id: nuevoProductoId, mensaje: "Producto creado exitosamente" });
   });
 };
+
+// Función para validar una URL
+function isValidURL(url) {
+  // Utiliza una expresión regular para validar la URL
+  // Esta expresión regular es simple y puede no cubrir todos los casos
+  const pattern = new RegExp(
+    "^(https?:\\/\\/)?" + // protocolo
+      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // nombre de dominio
+      "((\\d{1,3}\\.){3}\\d{1,3}))" + // dirección IP
+      "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // puerto y ruta
+      "(\\?[;&a-z\\d%_.~+=-]*)?" + // parámetros de consulta
+      "(\\#[-a-z\\d_]*)?$",
+    "i"
+  ); // fragmento
+  return !!pattern.test(url);
+}
 
 // Lógica para eliminar un producto por ID
 const deleteProduct = (req, res, connection) => {
