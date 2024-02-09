@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import axios from "axios";
@@ -37,13 +38,9 @@ export const PasswordReset = () => {
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        setErrorMessage(
-          "El correo electrónico ingresado no se encuentra registrado."
-        );
+        setErrorMessage("The entered email is not registered.");
       } else {
-        setErrorMessage(
-          "Error al enviar el correo electrónico. Por favor, inténtalo de nuevo."
-        );
+        setErrorMessage("Error sending the email. Please try again.");
       }
     }
   };
@@ -55,7 +52,7 @@ export const PasswordReset = () => {
 
     // Verificar si las contraseñas coinciden
     if (newPassword !== confirmPassword) {
-      setErrorMessage("Las contraseñas no coinciden.");
+      setErrorMessage("The passwords do not match.");
       return;
     }
 
@@ -70,12 +67,10 @@ export const PasswordReset = () => {
     } catch (error) {
       if (error.response && error.response.status === 400) {
         setErrorMessage(
-          "El código de verificación es incorrecto o ha expirado. Por favor, solicita otro código."
+          "The verification code is incorrect or has expired. Please request another code."
         );
       } else {
-        setErrorMessage(
-          "Error al restablecer la contraseña. Por favor, inténtalo de nuevo."
-        );
+        setErrorMessage("Error resetting the password. Please try again.");
       }
     }
   };
@@ -84,12 +79,12 @@ export const PasswordReset = () => {
     <div className="bg-slate-100 flex items-center justify-center h-screen">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
         <img src={LogoGrande} alt="Logo" className="w-24 mx-auto mb-4" />
-        <h2 className="text-2xl font-bold mb-4">Restablecer Contraseña</h2>
+        <h2 className="text-2xl font-bold mb-4">Reset Password</h2>
         {!emailSent ? (
           <form onSubmit={handleEmailSubmit} className="space-y-4">
             <div className="mb-3">
               <label htmlFor="email" className="block">
-                Correo Electrónico:
+                Email Address:
               </label>
               <input
                 type="email"
@@ -106,14 +101,14 @@ export const PasswordReset = () => {
               type="submit"
               className="text-center text-white px-6 mt-6 bg-blue-600 py-1 rounded-sm cursor-pointerhover:shadow-lg"
             >
-              Enviar Correo de Restablecimiento
+              Send Reset Email
             </button>
           </form>
         ) : (
           <form onSubmit={handleResetSubmit} className="space-y-4">
             <div>
               <label htmlFor="code" className="block">
-                Código de 6 dígitos:
+                6-digit Code:
               </label>
               <input
                 type="text"
@@ -122,13 +117,13 @@ export const PasswordReset = () => {
                 value={formData.code}
                 onChange={handleChange}
                 pattern="[0-9]{6}"
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                className="form-control mt-1 border border-gray-200 rounded-sm w-full pl-2 outline-none focus:border-2 focus:border-b-cyan-500"
                 required
               />
             </div>
             <div>
               <label htmlFor="newPassword" className="block">
-                Nueva Contraseña:
+                New Password:
               </label>
               <input
                 type="password"
@@ -137,13 +132,13 @@ export const PasswordReset = () => {
                 value={formData.newPassword}
                 onChange={handleChange}
                 minLength={8}
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                className="form-control mt-1 border border-gray-200 rounded-sm w-full pl-2 outline-none focus:border-2 focus:border-b-cyan-500"
                 required
               />
             </div>
             <div>
               <label htmlFor="confirmPassword" className="block">
-                Confirmar Nueva Contraseña:
+                Confirm New Password:
               </label>
               <input
                 type="password"
@@ -152,15 +147,15 @@ export const PasswordReset = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 minLength={8}
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                className="form-control mt-1 border border-gray-200 rounded-sm w-full pl-2 outline-none focus:border-2 focus:border-b-cyan-500"
                 required
               />
             </div>
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+              className="text-center text-white px-6 mt-6 bg-blue-600 py-1 rounded-sm cursor-pointerhover:shadow-lg"
             >
-              Restablecer Contraseña
+              Reset Password
             </button>
           </form>
         )}
@@ -170,14 +165,14 @@ export const PasswordReset = () => {
             className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
             role="alert"
           >
-            <p className="font-bold">Contraseña restablecida exitosamente.</p>
+            <p className="font-bold">Password successfully reset.</p>
             <p className="text-sm">
               Por favor,{" "}
               <Link
                 to="/login"
                 className="text-green-800 hover:text-green-900 font-semibold"
               >
-                inicia sesión
+                log in
               </Link>
               .
             </p>
@@ -188,7 +183,7 @@ export const PasswordReset = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
               >
-                <title>Cerrar</title>
+                <title>Close</title>
                 <path d="M14.348 14.849a1 1 0 0 1-1.414 1.414L10 11.414l-2.93 2.93a1 1 0 1 1-1.414-1.414L8.586 10 5.656 7.071a1 1 0 0 1 1.414-1.414L10 8.586l2.93-2.93a1 1 0 0 1 1.414 1.414L11.414 10l2.93 2.929z" />
               </svg>
             </span>
