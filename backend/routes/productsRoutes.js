@@ -42,6 +42,14 @@ router.put("/productos/:id", (req, res, next) => {
   }
 });
 
+router.delete("/productos/:id", (req, res, next) => {
+  try {
+    productsController.deleteProduct(req, res, req.dbConnection);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/categories", (req, res, next) => {
   try {
     categoriesController.getAllCategories(req, res);
