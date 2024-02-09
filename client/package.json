@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tippyjs/react": "^4.2.6",
     "axios": "^1.6.5",
     "bootstrap-icons": "^1.11.3",
     "dompurify": "^3.0.8",
