@@ -3,19 +3,19 @@ const parsers = require("../parsers/parsers");
 // Lógica para obtener todos los productos
 const getAllProducts = (req, res, connection) => {
   const page = req.query.page || 1;
-  const pageSize = 100;
+  const pageSize = 10;
   const offset = (page - 1) * pageSize;
   const searchTerm = req.query.name || "";
-  const colorFilter = req.query.color || ""; // Nuevo filtro por color
+  const categoryFilter = req.query.category || ""; // Nuevo filtro por categoría
 
   let countQuery =
     "SELECT COUNT(*) as total FROM productos WHERE (nombre_es LIKE ? OR nombre_ingles LIKE ?)";
   let countParams = [`%${searchTerm}%`, `%${searchTerm}%`];
 
-  // Agregar filtro por color si se proporciona
-  if (colorFilter) {
-    countQuery += " AND JSON_SEARCH(filtros, 'one', ?) IS NOT NULL";
-    countParams.push(colorFilter);
+  // Agregar filtro por categoría si se proporciona
+  if (categoryFilter) {
+    countQuery += " AND categoria_id = ?";
+    countParams.push(categoryFilter);
   }
 
   connection.query(countQuery, countParams, (error, countResult) => {
@@ -37,10 +37,10 @@ const getAllProducts = (req, res, connection) => {
       "SELECT * FROM productos WHERE (nombre_es LIKE ? OR nombre_ingles LIKE ?)";
     let queryParams = [`%${searchTerm}%`, `%${searchTerm}%`];
 
-    // Agregar filtro por color si se proporciona
-    if (colorFilter) {
-      query += " AND JSON_SEARCH(filtros, 'one', ?) IS NOT NULL";
-      queryParams.push(colorFilter);
+    // Agregar filtro por categoría si se proporciona
+    if (categoryFilter) {
+      query += " AND categoria_id = ?";
+      queryParams.push(categoryFilter);
     }
 
     query += " LIMIT ? OFFSET ?";
@@ -287,8 +287,12 @@ const parseContent = (content) => {
 };
 
 // Función para analizar los filtros JSON
+// Función para analizar los filtros JSON
 const parseFilters = (filters) => {
   try {
+    if (!filters) {
+      return [];
+    }
     const parsedFilters = JSON.parse(filters);
     return parsedFilters.map((filter) => ({
       value: filter.value,
