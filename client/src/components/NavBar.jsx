@@ -204,9 +204,9 @@ export const NavBar = () => {
               <div className="submenu transition-all-300 invisible absolute left-0 pt-[10px] opacity-0 group-hover:visible group-hover:opacity-100">
                 <ul className="relative w-[250px] bg-white text-base shadow-custom1">
                   <li className="group-1">
-                    <a href="#" className="flex items-center gap-2 p-2">
+                    <a href="/adminDashboard" className="flex items-center gap-2 p-2">
                       <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
-                      <span className="group-1-hover-font">Pc components</span>
+                      <span className="group-1-hover-font">Dashboard</span>
                       <i className="bi bi-caret-right-fill group-1-hover-visible invisible ml-auto flex text-xs text-primary"></i>
                     </a>
                     <div className="submenu group-1-hover-visible transition-all-300 invisible absolute top-0 left-full min-h-full min-w-[680px] opacity-0">
