@@ -4,8 +4,25 @@ import axios from "axios";
 export const FormAddProd = () => {
   //* --- HOOKs ---
   const [tags, setTags] = useState("");
+  const [isEnglish, setIsEnglish] = useState(true)
+  console.log("🚀 ~ FormAddProd ~ isEnglish:", isEnglish)
   const [product, setProduct] = useState({
-    contenido: "",
+    contenido: [
+      {
+        idioma: "Spanish", 
+        nombre: "",        // su valor sera igual a nombre_es
+        slug: "",          // Se creara a partir del nombre automaticamente
+        descripcion: "",
+        ficha: "",
+      },
+      {
+        idioma: "English",
+        nombre: "",
+        slug: "",
+        descripcion: "",
+        ficha: "",
+      },
+    ],
     nombre_es: "",
     nombre_ingles: "",
     tags: [],
@@ -23,6 +40,45 @@ export const FormAddProd = () => {
     envio_rapido: 0, //obligatorio 0/1
   });
   // --- HOOKs ---
+
+  //* --- HANDLEs ---
+  // cambia el valor y donde se guarda el input NAME depende del idioma seleccionado
+  const handleInputName = (event) => {
+    const { name, value } = event.target;
+    // setProduct({ ...product, [name]: value });
+    
+    const languageIndex = isEnglish ? 1 : 0;
+
+    const updateNombres = [...product.contenido]
+    updateNombres[languageIndex] = {
+        ...updateNombres[languageIndex],
+        nombre: value,
+        slug: value.toLowerCase().replace(/ /g, "-"),
+  }
+    setProduct({
+        ...product,
+        [name]: value,
+        contenido: updateNombres,
+    })
+}
+
+  const handleInputFichaDesc = (event) => {
+    const { name, value } = event.target;
+    const languageIndex = isEnglish ? 1 : 0;
+
+    const updatedContenido = [...product.contenido]; // Realizo una copia temporal del hook para usarlo mutable  
+    updatedContenido[languageIndex] = {
+        ...updatedContenido[languageIndex],
+        [name]: value,      // Modifico la propiedad y valor de Descripcion y Ficha
+    };
+
+    setProduct({
+        ...product,
+        contenido: updatedContenido,
+    });
+}
+  
+  // --- HANDLEs ---
 
   //* --- POST ---
   const postProduct = async () => {
@@ -66,14 +122,18 @@ export const FormAddProd = () => {
           <form onSubmit={handleSubmit}>
             {/* NOMBRE - FICHA - DESCRIPCION Spanish/English */}
             <div className=" mb-8">
-              <div className="md:w-1/3">
-                <legend className="uppercase tracking-wide text-sm">
-                  nombre ficha y descripcion en idioma: <strong>Ingles</strong>
+              <div className="flex">
+                <legend className="uppercase tracking-wide text-sm mr-3">
+                  nombre ficha y descripcion
                 </legend>
+                <button type="button" onClick={() => setIsEnglish(!isEnglish)} className="uppercase tracking-wide text-sm bg-white border-2 border-gray-300 px-2 rounded-sm shadow-lg">
+                  idioma: <strong>{isEnglish? "Inglish" : "Spanish"}</strong>
+                </button>
               </div>
 
               <div className="md:flex-1 mt-2 mb:mt-0 md:px-3">
                 <div className="mb-4 xl:flex ">
+                    {/* NAME */}
                   <div className="w-5/6 mr-4 mb-4">
                     <label className="block uppercase tracking-wide text-xs font-bold">
                       Name
@@ -81,17 +141,13 @@ export const FormAddProd = () => {
                     <input
                       className="w-full shadow-inner p-4 border-0"
                       type="text"
-                      value={product.nombre_ingles}
-                      onChange={(e) =>
-                        setProduct({
-                          ...product,
-                          nombre_ingles: e.target.value,
-                        })
-                      }
-                      name="name"
+                      value={isEnglish? product.nombre_ingles : product.nombre_es}
+                      onChange={handleInputName}
+                      name={isEnglish ? "nombre_ingles" : "nombre_es"}
                       placeholder="TV Led 55 pulgadas Samsung"
                     />
                   </div>
+                  {/* Precio */}
                   <div className="">
                     <label className="block uppercase tracking-wide text-xs font-bold">
                       Precio
@@ -100,7 +156,7 @@ export const FormAddProd = () => {
                       type="number"
                       value={product.precio_base}
                       onChange={(e) =>
-                        setProduct({ ...product, precio_base: e.target.value })
+                        setProduct({ ...product, precio_base: parseInt(e.target.value) }) //Guardo el valor como un entero
                       }
                       placeholder="$ ..."
                       className="shadow-inner p-4 border-0"
@@ -109,22 +165,28 @@ export const FormAddProd = () => {
                 </div>
 
                 <div className="mb-4">
+                    {/* Descripcion */}
                   <div className="md:flex-1 ">
                     <label className="block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
                       Descripcion
                     </label>
                     <textarea
-                      name="mensaje"
+                      name="descripcion"
+                      value={isEnglish? product.contenido[1].descripcion : product.contenido[0].descripcion}
+                      onChange={handleInputFichaDesc}
                       className="w-full shadow-inner p-4 border-0"
                       placeholder="Aquí puedes escribir tu mensaje."
                     ></textarea>
                   </div>
+                  {/* Ficha */}
                   <div className="md:flex-1 ">
                     <label className="block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
                       Ficha
                     </label>
                     <textarea
-                      name="mensaje"
+                      name="ficha"
+                      value={isEnglish? product.contenido[1].ficha : product.contenido[0].ficha}
+                      onChange={handleInputFichaDesc}
                       className="w-full shadow-inner p-4 border-0"
                       placeholder="Aquí puedes escribir la Ficha."
                     ></textarea>
@@ -210,12 +272,20 @@ export const FormAddProd = () => {
               <div className="xl:flex  items-center">
                 {/* Input Radio */}
                 <div className="flex xl:flex-col justify-between items-end ">
-
                   <div className="bg-slate-100 shadow-md rounded-md m-1 px-1">
                     <label htmlFor="" className="mr-8">
                       Status
                     </label>
-                    <select value={product.status} onChange={(e)=> setProduct({...product, status: parseInt(e.target.value) })} className="flex-1 shadow-inner py-2 px-1 border-0">
+                    <select
+                      value={product.status}
+                      onChange={(e) =>
+                        setProduct({
+                          ...product,
+                          status: parseInt(e.target.value),
+                        })
+                      }
+                      className="flex-1 shadow-inner py-2 px-1 border-0"
+                    >
                       <option value={1} selected>
                         Activo
                       </option>
@@ -228,11 +298,20 @@ export const FormAddProd = () => {
                     <label htmlFor="" className="mr-8">
                       Envio Rapido
                     </label>
-                    <select value={product.envio_rapido} onChange={(e)=> setProduct({...product, envio_rapido: parseInt(e.target.value) })} className="flex-1 shadow-inner py-2 px-1 border-0">
-                      <option value={0} selected>Desactivo</option>
-                      <option value={1} >
-                        Activo
+                    <select
+                      value={product.envio_rapido}
+                      onChange={(e) =>
+                        setProduct({
+                          ...product,
+                          envio_rapido: parseInt(e.target.value),
+                        })
+                      }
+                      className="flex-1 shadow-inner py-2 px-1 border-0"
+                    >
+                      <option value={0} selected>
+                        Desactivo
                       </option>
+                      <option value={1}>Activo</option>
                     </select>
                   </div>
 
@@ -240,11 +319,20 @@ export const FormAddProd = () => {
                     <label htmlFor="" className="mr-8">
                       Envio Free
                     </label>
-                    <select value={product.envio_free} onChange={(e)=> setProduct({...product, envio_free: parseInt(e.target.value) })} className="flex-1 shadow-inner py-2 px-1 border-0">
-                      <option value={0} selected>Desactivo</option>
-                      <option value={1} >
-                        Activo
+                    <select
+                      value={product.envio_free}
+                      onChange={(e) =>
+                        setProduct({
+                          ...product,
+                          envio_free: parseInt(e.target.value),
+                        })
+                      }
+                      className="flex-1 shadow-inner py-2 px-1 border-0"
+                    >
+                      <option value={0} selected>
+                        Desactivo
                       </option>
+                      <option value={1}>Activo</option>
                     </select>
                   </div>
                 </div>
