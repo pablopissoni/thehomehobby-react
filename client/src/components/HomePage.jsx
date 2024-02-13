@@ -23,6 +23,7 @@ import hogarBanner from "../assets/Hogar-Banner.jpg";
 export const HomePage = () => {
   //* -- USE STATE --------
   const [products, setProducts] = useState([]); // Get Productos
+  const [categories, setCategories] = useState([]); // Get Categories
   //* -- USE STATE --------
   // const dispatch = useDispatch();
   // const products = useSelector((state) => state.products);
@@ -50,15 +51,37 @@ export const HomePage = () => {
         console.log(err);
       });
   }
-  console.log("🚀 ~ .then ~ products.data:", products.data);
-  //* ----- GET Productos -------------
+  // ----- GET Productos -------------
+  
+  //* ----- GET Categories -------------
+  function getCategories() {
+    // peticion desde localhost o deploy
+    const isLocalhost = window.location.href.includes("localhost");
+    const urlCategories = isLocalhost
+      ? "http://localhost:3001/categories"
+      : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+
+    axios
+      .get(urlCategories)
+      .then((res) => {
+        // console.log("res.data: ",res.data);
+        setCategories(res.data);
+        // categories.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  console.log("🚀 ~ .then ~ categories.data:", categories);
+  // ----- GET Categories -------------
 
   //* ----- USE EFFECT -------------
   useEffect(() => {
-    getProducts();
+    // getProducts();
+    getCategories();
   }, []);
   //* ----- USE EFFECT -------------
-
+  // console.log("🚀 PRODUCTS.data:", products.data);
   return (
     <div>
       {/* <ProductList products={products} /> */}
@@ -226,19 +249,26 @@ export const HomePage = () => {
       </section>
       {/* img + slider de Productos */}
       {/* -- Sliders Notebooks -- */}
-      <SliderComponents
+      {/* <SliderComponents
         img={notebookBanner}
         titleImg={"Notebooks"}
         title={"Notebooks"}
-        products={products.data}
-      />
-      {/* -- Sliders Hogar -- */}
-      <SliderComponents
-        img={hogarBanner}
-        titleImg={"Hogar"}
-        title={"Hogar"}
-        products={TestProdObj}
-      />
+        // products={products.data}
+        prodCategoryId={5}
+      /> */}
+
+      {/* -- Sliders Map -- */}
+      {categories && categories.map((category) => (
+        category.status === 1 && ( // filtro solo los que tienen STATUS 1 que deben ser los activos
+        <SliderComponents
+          key={category?.id}
+          img={`https://thehomehobby.s3.amazonaws.com${category?.image}`}
+          titleImg={category?.contenido[0]?.nombre || category?.contenido[1]?.nombre}
+          title={category?.contenido[0]?.nombre || category?.contenido[1]?.nombre}
+          // products={}
+          prodCategoryId={category?.id}
+        />)
+      ))}
       {/* Sección de categorías */}
       <section>
         <div className="categories-section container mx-auto my-5 px-2 sm:px-8">

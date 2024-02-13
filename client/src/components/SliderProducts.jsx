@@ -6,8 +6,30 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
 
-export const SliderProducts = ({ products }) => {
+export const SliderProducts = ({ products, prodCategoryId }) => {
   const [slidesPerView, setSlidesPerView] = useState(4); // Valor predeterminado para dispositivos no móviles
+  const [productsByCateg, setProductsByCateg] = useState([]);
+  console.log("🚀 ~ SliderProducts ~ productsByCateg:", productsByCateg.data)
+
+//* ---- USE EFFECTs ----
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/productos?category=${prodCategoryId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setProductsByCateg(data);
+        } else {
+          throw new Error('Error al obtener los productos');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchProducts();
+  }, [prodCategoryId]);
+  // }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,6 +52,8 @@ export const SliderProducts = ({ products }) => {
       window.removeEventListener("resize", handleResize);
     };
   }, []); // Se ejecuta solo una vez al montar el componente
+//  ---- USE EFFECTs ----
+
 
   return (
     <Swiper
@@ -47,7 +71,7 @@ export const SliderProducts = ({ products }) => {
       modules={[Pagination, Navigation]}
       className="mySwiper px-10"
     >
-      {products?.map((prod, index) => (
+      {productsByCateg.data && productsByCateg.data?.map((prod, index) => (
         <SwiperSlide key={index}>
           <CardProduct
             id={prod?.id}

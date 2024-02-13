@@ -1,9 +1,23 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { SliderProducts } from "./SliderProducts";
 // --- IMG ---
 // import notebookBanner from '../assets/notebookBanner.jpg'
 
-export const SliderComponents = ({img, titleImg, title, products}) => {
+/**
+ * Componente SliderComponent
+ * 
+ * Un componente para mostrar un slider de imágenes.
+ * 
+ * @component
+ * @param {string} img - Un string del src imagen para mostrar en el slider.
+ * @param {string} titleImg - Texto de titulo sobre la imagen.
+ * @param {string} title - El encabezado del slider.
+ * @param {Object} products - Objeto con los productos para props de SliderProducts.
+ * @param {string} prodCategoryId - ID de la categoria por props para hacer un GET en SliderProducts.
+ * @returns {JSX.Element} Un componente JSX para mostrar un slider de imágenes y cards de productos.
+ */
+export const SliderComponents = ({img, titleImg, title, products, prodCategoryId}) => {
+
   return (
     <>
       {/* img + slider de Productos  */}
@@ -42,7 +56,7 @@ export const SliderComponents = ({img, titleImg, title, products}) => {
             <div className="cards-slider-2 swiper-container col-span-12 xl:col-span-9">
               <div className="swiper swiper-cards-2 group relative flex items-center py-5 swiper-initialized swiper-horizontal swiper-free-mode swiper-backface-hidden">
                 {/* <SliderProducts slidesToShow={3} /> */}
-                <SliderProducts products={products}/>
+                <SliderProducts products={products} prodCategoryId={prodCategoryId}/>
               </div>
             </div>
           </div>
