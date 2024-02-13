@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 // REACT QUILL
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 import axios from "axios";
 
@@ -9,6 +9,12 @@ export const FormAddProd = () => {
   //* --- HOOKs ---
   const [tags, setTags] = useState("");
   const [isEnglish, setIsEnglish] = useState(true);
+  const [descEsHTML, setDescEsHTML] = useState(""); // Para usar con ReactQuill
+  //   console.log("🚀 ~ FormAddProd ~ Espaniol:", descEsHTML)
+  const [descInHTML, setDescInHTML] = useState(""); // Para usar con ReactQuill
+  //   console.log("🚀 ~ FormAddProd ~ Ingles:", descInHTML)
+  const [fichaInHTML, setFichaInHTML] = useState(""); // Para usar con ReactQuill
+  const [fichaEsHTML, setFichaEsHTML] = useState(""); // Para usar con ReactQuill
   const [product, setProduct] = useState({
     contenido: [
       {
@@ -47,8 +53,8 @@ export const FormAddProd = () => {
   //* --- HANDLEs ---
   const handleSubmit = () => {
     event.preventDefault();
-    alert("eyy mas despacio chiquitin")
-  }
+    alert("eyy mas despacio chiquitin");
+  };
 
   // cambia el valor y donde se guarda el input NAME depende del idioma seleccionado
   const handleInputName = (event) => {
@@ -70,14 +76,14 @@ export const FormAddProd = () => {
     });
   };
 
-  const handleInputFichaDesc = (event) => {
-    const { name, value } = event.target;
+  const handleInputFichaDesc = (event1, name) => {
+    // const { name, value } = event1.target;
     const languageIndex = isEnglish ? 1 : 0;
 
     const updatedContenido = [...product.contenido]; // Realizo una copia temporal del hook para usarlo mutable
     updatedContenido[languageIndex] = {
       ...updatedContenido[languageIndex],
-      [name]: value, // Modifico la propiedad y valor de Descripcion y Ficha
+      [name]: event1, // Modifico la propiedad y valor de Descripcion y Ficha
     };
 
     setProduct({
@@ -85,6 +91,22 @@ export const FormAddProd = () => {
       contenido: updatedContenido,
     });
   };
+
+//   const handleInputFichaDesc = (event) => {
+//     const { name, value } = event.target;
+//     const languageIndex = isEnglish ? 1 : 0;
+
+//     const updatedContenido = [...product.contenido]; // Realizo una copia temporal del hook para usarlo mutable
+//     updatedContenido[languageIndex] = {
+//       ...updatedContenido[languageIndex],
+//       [name]: value, // Modifico la propiedad y valor de Descripcion y Ficha
+//     };
+
+//     setProduct({
+//       ...product,
+//       contenido: updatedContenido,
+//     });
+//   };
 
   // --- HANDLEs ---
 
@@ -104,6 +126,28 @@ export const FormAddProd = () => {
   };
   // --- POST ---
 
+  //* --- REACT QUILL ---
+  const toolbarOptions = [
+    ["bold", "italic", "underline", "strike"], // toggled buttons
+    ["blockquote", "code-block"],
+
+    [{ header: 1 }, { header: 2 }], // custom button values
+    [{ list: "ordered" }, { list: "bullet" }],
+    [{ script: "sub" }, { script: "super" }], // superscript/subscript
+    [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+    [{ direction: "rtl" }], // text direction
+
+    [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+    [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+    [{ font: [] }],
+    [{ align: [] }],
+
+    ["clean"], // remove formatting button
+  ];
+  // --- REACT QUILL ---
+
   const saveTags = (event) => {
     const newTags = event.target.value;
     setTags(newTags);
@@ -112,7 +156,7 @@ export const FormAddProd = () => {
     console.log(tagsArray);
   };
 
-//   console.log("🚀 ~ FormAddProd ~ product:", product);
+  console.log("🚀 ~ FormAddProd ~ product:", product);
   return (
     <div className="bg-cream text-charcoal min-h-screen font-sans leading-normal overflow-x-hidden lg:overflow-auto border border-red-400">
       <main className="flex-1 md:p-0 lg:pt-8 lg:px-8 md:ml-2 flex flex-col">
@@ -180,46 +224,51 @@ export const FormAddProd = () => {
 
                 <div className="mb-4">
                   {/* Descripcion */}
-                  <div className="md:flex-1 ">
-                    <label className="block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
-                      Descripcion
+                  <label className="mb-1 block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
+                  descripcion
                     </label>
-                    <textarea
-                      name="descripcion"
-                      value={
-                        isEnglish
-                          ? product.contenido[1].descripcion
-                          : product.contenido[0].descripcion
-                      }
-                      onChange={handleInputFichaDesc}
-                      className="w-full shadow-inner p-4 border-0"
-                      placeholder="Aquí puedes escribir tu mensaje."
-                    ></textarea>
-                  </div>
+                  <ReactQuill
+                    theme="snow"
+                    name="descripcion"
+                    value={
+                      isEnglish
+                        ? product.contenido[1].descripcion
+                        : product.contenido[0].descripcion
+                    }
+                    onChange={(event1) => handleInputFichaDesc(event1, "descripcion")}
+                    modules={{
+                      toolbar: toolbarOptions,
+                    }}
+                    className="h-auto mb-4 "
+                  />
                   {/* Ficha */}
-                  <div className="md:flex-1 ">
-                    <label className="block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
+                  <div className="md:flex-1">
+                    <label className="mb-1 block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
                       Ficha
                     </label>
-                    <textarea
-                      name="ficha"
+                    <ReactQuill
+                      theme="snow"
+                      name="descripcion"
                       value={
                         isEnglish
                           ? product.contenido[1].ficha
                           : product.contenido[0].ficha
                       }
-                      onChange={handleInputFichaDesc}
-                      className="w-full shadow-inner p-4 border-0"
-                      placeholder="Aquí puedes escribir la Ficha."
-                    ></textarea>
+                      onChange={(event1) => handleInputFichaDesc(event1, "ficha")}
+                      modules={{
+                        toolbar: toolbarOptions,
+                      }}
+                      className="h-auto mb-4 "
+                    />
                   </div>
                   {/* TAGS */}
                   <div className="mb-4 flex flex-col">
                     <label className="block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
                       TAGs
+                      <span className="font-medium italic normal-case text-gray-500"> separar por comas `,`</span>
                     </label>
                     <input
-                      className="tag-input "
+                      className="tag-input p-1"
                       type="text"
                       id="tagInput"
                       placeholder="Agregar tags (separados por comas)"
@@ -308,9 +357,7 @@ export const FormAddProd = () => {
                       }
                       className="flex-1 shadow-inner py-2 px-1 border-0"
                     >
-                      <option value={1} >
-                        Activo
-                      </option>
+                      <option value={1}>Activo</option>
                       <option value={0}>Desactivo</option>
                     </select>
                   </div>
@@ -329,9 +376,7 @@ export const FormAddProd = () => {
                       }
                       className="flex-1 shadow-inner py-2 px-1 border-0"
                     >
-                      <option value={0} >
-                        Desactivo
-                      </option>
+                      <option value={0}>Desactivo</option>
                       <option value={1}>Activo</option>
                     </select>
                   </div>
@@ -350,9 +395,7 @@ export const FormAddProd = () => {
                       }
                       className="flex-1 shadow-inner py-2 px-1 border-0"
                     >
-                      <option value={0} >
-                        Desactivo
-                      </option>
+                      <option value={0}>Desactivo</option>
                       <option value={1}>Activo</option>
                     </select>
                   </div>
@@ -474,7 +517,10 @@ export const FormAddProd = () => {
               </div>
             </div>
             {/* GUARDAR */}
-            <button type="submit" className="md:flex mb-6 p-2 bg-blue-300 rounded-md shadow-xl transition-color duration-300 hover:bg-blue-400 hover:text-white">
+            <button
+              type="submit"
+              className="md:flex mb-6 p-2 bg-blue-300 rounded-md shadow-xl transition-color duration-300 hover:bg-blue-400 hover:text-white"
+            >
               Subir Producto
             </button>
           </form>
