@@ -9,12 +9,10 @@ export const FormAddProd = () => {
   //* --- HOOKs ---
   const [tags, setTags] = useState("");
   const [isEnglish, setIsEnglish] = useState(true);
-  const [descEsHTML, setDescEsHTML] = useState(""); // Para usar con ReactQuill
-  //   console.log("🚀 ~ FormAddProd ~ Espaniol:", descEsHTML)
-  const [descInHTML, setDescInHTML] = useState(""); // Para usar con ReactQuill
-  //   console.log("🚀 ~ FormAddProd ~ Ingles:", descInHTML)
-  const [fichaInHTML, setFichaInHTML] = useState(""); // Para usar con ReactQuill
-  const [fichaEsHTML, setFichaEsHTML] = useState(""); // Para usar con ReactQuill
+  const [imagen, setImagen] = useState(null);
+  const [gallery, setGallery] = useState([]);
+  console.log("🚀 ~ FormAddProd ~ gallery:", gallery)
+  console.log("🚀 ~ FormAddProd ~ imagen:", imagen);
   const [product, setProduct] = useState({
     contenido: [
       {
@@ -92,22 +90,49 @@ export const FormAddProd = () => {
     });
   };
 
-//   const handleInputFichaDesc = (event) => {
-//     const { name, value } = event.target;
-//     const languageIndex = isEnglish ? 1 : 0;
+  const handleImagenChange = (e) => {
+    //! Beta para carga de IMG
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        setImagen(reader.result);
+      };
+    }
+  };
 
-//     const updatedContenido = [...product.contenido]; // Realizo una copia temporal del hook para usarlo mutable
-//     updatedContenido[languageIndex] = {
-//       ...updatedContenido[languageIndex],
-//       [name]: value, // Modifico la propiedad y valor de Descripcion y Ficha
-//     };
-
-//     setProduct({
-//       ...product,
-//       contenido: updatedContenido,
-//     });
-//   };
-
+  const handleGalleryChange = (e) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const uploadedImages = [];
+      const uploadPromises = Array.from(files).map((file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => {
+            // Aquí tendrías la lógica para subir la imagen a AWS
+            // Supongamos que 'uploadImageToAWS' es una función que sube la imagen a AWS y devuelve su URL
+            // uploadImageToAWS(file).then((url) => {
+            //   uploadedImages.push({ url });
+            //   resolve();
+            // }).catch((error) => {
+            //   console.error("Error al subir imagen a AWS:", error);
+            //   reject(error);
+            // });
+          };
+        });
+      });
+      
+      // Espera a que todas las promesas de carga de imágenes se completen
+      Promise.all(uploadPromises).then(() => {
+        setGallery([...gallery, ...uploadedImages]);
+      }).catch((error) => {
+        console.error("Error al cargar imágenes de la galería:", error);
+      });
+    }
+  };
+  
   // --- HANDLEs ---
 
   //* --- POST ---
@@ -225,8 +250,8 @@ export const FormAddProd = () => {
                 <div className="mb-4">
                   {/* Descripcion */}
                   <label className="mb-1 block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
-                  descripcion
-                    </label>
+                    descripcion
+                  </label>
                   <ReactQuill
                     theme="snow"
                     name="descripcion"
@@ -235,7 +260,9 @@ export const FormAddProd = () => {
                         ? product.contenido[1].descripcion
                         : product.contenido[0].descripcion
                     }
-                    onChange={(event1) => handleInputFichaDesc(event1, "descripcion")}
+                    onChange={(event1) =>
+                      handleInputFichaDesc(event1, "descripcion")
+                    }
                     modules={{
                       toolbar: toolbarOptions,
                     }}
@@ -254,7 +281,9 @@ export const FormAddProd = () => {
                           ? product.contenido[1].ficha
                           : product.contenido[0].ficha
                       }
-                      onChange={(event1) => handleInputFichaDesc(event1, "ficha")}
+                      onChange={(event1) =>
+                        handleInputFichaDesc(event1, "ficha")
+                      }
                       modules={{
                         toolbar: toolbarOptions,
                       }}
@@ -265,7 +294,10 @@ export const FormAddProd = () => {
                   <div className="mb-4 flex flex-col">
                     <label className="block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
                       TAGs
-                      <span className="font-medium italic normal-case text-gray-500"> separar por comas `,`</span>
+                      <span className="font-medium italic normal-case text-gray-500">
+                        {" "}
+                        separar por comas `,`
+                      </span>
                     </label>
                     <input
                       className="tag-input p-1"
@@ -292,7 +324,23 @@ export const FormAddProd = () => {
                     <label className="block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
                       imagen
                     </label>
-                    <input
+                    <div>
+                      <label htmlFor="imagen">Imagen:</label>
+                      {/* beta imagen */}
+                      <input
+                        type="file"
+                        id="imagen"
+                        name="imagen"
+                        accept="image/*"
+                        onChange={handleImagenChange}
+                      />
+                    </div>
+                    {imagen && (
+                      <div>
+                        <img src={imagen} alt="Vista previa de la imagen" />
+                      </div>
+                    )}
+                    {/* <input
                       className="w-full shadow-inner p-4 border-0"
                       type="url"
                       name="url"
@@ -301,18 +349,31 @@ export const FormAddProd = () => {
                         setProduct({ ...product, imagen: e.target.value })
                       }
                       placeholder="Video..."
-                    />
+                    /> */}
                   </div>
                   <div className="mb-4 md:ml-4 md:w-3/4">
                     <label className="block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
                       galeria
                     </label>
-                    <input
+                    <div>
+                        {/* beta galeria */}
+                      <label htmlFor="galleryInput">
+                        Seleccionar imágenes:
+                      </label>
+                      <input
+                        type="file"
+                        id="galleryInput"
+                        accept="image/*"
+                        multiple
+                        onChange={handleGalleryChange}
+                      />
+                    </div>
+                    {/* <input
                       className="w-full shadow-inner p-4 border-0"
                       type="email"
                       name="email"
                       placeholder="beta"
-                    />
+                    /> */}
                   </div>
                   <div className="mb-4 md:ml-4 md:w-3/4">
                     <label className="block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
@@ -501,9 +562,9 @@ export const FormAddProd = () => {
                 </div>
               </div>
             </div>
-            {/* DESCRIPCION */}
+            {/* Filtros */}
             <div className="md:flex mb-6">
-              <div className="md:w-1/3">
+              {/* <div className="md:w-1/3">
                 <legend className="uppercase tracking-wide text-sm">
                   Filtros
                 </legend>
@@ -514,7 +575,7 @@ export const FormAddProd = () => {
                   className="shadow-inner p-4 border-0"
                   placeholder="NULL BETA"
                 />
-              </div>
+              </div> */}
             </div>
             {/* GUARDAR */}
             <button
