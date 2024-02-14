@@ -11,7 +11,7 @@ export const FormAddProd = () => {
   const [isEnglish, setIsEnglish] = useState(true);
   const [imagen, setImagen] = useState(null);
   const [gallery, setGallery] = useState([]);
-  console.log("🚀 ~ FormAddProd ~ gallery:", gallery)
+  console.log("🚀 ~ FormAddProd ~ gallery:", gallery);
   console.log("🚀 ~ FormAddProd ~ imagen:", imagen);
   const [product, setProduct] = useState({
     contenido: [
@@ -38,9 +38,20 @@ export const FormAddProd = () => {
     sub_categoria_id: undefined,
     categoria_id: undefined, //obligatorio algun valor
     oferta_id: undefined,
-    imagen: "",
-    galeria: [],
-    video: "",
+    imagen: "https://tecnitium.com/wp-content/uploads/2022/05/testing-1.jpg", //! test
+    galeria: [
+      //! test
+      {
+        url: "https://tecnitium.com/wp-content/uploads/2022/05/testing-1.jpg",
+      },
+      {
+        url: "https://tecnitium.com/wp-content/uploads/2022/05/testing-1.jpg",
+      },
+      {
+        url: "https://tecnitium.com/wp-content/uploads/2022/05/testing-1.jpg",
+      },
+    ],
+    video: "https://player.vimeo.com/video/225519343?h=a9a924c301", //! test
     status: 1, //obligatorio 0/1
     envio_free: 0, //obligatorio 0/1
     envio_rapido: 0, //obligatorio 0/1
@@ -49,11 +60,6 @@ export const FormAddProd = () => {
   // --- HOOKs ---
 
   //* --- HANDLEs ---
-  const handleSubmit = () => {
-    event.preventDefault();
-    alert("eyy mas despacio chiquitin");
-  };
-
   // cambia el valor y donde se guarda el input NAME depende del idioma seleccionado
   const handleInputName = (event) => {
     const { name, value } = event.target;
@@ -123,16 +129,23 @@ export const FormAddProd = () => {
           };
         });
       });
-      
+
       // Espera a que todas las promesas de carga de imágenes se completen
-      Promise.all(uploadPromises).then(() => {
-        setGallery([...gallery, ...uploadedImages]);
-      }).catch((error) => {
-        console.error("Error al cargar imágenes de la galería:", error);
-      });
+      Promise.all(uploadPromises)
+        .then(() => {
+          setGallery([...gallery, ...uploadedImages]);
+        })
+        .catch((error) => {
+          console.error("Error al cargar imágenes de la galería:", error);
+        });
     }
   };
-  
+
+  const handleSubmit = () => {
+    event.preventDefault();
+    postProduct();
+    // alert("eyy mas despacio chiquitin");
+  };
   // --- HANDLEs ---
 
   //* --- POST ---
@@ -144,9 +157,10 @@ export const FormAddProd = () => {
         : `XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`;
 
       const response = await axios.post(urlPostProduct, product);
-      console.log("🚀 ~ postProduct ~ response:", response.data);
+      console.log("🚀 ~ POST ~ response:", response.data);
+      alert(JSON.stringify(response.data));
     } catch (error) {
-      console.log(error);
+      console.log("ERROR POST: ", error);
     }
   };
   // --- POST ---
@@ -183,9 +197,9 @@ export const FormAddProd = () => {
 
   console.log("🚀 ~ FormAddProd ~ product:", product);
   return (
-    <div className="bg-cream text-charcoal min-h-screen font-sans leading-normal overflow-x-hidden lg:overflow-auto border border-red-400">
+    <div className="bg-cream text-charcoal min-h-screen font-sans leading-normal overflow-x-hidden lg:overflow-auto border border-gray-200">
       <main className="flex-1 md:p-0 lg:pt-8 lg:px-8 md:ml-2 flex flex-col">
-        <section className="bg-cream-lighter p-4 shadow ">
+        <section className="bg-cream-lighter p-4  ">
           <div className="md:flex">
             <h2 className=" uppercase tracking-wide text-sm sm:text-lg mb-6">
               Agregar un nuevo producto
@@ -252,14 +266,11 @@ export const FormAddProd = () => {
                   <label className="mb-1 block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
                     descripcion
                   </label>
-                  <ReactQuill
+                  {/* Descripcion para Ingles */}
+                  {isEnglish && <ReactQuill
                     theme="snow"
                     name="descripcion"
-                    value={
-                      isEnglish
-                        ? product.contenido[1].descripcion
-                        : product.contenido[0].descripcion
-                    }
+                    value={product.contenido[1].descripcion}
                     onChange={(event1) =>
                       handleInputFichaDesc(event1, "descripcion")
                     }
@@ -267,28 +278,56 @@ export const FormAddProd = () => {
                       toolbar: toolbarOptions,
                     }}
                     className="h-auto mb-4 "
-                  />
+                  />}
+                  {/* Descripcion para Español */}
+                  {!isEnglish && <ReactQuill
+                    theme="snow"
+                    name="descripcion"
+                    value={product.contenido[0].descripcion}
+                    onChange={(event1) =>
+                      handleInputFichaDesc(event1, "descripcion")
+                    }
+                    modules={{
+                      toolbar: toolbarOptions,
+                    }}
+                    className="h-auto mb-4 "
+                  />}
+
                   {/* Ficha */}
                   <div className="md:flex-1">
                     <label className="mb-1 block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
                       Ficha
                     </label>
-                    <ReactQuill
-                      theme="snow"
-                      name="descripcion"
-                      value={
-                        isEnglish
-                          ? product.contenido[1].ficha
-                          : product.contenido[0].ficha
-                      }
-                      onChange={(event1) =>
-                        handleInputFichaDesc(event1, "ficha")
-                      }
-                      modules={{
-                        toolbar: toolbarOptions,
-                      }}
-                      className="h-auto mb-4 "
-                    />
+                    {/* Ficha para Ingles */}
+                    {isEnglish && (
+                      <ReactQuill
+                        theme="snow"
+                        name="ficha"
+                        value={product.contenido[1].ficha}
+                        onChange={(event1) =>
+                          handleInputFichaDesc(event1, "ficha")
+                        }
+                        modules={{
+                          toolbar: toolbarOptions,
+                        }}
+                        className="h-auto mb-4 "
+                      />
+                    )}
+                    {/* Ficha para Español */}
+                    {!isEnglish && (
+                      <ReactQuill
+                        theme="snow"
+                        name="ficha"
+                        value={product.contenido[0].ficha}
+                        onChange={(event1) =>
+                          handleInputFichaDesc(event1, "ficha")
+                        }
+                        modules={{
+                          toolbar: toolbarOptions,
+                        }}
+                        className="h-auto mb-4 "
+                      />
+                    )}
                   </div>
                   {/* TAGS */}
                   <div className="mb-4 flex flex-col">
@@ -356,7 +395,7 @@ export const FormAddProd = () => {
                       galeria
                     </label>
                     <div>
-                        {/* beta galeria */}
+                      {/* beta galeria */}
                       <label htmlFor="galleryInput">
                         Seleccionar imágenes:
                       </label>
@@ -381,7 +420,7 @@ export const FormAddProd = () => {
                     </label>
                     <input
                       className="w-full shadow-inner p-4 border-0"
-                      type="email"
+                      type="text"
                       name="email"
                       value={product.video}
                       onChange={(e) =>

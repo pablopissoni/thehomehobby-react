@@ -29,10 +29,10 @@ export const SliderComponents = ({img, titleImg, title, products, prodCategoryId
             </h1>
           </div>
           <div className="grid grid-cols-12 gap-5">
-            <div className="group relative col-span-3 my-5 hidden overflow-hidden rounded-l-lg xl:block">
+            <div className="group relative col-span-3 my-5 hidden overflow-hidden rounded-l-lg xl:block shadow-md">
               <div className="overlay-gradient absolute  z-[1] h-full w-full"></div>
               <img
-                className="transition-all-300 h-full w-full object-cover hover:transform group-hover:scale-110"
+                className="transition-all-300 h-full w-full object-contain transition-transform duration-300 hover:transform group-hover:scale-110"
                 src={img}
                 alt="banner-img"
               />

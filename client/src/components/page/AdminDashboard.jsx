@@ -19,27 +19,6 @@ export const AdminDashboard = () => {
     setOpen(true)
   };
 
-//   const objeto = {
-//     contenido: "[{\"idioma\":\"Spanish\",\"nombre\":\"televisor plasma\",\"descripcion\":\"<p>el mjor smartv<\\/p>\",\"ficha\":null,\"slug\":\"televisor-plasma\"}]",
-//     nombre_es: "Ejemplo Producto",
-//     nombre_ingles: "Example Product",
-//     tags: ["etiqueta1", "etiqueta2"],
-//     marca_id: 1,
-//     sub_categoria_id: 2,
-//     imagen: "/ruta/imagen.jpg",
-//     galeria: ["/ruta/galeria1.jpg", "/ruta/galeria2.jpg"],
-//     categoria_id: 3,
-//     status: 1,
-//     video: "/ruta/video.mp4",
-//     oferta_id: 1,
-//     precio_base: 50.99,
-//     filtros: {"color": "rojo", "tamaño": "grande"},
-//     envio_free: 1,
-//     envio_rapido: 0
-//   };
-// const cadenaJSON = JSON.stringify(objeto);
-// console.log(cadenaJSON);
-
   return (
     <div className="flex flex-col h-auto bg-gray-100">
       {/* Barra de navegación superior */}
@@ -73,12 +52,6 @@ export const AdminDashboard = () => {
           }`}
         >
           <nav>
-            <a
-              className="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white"
-              href="#"
-            >
-              <i className="fas fa-home mr-2"></i>Inicio
-            </a>
             <Link
               className="block cursor-pointer text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white"
               // href="#"
@@ -86,18 +59,6 @@ export const AdminDashboard = () => {
             >
               <i className="fas fa-file-alt mr-2"></i>Agregar Producto
             </Link>
-            <a
-              className="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white"
-              href="#"
-            >
-              <i className="fas fa-users mr-2"></i>Usuarios
-            </a>
-            <a
-              className="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white"
-              href="#"
-            >
-              <i className="fas fa-store mr-2"></i>Comercios
-            </a>
             <Link
               className="block cursor-pointer text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white"
               onClick={() => toggleTitleOpen(setOriginalOpen)}
