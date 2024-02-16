@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import TestProdObj from "../TestProdObj";
 import axios from "axios";
+import { Paginado } from "../Paginado";
 
 export const SearchProducts = () => {
   //* ---- HOOKs ----
@@ -34,7 +35,7 @@ export const SearchProducts = () => {
   }
   // ---- Get Products by search ----
   return (
-    <div className="m-20 max-w-[1500px] ">
+    <div className="m-20 max-w-[1500px] border border-red-400">
       {/* encabezado */}
       <div className="bg-gray-200 ml-2">
         <span>Lavarropas</span>
@@ -42,7 +43,9 @@ export const SearchProducts = () => {
       {/* Container Filtro y productos */}
       <div className="flex">
         {/* Filtros */}
-        <div className="bg-gray-300 h-[800px] m-2 lg:w-[300px] rounded-sm">Filtros</div>
+        <div className="bg-gray-300 h-[800px] m-2 lg:w-[300px] rounded-sm">
+          Filtros
+        </div>
         {/* Productos */}
         <div className=" h-auto w-full shadow-xl curs mt-2">
           {!producSearchs.message &&
@@ -72,9 +75,9 @@ export const SearchProducts = () => {
                   <span className="bg-green-200 text-green-800 w-[100px] mt-3 text-center rounded-md">
                     Envio gratis
                   </span>
-                  <span className="text-sm font-extralight flex justify-end mr-8">
+                  {/* <span className="text-sm font-extralight flex justify-end mr-8">
                     stock: 999
-                  </span>
+                  </span> */}
                 </div>
               </div>
             ))}
@@ -86,6 +89,9 @@ export const SearchProducts = () => {
             </div>
           )}
         </div>
+      </div>
+      <div>
+        <Paginado></Paginado>
       </div>
     </div>
   );
