@@ -1,51 +1,90 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import TestProdObj from "../TestProdObj";
+import axios from "axios";
 
 export const SearchProducts = () => {
-  const location = useLocation();
-  console.log("🚀 ~ SearchProducts ~ location:", location);
+  //* ---- HOOKs ----
+  const { id } = useParams();
+  const [producSearchs, setProducSearchs] = useState({});
+  // const  [noProdSearch, setNoProdSearch ] = useState({});
+  console.log("🚀 ~ SearchProducts ~ producSearchs:", producSearchs.data);
+  // ---- HOOKs ----
+  console.log("🚀 ~ SearchProducts ~ search:", id);
 
+  //* ---- USE EFFECTs ----
+  useEffect(() => {
+    getProducts(id);
+  }, [id]);
+  // ----- USE EFFECTs ----
+
+  //* ---- Get Products by search ----
+  async function getProducts(id) {
+    const isLocal = window.location.href.includes("localhost");
+    const urlGetProductsId = isLocal
+      ? `http://localhost:3001/productos?name=${id}`
+      : `XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX${id}`;
+    try {
+      const response = await axios(urlGetProductsId);
+      setProducSearchs(response.data);
+    } catch (error) {
+      setProducSearchs({ message: "no products found" });
+      console.error("Error en getProduct ID >>> ", error);
+    }
+  }
+  // ---- Get Products by search ----
   return (
-    <div className="m-20 max-w-[1500px]">
+    <div className="m-20 max-w-[1500px] ">
       {/* encabezado */}
-      <div className="bg-gray-200 ">
+      <div className="bg-gray-200 ml-2">
         <span>Lavarropas</span>
       </div>
       {/* Container Filtro y productos */}
       <div className="flex">
         {/* Filtros */}
-        <div className="bg-gray-300 h-[800px] lg:w-[300px]">Filtros</div>
+        <div className="bg-gray-300 h-[800px] m-2 lg:w-[300px] rounded-sm">Filtros</div>
         {/* Productos */}
-        <div className=" h-auto w-full shadow-xl">
-          {TestProdObj.map((product, index) => (
-            <div
-              className="flex border-b py-4 pl-4 border-gray-200 "
-              key={index}
-            >
+        <div className=" h-auto w-full shadow-xl curs mt-2">
+          {!producSearchs.message &&
+            producSearchs?.data?.map((product, index) => (
+              <div
+                className="flex py-4 pl-4 border-gray-200 transition-transform duration-300 hover:scale-[1.02]"
+                key={index}
+              >
                 <div className="w-[160px] h-[160px]">
-              <img
-                className="w-[160px] h-[160px] object-contain"
-                src={product.img}
-                alt=""
-              />
+                  <Link to={`/details/${product.id}`}>
+                    <img
+                      className="w-[160px] h-[160px] object-contain cursor-pointer"
+                      src={product.imagen}
+                      alt=""
+                    />
+                  </Link>
                 </div>
-              <div className="ml-4 flex flex-col w-full ">
-                <h3 className="lg:text-2xl font-light">
-                    {product.title}
-                </h3>
-                <span className="lg:text-lg font-semibold mt-3">
-                  $ {product.price}
-                </span>
-                <span className="bg-green-200 text-green-800 w-[100px] mt-3 text-center rounded-md">
-                  Envio gratis
-                </span>
-                <span className="text-sm font-extralight flex justify-end mr-8">
-                  stock: 999
-                </span>
+                <div className="ml-4 flex flex-col w-full">
+                  <Link to={`/details/${product.id}`}>
+                    <h3 className="lg:text-2xl font-light">
+                      {product?.nombre_ingles || product?.nombre_es}
+                    </h3>
+                  </Link>
+                  <span className="lg:text-lg font-semibold mt-3">
+                    $ {product?.precio_base}
+                  </span>
+                  <span className="bg-green-200 text-green-800 w-[100px] mt-3 text-center rounded-md">
+                    Envio gratis
+                  </span>
+                  <span className="text-sm font-extralight flex justify-end mr-8">
+                    stock: 999
+                  </span>
+                </div>
               </div>
+            ))}
+
+          {/* No hay productos */}
+          {producSearchs.message && (
+            <div className="flex border-b py-4 pl-4 border-gray-200 justify-center  xl:text-xl">
+              No products found
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>
