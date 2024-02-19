@@ -8,31 +8,40 @@ export const SearchProducts = () => {
   //* ---- HOOKs ----
   const { id } = useParams();
   const [producSearchs, setProducSearchs] = useState({});
-  // const  [noProdSearch, setNoProdSearch ] = useState({});
-  console.log("🚀 ~ SearchProducts ~ producSearchs:", producSearchs.data);
+  const [paginationData, setPaginationData] = useState({
+    currentPage: 1,
+    nextPage: null,
+    previousPage: null,
+    totalItems: null,
+    totalPages: null,
+  });
+
   // ---- HOOKs ----
-  console.log("🚀 ~ SearchProducts ~ search:", id);
 
   //* ---- USE EFFECTs ----
   useEffect(() => {
     getProducts(id);
   }, [id]);
   // ----- USE EFFECTs ----
-
+  
   //* ---- Get Products by search ----
-  async function getProducts(id) {
+  async function getProducts(id, page = 1) {
     const isLocal = window.location.href.includes("localhost");
     const urlGetProductsId = isLocal
-      ? `http://localhost:3001/productos?name=${id}`
-      : `XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX${id}`;
+    ? `http://localhost:3001/productos?name=${id}&page=${page}`
+    : `XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX${id}&page=${page}`;
     try {
       const response = await axios(urlGetProductsId);
       setProducSearchs(response.data);
+      setPaginationData(response.data.info);
+
     } catch (error) {
       setProducSearchs({ message: "no products found" });
       console.error("Error en getProduct ID >>> ", error);
     }
   }
+  console.log("🚀 ~ SearchProducts ~ paginationData:", paginationData)
+
   // ---- Get Products by search ----
   return (
     <div className="m-20 max-w-[1500px] border border-red-400">
@@ -47,11 +56,11 @@ export const SearchProducts = () => {
           Filtros
         </div>
         {/* Productos */}
-        <div className=" h-auto w-full shadow-xl curs mt-2">
+        <div className=" h-auto w-full curs mt-2">
           {!producSearchs.message &&
             producSearchs?.data?.map((product, index) => (
               <div
-                className="flex py-4 pl-4 border-gray-200 transition-transform duration-300 hover:scale-[1.02]"
+                className="flex py-4 pl-4 border-b-2 border-gray-200 transition-transform duration-300 hover:scale-[1.02]"
                 key={index}
               >
                 <div className="w-[160px] h-[160px]">
@@ -91,7 +100,11 @@ export const SearchProducts = () => {
         </div>
       </div>
       <div>
-        <Paginado></Paginado>
+        <Paginado
+          getProducts={getProducts}
+          id={id}
+          paginationData={paginationData}
+        />
       </div>
     </div>
   );
