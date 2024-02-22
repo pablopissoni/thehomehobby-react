@@ -5,7 +5,7 @@ import "react-quill/dist/quill.snow.css";
 
 import axios from "axios";
 
-export const FormAddProd = ({ setCloseModal }) => {
+export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
   //* --- HOOKs ---
   const [tags, setTags] = useState("");
   const [isEnglish, setIsEnglish] = useState(true);
@@ -14,32 +14,33 @@ export const FormAddProd = ({ setCloseModal }) => {
   // console.log("🚀 ~ FormAddProd ~ gallery:", gallery);
   // console.log("🚀 ~ FormAddProd ~ imagen:", imagen);
   const [product, setProduct] = useState({
+  /* eslint-disable */
     contenido: [
       {
         idioma: "Spanish",
-        nombre: "", // su valor sera igual a nombre_es
-        slug: "", // Se creara a partir del nombre automaticamente
-        descripcion: "",
-        ficha: "",
+        nombre: prodEdit.contenido[0].nombre || "", // su valor sera igual a nombre_es
+        slug: prodEdit.contenido[0].slug || "", // Se creara a partir del nombre automaticamente
+        descripcion: prodEdit.contenido[0].descripcion || "",
+        ficha: prodEdit.contenido[0].ficha || "",
       },
       {
         idioma: "English",
-        nombre: "",
-        slug: "",
-        descripcion: "",
-        ficha: "",
+        nombre: prodEdit?.contenido[1]?.nombre || "", // su valor sera igual a nombre_es
+        slug: prodEdit?.contenido[1]?.slug || "", // Se creara a partir del nombre automaticamente
+        descripcion: prodEdit?.contenido[1]?.descripcion || "",
+        ficha: prodEdit?.contenido[1]?.ficha || "",
       },
     ],
-    precio_base: 0,
-    nombre_es: "",
-    nombre_ingles: "",
-    tags: [],
-    marca_id: undefined, //obligatorio algun valor
-    sub_categoria_id: undefined,
-    categoria_id: undefined, //obligatorio algun valor
-    oferta_id: undefined,
-    imagen: "https://tecnitium.com/wp-content/uploads/2022/05/testing-1.jpg", //! test
-    galeria: [
+    precio_base: prodEdit.precio_base || "",
+    nombre_es: prodEdit.nombre_es || "",
+    nombre_ingles: prodEdit.nombre_ingles || "",
+    tags: prodEdit.tags || [],
+    marca_id: prodEdit.marca_id || undefined, //obligatorio algun valor
+    sub_categoria_id: prodEdit.sub_categoria_id || undefined,
+    categoria_id: prodEdit.categoria_id || undefined, //obligatorio algun valor
+    oferta_id: prodEdit.oferta_id || undefined,
+    imagen: prodEdit.imagen || "https://tecnitium.com/wp-content/uploads/2022/05/testing-1.jpg", //! test
+    galeria: prodEdit.galeria || [
       //! test
       {
         url: "https://tecnitium.com/wp-content/uploads/2022/05/testing-1.jpg",
@@ -51,13 +52,41 @@ export const FormAddProd = ({ setCloseModal }) => {
         url: "https://tecnitium.com/wp-content/uploads/2022/05/testing-1.jpg",
       },
     ],
-    video: "https://player.vimeo.com/video/225519343?h=a9a924c301", //! test
-    status: 1, //obligatorio 0/1
-    envio_free: 0, //obligatorio 0/1
-    envio_rapido: 0, //obligatorio 0/1
-    filtros: { color: "rojo", tamaño: "grande" }, //? Beta
-  });
+    video: prodEdit.video || "https://player.vimeo.com/video/225519343?h=a9a924c301", //! test
+    status: prodEdit.status || 1, //obligatorio 0/1
+    envio_free: prodEdit.envio_free || 0, //obligatorio 0/1
+    envio_rapido: prodEdit.envio_rapido || 0, //obligatorio 0/1
+    filtros: prodEdit.filtros || {}, //? Beta
+  /* eslint-enable */
+  })
   // --- HOOKs ---
+
+  //* ------------ AL EDITAR UN PRODUCTO -----------------
+  /* eslint-disable */
+//   useEffect(() => {
+//     if (prodEdit) {
+//       setProduct({
+//         contenido: prodEdit?.contenido,
+//         precio_base: prodEdit?.precio_base,
+//         nombre_es: prodEdit?.nombre_es,
+//         nombre_ingles: prodEdit?.nombre_ingles,
+//         tags: prodEdit?.tags,
+//         marca_id: prodEdit?.marca_id,
+//         sub_categoria_id: prodEdit?.sub_categoria_id,
+//         categoria_id: prodEdit?.categoria_id,
+//         oferta_id: prodEdit?.oferta_id,
+//         imagen: prodEdit?.imagen,
+//         galeria: prodEdit?.galeria,
+//         video: prodEdit?.video,
+//         status: prodEdit?.status,
+//         envio_free: prodEdit?.envio_free,
+//         envio_rapido: prodEdit?.envio_rapido,
+//         filtros: prodEdit?.filtros,
+//       });
+//     }
+//   }, [prodEdit]);
+  /* eslint-enable */
+  // ------------- AL EDITAR UN PRODUCTO -----------------
 
   //* --- HANDLEs ---
   // cambia el valor y donde se guarda el input NAME depende del idioma seleccionado
@@ -80,20 +109,21 @@ export const FormAddProd = ({ setCloseModal }) => {
     });
   };
 
-  const handleInputFichaDesc = (event1, name) => {
+  const handleInputFichaDesc = (event1, name, source) => {
     // const { name, value } = event1.target;
     const languageIndex = isEnglish ? 1 : 0;
-
-    const updatedContenido = [...product.contenido]; // Realizo una copia temporal del hook para usarlo mutable
-    updatedContenido[languageIndex] = {
-      ...updatedContenido[languageIndex],
-      [name]: event1, // Modifico la propiedad y valor de Descripcion y Ficha
-    };
-
-    setProduct({
-      ...product,
-      contenido: updatedContenido,
-    });
+    if(source === "user") {
+        const updatedContenido = [...product.contenido]; // Realizo una copia temporal del hook para usarlo mutable
+        updatedContenido[languageIndex] = {
+          ...updatedContenido[languageIndex],
+          [name]: event1, // Modifico la propiedad y valor de Descripcion y Ficha
+        };
+    
+        setProduct({
+          ...product,
+          contenido: updatedContenido,
+        });
+    }
   };
 
   const handleImagenChange = (e) => {
@@ -143,28 +173,12 @@ export const FormAddProd = ({ setCloseModal }) => {
 
   const handleSubmit = () => {
     event.preventDefault();
+    prodEdit ? alert("Edito producto") :
     alert("Nuevo producto")
     //  postProduct();
     // alert("eyy mas despacio chiquitin");
   };
   // --- HANDLEs ---
-
-  //* --- POST ---
-  const postProduct = async () => {
-    try {
-      const isLocalhost = window.location.href.includes("localhost");
-      const urlPostProduct = isLocalhost
-        ? `http://localhost:3001/productos`
-        : `XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`;
-
-      const response = await axios.post(urlPostProduct, product);
-      console.log("🚀 ~ POST ~ response:", response.data);
-      alert(JSON.stringify(response.data));
-    } catch (error) {
-      console.log("ERROR POST: ", error);
-    }
-  };
-  // --- POST ---
 
   //* --- REACT QUILL ---
   const toolbarOptions = [
@@ -196,7 +210,7 @@ export const FormAddProd = ({ setCloseModal }) => {
     console.log(tagsArray);
   };
 
-  console.log("🚀 ~ FormAddProd ~ product:", product);
+  console.log("🚀 ~ FormEdirProd ~ product:", product);
   return (
     <div className="bg-cream text-charcoal min-h-screen font-sans leading-normal overflow-x-hidden lg:overflow-auto border border-gray-200">
       <main className="flex-1 md:p-0 lg:pt-8 lg:px-8 md:ml-2 flex flex-col">
@@ -234,7 +248,7 @@ export const FormAddProd = ({ setCloseModal }) => {
                       className="w-full shadow-inner p-4 border-0"
                       type="text"
                       value={
-                        isEnglish ? product.nombre_ingles : product.nombre_es
+                        isEnglish ? product?.nombre_ingles : product?.nombre_es
                       }
                       onChange={handleInputName}
                       name={isEnglish ? "nombre_ingles" : "nombre_es"}
@@ -248,7 +262,7 @@ export const FormAddProd = ({ setCloseModal }) => {
                     </label>
                     <input
                       type="number"
-                      value={product.precio_base}
+                      value={product?.precio_base}
                       onChange={
                         (e) =>
                           setProduct({
@@ -272,10 +286,12 @@ export const FormAddProd = ({ setCloseModal }) => {
                     <ReactQuill
                       theme="snow"
                       name="descripcion"
-                      value={product.contenido[1].descripcion}
-                      onChange={(event1) =>
-                        handleInputFichaDesc(event1, "descripcion")
-                      }
+                    //   value={product.contenido[1].descripcion}
+                    value={product?.contenido[1]?.descripcion}
+                    onChange={(event1,delta, source) => handleInputFichaDesc(event1,'descripcion', source)}
+                    //   onChange={(event1) =>
+                    //     handleInputFichaDesc(event1, "descripcion")
+                    //   }
                       modules={{
                         toolbar: toolbarOptions,
                       }}
@@ -287,10 +303,12 @@ export const FormAddProd = ({ setCloseModal }) => {
                     <ReactQuill
                       theme="snow"
                       name="descripcion"
-                      value={product.contenido[0].descripcion}
-                      onChange={(event1) =>
-                        handleInputFichaDesc(event1, "descripcion")
-                      }
+                    //   value={product.contenido[0].descripcion}
+                    value={product?.contenido[0]?.descripcion}
+                    onChange={(event1,delta, source) => handleInputFichaDesc(event1,'descripcion', source)}
+                    //   onChange={(event1) =>
+                    //     handleInputFichaDesc(event1, "descripcion")
+                    //   }
                       modules={{
                         toolbar: toolbarOptions,
                       }}
@@ -308,10 +326,12 @@ export const FormAddProd = ({ setCloseModal }) => {
                       <ReactQuill
                         theme="snow"
                         name="ficha"
-                        value={product.contenido[1].ficha}
-                        onChange={(event1) =>
-                          handleInputFichaDesc(event1, "ficha")
-                        }
+                        // value={product.contenido[1].ficha}
+                        value={product?.contenido[1]?.ficha}
+                      onChange={(event1,delta, source) => handleInputFichaDesc(event1,'ficha', source)}
+                        // onChange={(event1) =>
+                        //   handleInputFichaDesc(event1, "ficha")
+                        // }
                         modules={{
                           toolbar: toolbarOptions,
                         }}
@@ -323,10 +343,13 @@ export const FormAddProd = ({ setCloseModal }) => {
                       <ReactQuill
                         theme="snow"
                         name="ficha"
-                        value={product.contenido[0].ficha}
-                        onChange={(event1) =>
-                          handleInputFichaDesc(event1, "ficha")
-                        }
+                        // value={product.contenido[0].ficha}
+                        value={product?.contenido[0]?.ficha}
+                        onChange={(event1,delta, source) => handleInputFichaDesc(event1,'ficha', source)}
+
+                        // onChange={(event1) =>
+                        //   handleInputFichaDesc(event1, "ficha")
+                        // }
                         modules={{
                           toolbar: toolbarOptions,
                         }}
@@ -384,16 +407,6 @@ export const FormAddProd = ({ setCloseModal }) => {
                         <img src={imagen} alt="Vista previa de la imagen" />
                       </div>
                     )}
-                    {/* <input
-                      className="w-full shadow-inner p-4 border-0"
-                      type="url"
-                      name="url"
-                      value={product.imagen}
-                      onChange={(e) =>
-                        setProduct({ ...product, imagen: e.target.value })
-                      }
-                      placeholder="Video..."
-                    /> */}
                   </div>
                   <div className="mb-4 md:ml-4 md:w-3/4">
                     <label className="block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
@@ -412,12 +425,6 @@ export const FormAddProd = ({ setCloseModal }) => {
                         onChange={handleGalleryChange}
                       />
                     </div>
-                    {/* <input
-                      className="w-full shadow-inner p-4 border-0"
-                      type="email"
-                      name="email"
-                      placeholder="beta"
-                    /> */}
                   </div>
                   <div className="mb-4 md:ml-4 md:w-3/4">
                     <label className="block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
@@ -427,7 +434,7 @@ export const FormAddProd = ({ setCloseModal }) => {
                       className="w-full shadow-inner p-4 border-0"
                       type="text"
                       name="email"
-                      value={product.video}
+                      value={product?.video}
                       onChange={(e) =>
                         setProduct({ ...product, video: e.target.value })
                       }
@@ -453,7 +460,7 @@ export const FormAddProd = ({ setCloseModal }) => {
                       Status
                     </label>
                     <select
-                      value={product.status}
+                      value={product?.status}
                       onChange={(e) =>
                         setProduct({
                           ...product,
@@ -472,7 +479,7 @@ export const FormAddProd = ({ setCloseModal }) => {
                       Envio Rapido
                     </label>
                     <select
-                      value={product.envio_rapido}
+                      value={product?.envio_rapido}
                       onChange={(e) =>
                         setProduct({
                           ...product,
@@ -491,7 +498,7 @@ export const FormAddProd = ({ setCloseModal }) => {
                       Envio Free
                     </label>
                     <select
-                      value={product.envio_free}
+                      value={product?.envio_free}
                       onChange={(e) =>
                         setProduct({
                           ...product,
@@ -515,7 +522,7 @@ export const FormAddProd = ({ setCloseModal }) => {
                       </label>
                       <div className="w-full flex">
                         <select
-                          value={product.marca_id}
+                          value={product?.marca_id}
                           onChange={(e) =>
                             setProduct({
                               ...product,
@@ -540,7 +547,7 @@ export const FormAddProd = ({ setCloseModal }) => {
                       </label>
                       <div className="w-full flex">
                         <select
-                          value={product.oferta_id}
+                          value={product?.oferta_id}
                           onChange={(e) =>
                             setProduct({
                               ...product,
@@ -564,7 +571,7 @@ export const FormAddProd = ({ setCloseModal }) => {
                       </label>
                       <div className="w-full flex">
                         <select
-                          value={product.categoria_id}
+                          value={product?.categoria_id}
                           onChange={(e) =>
                             setProduct({
                               ...product,
@@ -586,7 +593,7 @@ export const FormAddProd = ({ setCloseModal }) => {
                       </label>
                       <div className="w-full flex">
                         <select
-                          value={product.sub_categoria_id}
+                          value={product?.sub_categoria_id}
                           onChange={(e) =>
                             setProduct({
                               ...product,
@@ -608,18 +615,6 @@ export const FormAddProd = ({ setCloseModal }) => {
             </div>
             {/* Filtros */}
             <div className="md:flex mb-6">
-              {/* <div className="md:w-1/3">
-                <legend className="uppercase tracking-wide text-sm">
-                  Filtros
-                </legend>
-              </div>
-              <div className="md:flex-1 mt-2 mb:mt-0 md:px-3">
-                <input
-                  type="text"
-                  className="shadow-inner p-4 border-0"
-                  placeholder="NULL BETA"
-                />
-              </div> */}
             </div>
             {/* GUARDAR y cerrar edicion*/}
             <div className="flex">
@@ -631,7 +626,7 @@ export const FormAddProd = ({ setCloseModal }) => {
             </button>
             <button
               onClick={() => setCloseModal(false)}
-              type="buton"
+              type="button"
               className="md:flex mb-6 p-2 bg-red-300 rounded-md shadow-xl transition-color duration-300 hover:bg-red-400 hover:text-white"
             >
               Cerrar

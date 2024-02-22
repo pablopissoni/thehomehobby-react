@@ -2,21 +2,26 @@ import React, { useState } from "react";
 import LogoMini from "../../assets/Logo miniatura.svg";
 import { FormAddProd } from "../Dashboard/FormAddProd";
 import { Link } from "react-router-dom";
+import { Products } from "../Dashboard/Products";
 
 export const AdminDashboard = () => {
   // Estado para controlar la visibilidad del menú lateral
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
   const [isOriginalOpen, setOriginalOpen] = useState(false);
-  const [isFormAddProd, setIsFormAddProd] = useState(false)
+  const [isFormAddProd, setIsFormAddProd] = useState(false); // Nuevo producto
+  const [isProducts, setIsProducts] = useState(false);       // Lista de productos y Edicion
 
   // Función para alternar la visibilidad del menú lateral
   const toggleSideNav = () => {
     setIsSideNavOpen(!isSideNavOpen);
   };
+
+  // Función para alternar la visibilidad del formulario de productos
   const toggleTitleOpen = (setOpen) => {
     setOriginalOpen(false);
-    setIsFormAddProd(false)
-    setOpen(true)
+    setIsFormAddProd(false);
+    setIsProducts(false);
+    setOpen(true);
   };
 
   return (
@@ -61,6 +66,13 @@ export const AdminDashboard = () => {
             </Link>
             <Link
               className="block cursor-pointer text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white"
+              // href="#"
+              onClick={() => toggleTitleOpen(setIsProducts)}
+            >
+              <i className="fas fa-file-alt mr-2"></i>Ver Producto / Editar
+            </Link>
+            <Link
+              className="block cursor-pointer text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white"
               onClick={() => toggleTitleOpen(setOriginalOpen)}
               // href="#"
             >
@@ -87,7 +99,10 @@ export const AdminDashboard = () => {
 
         {/* Área de contenido principal */}
         <div className="flex-1 p-4 w-full md:w-1/2">
-          { isFormAddProd && <FormAddProd/>}
+          {/* Agregar Producto */}
+          {isFormAddProd && <FormAddProd setCloseModal={setIsFormAddProd}/>}
+          {/* Buscar productos y editar */}
+          {isProducts && <Products setCloseModal={setIsFormAddProd}/>}
           {/*//! Oculto   */}
           {isOriginalOpen && (
             <>
