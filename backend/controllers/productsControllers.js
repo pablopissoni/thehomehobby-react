@@ -144,6 +144,7 @@ function formatURL(url) {
     return url;
   }
 }
+const AWS = require("aws-sdk");
 
 const createProduct = (req, res, connection) => {
   const {
@@ -210,14 +211,12 @@ const createProduct = (req, res, connection) => {
     });
   }
 
-  // Verificar que la galería sea un arreglo de objetos con URLs válidas
   if (
     !Array.isArray(galeria) ||
-    !galeria.every((item) => typeof item === "object" && isValidURL(item.url))
+    !galeria.every((item) => typeof item === "object")
   ) {
     return res.status(400).json({
-      error:
-        "El campo 'galeria' debe ser un arreglo de objetos con URLs válidas",
+      error: "El campo 'galeria' debe ser un arreglo de objetos",
     });
   }
 
@@ -239,6 +238,14 @@ const createProduct = (req, res, connection) => {
     // Obtener el último ID y asignar el siguiente
     const lastId = results[0].lastId || 0;
     const nuevoProductoId = lastId + 1;
+
+    AWS.config.update({
+      accessKeyId: "AKIASSFS6RFCBNCABLI4",
+      secretAccessKey: "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",
+    });
+
+    // Crea una nueva instancia de S3
+    const s3 = new AWS.S3();
 
     // Si todas las validaciones pasan, crear el nuevo producto
     const nuevoProducto = {
@@ -263,37 +270,47 @@ const createProduct = (req, res, connection) => {
       updated_at: new Date(),
     };
 
-    const query = "INSERT INTO productos SET ?";
+    const imagenParams = {
+      Bucket: "thehomehobby",
+      Key: `storage/imagen${nuevoProductoId}.jpg`, // ruta en S3
+      Body: imagen, // datos de la imagen
+      ACL: "public-read", // permisos públicos de lectura
+    };
 
-    connection.query(query, nuevoProducto, (error, results) => {
-      if (error) {
-        console.error("Error al realizar la inserción:", error);
+    // Subir la imagen a S3
+    s3.upload(imagenParams, (err, data) => {
+      if (err) {
+        console.error("Error al subir la imagen:", err);
         return res.status(500).json({ error: "Error en el servidor" });
       }
+      console.log("Imagen subida exitosamente a:", data.Location);
 
-      // Respuesta exitosa
-      res.status(201).json({
-        id: nuevoProductoId,
-        mensaje: "Producto creado exitosamente",
+      // Continuar con la lógica para subir la galería y los videos aquí
+      const query = "INSERT INTO productos SET ?";
+
+      connection.query(query, nuevoProducto, (error, results) => {
+        if (error) {
+          console.error("Error al realizar la inserción:", error);
+          return res.status(500).json({ error: "Error en el servidor" });
+        }
+
+        // Respuesta exitosa
+        res.status(201).json({
+          id: nuevoProductoId,
+          mensaje: "Producto creado exitosamente",
+        });
       });
     });
   });
 };
 
-// Función para validar una URL
 function isValidURL(url) {
-  // Utiliza una expresión regular para validar la URL
-  // Esta expresión regular es simple y puede no cubrir todos los casos
-  const pattern = new RegExp(
-    "^(https?:\\/\\/)?" + // protocolo
-      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // nombre de dominio
-      "((\\d{1,3}\\.){3}\\d{1,3}))" + // dirección IP
-      "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // puerto y ruta
-      "(\\?[;&a-z\\d%_.~+=-]*)?" + // parámetros de consulta
-      "(\\#[-a-z\\d_]*)?$",
-    "i"
-  ); // fragmento
-  return !!pattern.test(url);
+  try {
+    new URL(url);
+    return true;
+  } catch (error) {
+    return false;
+  }
 }
 
 // Lógica para eliminar un producto por ID
