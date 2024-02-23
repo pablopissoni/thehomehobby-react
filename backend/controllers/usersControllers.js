@@ -10,6 +10,7 @@ const poolData = {
 
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
+//registro
 const registerUser = async (req, res) => {
   try {
     const { name, lastName, phone, email, password } = req.body;
