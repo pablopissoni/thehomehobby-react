@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { FormEdirProd } from "./FormEdirProd";
 
-export const Products = () => {
+export const ProductsDashboard = () => {
   //* --- HOOKS ---
   const [searchTerm, setSearchTerm] = useState(""); // Input de busqueda
   const [producSearchs, setProducSearchs] = useState([]); //Productos encontrados

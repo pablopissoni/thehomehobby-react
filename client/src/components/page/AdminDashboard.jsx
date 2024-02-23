@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import LogoMini from "../../assets/Logo miniatura.svg";
 import { FormAddProd } from "../Dashboard/FormAddProd";
 import { Link } from "react-router-dom";
-import { Products } from "../Dashboard/Products";
+import { ProductsDashboard } from "../Dashboard/ProductsDashboard";
 
 export const AdminDashboard = () => {
   // Estado para controlar la visibilidad del menú lateral
@@ -102,7 +102,7 @@ export const AdminDashboard = () => {
           {/* Agregar Producto */}
           {isFormAddProd && <FormAddProd setCloseModal={setIsFormAddProd}/>}
           {/* Buscar productos y editar */}
-          {isProducts && <Products setCloseModal={setIsFormAddProd}/>}
+          {isProducts && <ProductsDashboard setCloseModal={setIsFormAddProd}/>}
           {/*//! Oculto   */}
           {isOriginalOpen && (
             <>

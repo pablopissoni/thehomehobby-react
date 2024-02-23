@@ -233,7 +233,7 @@ export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
                   onClick={() => setIsEnglish(!isEnglish)}
                   className="uppercase tracking-wide text-sm bg-white border-2 border-gray-300 px-2 rounded-sm shadow-lg"
                 >
-                  idioma: <strong>{isEnglish ? "Inglish" : "Spanish"}</strong>
+                  idioma: <strong>{isEnglish ? "English" : "Spanish"}</strong>
                 </button>
               </div>
               {/*Name Precio Descripcion Ficha */}
