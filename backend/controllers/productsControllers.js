@@ -144,6 +144,8 @@ function formatURL(url) {
     return url;
   }
 }
+
+//create products
 const AWS = require("aws-sdk");
 
 const createProduct = (req, res, connection) => {
