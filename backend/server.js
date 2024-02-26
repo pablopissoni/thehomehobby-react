@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const multer = require("multer");
 const router = require("./routes/productsRoutes");
 const usersRouter = require("./routes/usersRoutes");
 const dbConnection = require("./dbConfig");
@@ -9,6 +10,9 @@ const port = 3001;
 
 // Configuración de CORS
 app.use(cors());
+
+const upload = multer();
+app.use(upload.any());
 
 app.use(express.json());
 
