@@ -168,8 +168,11 @@ const createProduct = (req, res, connection) => {
     envio_rapido,
   } = req.body;
 
-  // Validaciones de los campos
+  const parsedMarcaId = parseInt(marca_id);
+  const parsedSubCategoriaId = parseInt(sub_categoria_id);
+  const parsedCategoriaId = parseInt(categoria_id);
 
+  // Validaciones de los campos
   // Verificar que el nombre en español esté presente y sea una cadena de texto
   if (!nombre_es || typeof nombre_es !== "string") {
     return res.status(400).json({
@@ -193,23 +196,30 @@ const createProduct = (req, res, connection) => {
   }
 
   // Verificar que el ID de la marca sea un número entero
-  if (marca_id && !Number.isInteger(marca_id)) {
+  if (marca_id && !Number.isInteger(Number(marca_id))) {
     return res
       .status(400)
       .json({ error: "El campo 'marca_id' debe ser un número entero" });
   }
 
   // Verificar que el ID de la subcategoría, si está presente, sea un número entero
-  if (sub_categoria_id && !Number.isInteger(sub_categoria_id)) {
+  if (sub_categoria_id && !Number.isInteger(Number(sub_categoria_id))) {
     return res
       .status(400)
       .json({ error: "El campo 'sub_categoria_id' debe ser un número entero" });
   }
 
-  // Verificar que la imagen esté presente y sea una URL válida
-  if (!imagen || typeof imagen !== "string" || !isValidURL(imagen)) {
+  // Verificar que el ID de la categoría sea un número entero
+  if (!Number.isInteger(Number(categoria_id))) {
+    return res
+      .status(400)
+      .json({ error: "El campo 'categoria_id' debe ser un número entero" });
+  }
+
+  // Check if image file is uploaded
+  if (!req.files || !req.files.imagen) {
     return res.status(400).json({
-      error: "El campo 'imagen' es obligatorio y debe ser una URL válida",
+      error: "El campo 'imagen' es obligatorio y debe ser una imagen",
     });
   }
 
