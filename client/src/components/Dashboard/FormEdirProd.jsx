@@ -14,7 +14,7 @@ export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
   // console.log("🚀 ~ FormAddProd ~ gallery:", gallery);
   // console.log("🚀 ~ FormAddProd ~ imagen:", imagen);
   const [product, setProduct] = useState({
-  /* eslint-disable */
+    /* eslint-disable */
     contenido: [
       {
         idioma: "Spanish",
@@ -39,7 +39,9 @@ export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
     sub_categoria_id: prodEdit.sub_categoria_id || undefined,
     categoria_id: prodEdit.categoria_id || undefined, //obligatorio algun valor
     oferta_id: prodEdit.oferta_id || undefined,
-    imagen: prodEdit.imagen || "https://tecnitium.com/wp-content/uploads/2022/05/testing-1.jpg", //! test
+    imagen:
+      prodEdit.imagen ||
+      "https://tecnitium.com/wp-content/uploads/2022/05/testing-1.jpg", //! test
     galeria: prodEdit.galeria || [
       //! test
       {
@@ -52,39 +54,40 @@ export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
         url: "https://tecnitium.com/wp-content/uploads/2022/05/testing-1.jpg",
       },
     ],
-    video: prodEdit.video || "https://player.vimeo.com/video/225519343?h=a9a924c301", //! test
+    video:
+      prodEdit.video || "https://player.vimeo.com/video/225519343?h=a9a924c301", //! test
     status: prodEdit.status || 1, //obligatorio 0/1
     envio_free: prodEdit.envio_free || 0, //obligatorio 0/1
     envio_rapido: prodEdit.envio_rapido || 0, //obligatorio 0/1
     filtros: prodEdit.filtros || {}, //? Beta
-  /* eslint-enable */
-  })
+    /* eslint-enable */
+  });
   // --- HOOKs ---
 
   //* ------------ AL EDITAR UN PRODUCTO -----------------
   /* eslint-disable */
-//   useEffect(() => {
-//     if (prodEdit) {
-//       setProduct({
-//         contenido: prodEdit?.contenido,
-//         precio_base: prodEdit?.precio_base,
-//         nombre_es: prodEdit?.nombre_es,
-//         nombre_ingles: prodEdit?.nombre_ingles,
-//         tags: prodEdit?.tags,
-//         marca_id: prodEdit?.marca_id,
-//         sub_categoria_id: prodEdit?.sub_categoria_id,
-//         categoria_id: prodEdit?.categoria_id,
-//         oferta_id: prodEdit?.oferta_id,
-//         imagen: prodEdit?.imagen,
-//         galeria: prodEdit?.galeria,
-//         video: prodEdit?.video,
-//         status: prodEdit?.status,
-//         envio_free: prodEdit?.envio_free,
-//         envio_rapido: prodEdit?.envio_rapido,
-//         filtros: prodEdit?.filtros,
-//       });
-//     }
-//   }, [prodEdit]);
+  //   useEffect(() => {
+  //     if (prodEdit) {
+  //       setProduct({
+  //         contenido: prodEdit?.contenido,
+  //         precio_base: prodEdit?.precio_base,
+  //         nombre_es: prodEdit?.nombre_es,
+  //         nombre_ingles: prodEdit?.nombre_ingles,
+  //         tags: prodEdit?.tags,
+  //         marca_id: prodEdit?.marca_id,
+  //         sub_categoria_id: prodEdit?.sub_categoria_id,
+  //         categoria_id: prodEdit?.categoria_id,
+  //         oferta_id: prodEdit?.oferta_id,
+  //         imagen: prodEdit?.imagen,
+  //         galeria: prodEdit?.galeria,
+  //         video: prodEdit?.video,
+  //         status: prodEdit?.status,
+  //         envio_free: prodEdit?.envio_free,
+  //         envio_rapido: prodEdit?.envio_rapido,
+  //         filtros: prodEdit?.filtros,
+  //       });
+  //     }
+  //   }, [prodEdit]);
   /* eslint-enable */
   // ------------- AL EDITAR UN PRODUCTO -----------------
 
@@ -112,17 +115,17 @@ export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
   const handleInputFichaDesc = (event1, name, source) => {
     // const { name, value } = event1.target;
     const languageIndex = isEnglish ? 1 : 0;
-    if(source === "user") {
-        const updatedContenido = [...product.contenido]; // Realizo una copia temporal del hook para usarlo mutable
-        updatedContenido[languageIndex] = {
-          ...updatedContenido[languageIndex],
-          [name]: event1, // Modifico la propiedad y valor de Descripcion y Ficha
-        };
-    
-        setProduct({
-          ...product,
-          contenido: updatedContenido,
-        });
+    if (source === "user") {
+      const updatedContenido = [...product.contenido]; // Realizo una copia temporal del hook para usarlo mutable
+      updatedContenido[languageIndex] = {
+        ...updatedContenido[languageIndex],
+        [name]: event1, // Modifico la propiedad y valor de Descripcion y Ficha
+      };
+
+      setProduct({
+        ...product,
+        contenido: updatedContenido,
+      });
     }
   };
 
@@ -173,12 +176,28 @@ export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
 
   const handleSubmit = () => {
     event.preventDefault();
-    prodEdit ? alert("Edito producto") :
-    alert("Nuevo producto")
-    //  postProduct();
+    // prodEdit ? alert("Edito producto") : alert("Nuevo producto");
+     putProduct(prodEdit.id);
     // alert("eyy mas despacio chiquitin");
   };
   // --- HANDLEs ---
+console.log("ID PROD >>> ", prodEdit.id)
+  //* --- PUT ---
+  const putProduct = async (id) => {
+    try {
+      const isLocalhost = window.location.href.includes("localhost");
+      const urlPutProduct = isLocalhost
+        ? `http://localhost:3001/productos/${id}`
+        : `XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/${id}`;
+
+      const response = await axios.put(urlPutProduct, product);
+      console.log("🚀 ~ PUT ~ response:", response.data);
+      alert(JSON.stringify(response.data));
+    } catch (error) {
+      console.log("ERROR PUT: ", error);
+    }
+  };
+  // --- PUT ---
 
   //* --- REACT QUILL ---
   const toolbarOptions = [
@@ -286,12 +305,14 @@ export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
                     <ReactQuill
                       theme="snow"
                       name="descripcion"
-                    //   value={product.contenido[1].descripcion}
-                    value={product?.contenido[1]?.descripcion}
-                    onChange={(event1,delta, source) => handleInputFichaDesc(event1,'descripcion', source)}
-                    //   onChange={(event1) =>
-                    //     handleInputFichaDesc(event1, "descripcion")
-                    //   }
+                      //   value={product.contenido[1].descripcion}
+                      value={product?.contenido[1]?.descripcion}
+                      onChange={(event1, delta, source) =>
+                        handleInputFichaDesc(event1, "descripcion", source)
+                      }
+                      //   onChange={(event1) =>
+                      //     handleInputFichaDesc(event1, "descripcion")
+                      //   }
                       modules={{
                         toolbar: toolbarOptions,
                       }}
@@ -303,12 +324,14 @@ export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
                     <ReactQuill
                       theme="snow"
                       name="descripcion"
-                    //   value={product.contenido[0].descripcion}
-                    value={product?.contenido[0]?.descripcion}
-                    onChange={(event1,delta, source) => handleInputFichaDesc(event1,'descripcion', source)}
-                    //   onChange={(event1) =>
-                    //     handleInputFichaDesc(event1, "descripcion")
-                    //   }
+                      //   value={product.contenido[0].descripcion}
+                      value={product?.contenido[0]?.descripcion}
+                      onChange={(event1, delta, source) =>
+                        handleInputFichaDesc(event1, "descripcion", source)
+                      }
+                      //   onChange={(event1) =>
+                      //     handleInputFichaDesc(event1, "descripcion")
+                      //   }
                       modules={{
                         toolbar: toolbarOptions,
                       }}
@@ -328,7 +351,9 @@ export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
                         name="ficha"
                         // value={product.contenido[1].ficha}
                         value={product?.contenido[1]?.ficha}
-                      onChange={(event1,delta, source) => handleInputFichaDesc(event1,'ficha', source)}
+                        onChange={(event1, delta, source) =>
+                          handleInputFichaDesc(event1, "ficha", source)
+                        }
                         // onChange={(event1) =>
                         //   handleInputFichaDesc(event1, "ficha")
                         // }
@@ -345,8 +370,9 @@ export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
                         name="ficha"
                         // value={product.contenido[0].ficha}
                         value={product?.contenido[0]?.ficha}
-                        onChange={(event1,delta, source) => handleInputFichaDesc(event1,'ficha', source)}
-
+                        onChange={(event1, delta, source) =>
+                          handleInputFichaDesc(event1, "ficha", source)
+                        }
                         // onChange={(event1) =>
                         //   handleInputFichaDesc(event1, "ficha")
                         // }
@@ -614,25 +640,23 @@ export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
               </div>
             </div>
             {/* Filtros */}
-            <div className="md:flex mb-6">
-            </div>
+            <div className="md:flex mb-6"></div>
             {/* GUARDAR y cerrar edicion*/}
             <div className="flex">
-            <button
-              type="submit"
-              className="md:flex mb-6 p-2 mr-4 bg-blue-300 rounded-md shadow-xl transition-color duration-300 hover:bg-blue-400 hover:text-white"
-            >
-              Subir Producto
-            </button>
-            <button
-              onClick={() => setCloseModal(false)}
-              type="button"
-              className="md:flex mb-6 p-2 bg-red-300 rounded-md shadow-xl transition-color duration-300 hover:bg-red-400 hover:text-white"
-            >
-              Cerrar
-            </button>
+              <button
+                type="submit"
+                className="md:flex mb-6 p-2 mr-4 bg-blue-300 rounded-md shadow-xl transition-color duration-300 hover:bg-blue-400 hover:text-white"
+              >
+                Subir Producto
+              </button>
+              <button
+                onClick={() => setCloseModal(false)}
+                type="button"
+                className="md:flex mb-6 p-2 bg-red-300 rounded-md shadow-xl transition-color duration-300 hover:bg-red-400 hover:text-white"
+              >
+                Cerrar
+              </button>
             </div>
-
           </form>
         </section>
       </main>

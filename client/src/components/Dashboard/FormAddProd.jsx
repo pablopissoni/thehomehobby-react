@@ -12,7 +12,7 @@ export const FormAddProd = ({ setCloseModal }) => {
   const [imagen, setImagen] = useState(null);
   const [gallery, setGallery] = useState([]);
   // console.log("🚀 ~ FormAddProd ~ gallery:", gallery);
-  // console.log("🚀 ~ FormAddProd ~ imagen:", imagen);
+  console.log("🚀 ~ FormAddProd ~ imagen:", imagen);
   const [product, setProduct] = useState({
     contenido: [
       {
@@ -97,16 +97,26 @@ export const FormAddProd = ({ setCloseModal }) => {
   };
 
   const handleImagenChange = (e) => {
-    //! Beta para carga de IMG
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        setImagen(reader.result);
-      };
+      // Aquí puedes realizar cualquier manipulación necesaria con la imagen seleccionada
+      // Por ejemplo, puedes mostrar una vista previa de la imagen antes de subirla al servidor
+
+      // Actualiza el formData con la imagen seleccionada
+      setProduct((prevent) => ({...prevent, imagen: file}));
     }
   };
+  // const handleImagenChange = (e) => {
+  //   //! Beta para carga de IMG
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+  //       setImagen(reader.result);
+  //     };
+  //   }
+  // };
 
   const handleGalleryChange = (e) => {
     const files = e.target.files;
@@ -143,8 +153,8 @@ export const FormAddProd = ({ setCloseModal }) => {
 
   const handleSubmit = () => {
     event.preventDefault();
-    alert("Nuevo producto")
-    //  postProduct();
+    // alert("Nuevo producto")
+    postProduct();
     // alert("eyy mas despacio chiquitin");
   };
   // --- HANDLEs ---
@@ -623,21 +633,20 @@ export const FormAddProd = ({ setCloseModal }) => {
             </div>
             {/* GUARDAR y cerrar edicion*/}
             <div className="flex">
-            <button
-              type="submit"
-              className="md:flex mb-6 p-2 mr-4 bg-blue-300 rounded-md shadow-xl transition-color duration-300 hover:bg-blue-400 hover:text-white"
-            >
-              Subir Producto
-            </button>
-            <button
-              onClick={() => setCloseModal(false)}
-              type="buton"
-              className="md:flex mb-6 p-2 bg-red-300 rounded-md shadow-xl transition-color duration-300 hover:bg-red-400 hover:text-white"
-            >
-              Cerrar
-            </button>
+              <button
+                type="submit"
+                className="md:flex mb-6 p-2 mr-4 bg-blue-300 rounded-md shadow-xl transition-color duration-300 hover:bg-blue-400 hover:text-white"
+              >
+                Subir Producto
+              </button>
+              <button
+                onClick={() => setCloseModal(false)}
+                type="buton"
+                className="md:flex mb-6 p-2 bg-red-300 rounded-md shadow-xl transition-color duration-300 hover:bg-red-400 hover:text-white"
+              >
+                Cerrar
+              </button>
             </div>
-
           </form>
         </section>
       </main>
