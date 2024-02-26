@@ -65,9 +65,9 @@ export const ProductsDashboard = () => {
             }`}
       >
         <form className="search" onSubmit={handleSearch}>
-          <div className="flex h-[40px] overflow-hidden rounded-[50px] bg-white">
+          <div className="flex h-[40px] max-w-[500px] overflow-hidden rounded-[50px] bg-white">
             <input
-              className="search w-full border-none bg-transparent py-[5px] pl-5 text-black focus:border-none focus:ring-0 focus:ring-transparent"
+            className="search w-full rounded-sm pl-2 outline-none focus:border-2 focus:border-b-cyan-500"
               type="search"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}

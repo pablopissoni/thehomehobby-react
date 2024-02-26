@@ -100,7 +100,7 @@ export const NavBar = () => {
             <form className="search" onSubmit={handleSearch}>
               <div className="flex h-[40px] overflow-hidden rounded-[50px] bg-white">
                 <input
-                  className="search w-full border-none bg-transparent py-[5px] pl-5 text-black focus:border-none focus:ring-0 focus:ring-transparent"
+                  className="search w-full border-2 border-red-100 rounded-sm pl-2 outline-none focus:border-2 focus:border-b-cyan-500"
                   type="search"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -193,7 +193,7 @@ export const NavBar = () => {
       <div className="hidden bg-white lg:block">
         <nav className="container mx-auto px-2 sm:px-8">
           <ul className="menu flex flex-wrap items-center justify-between py-[10px] text-lg">
-            <li className="underlined-animated group relative">
+            {/* <li className="underlined-animated group relative">
               <a
                 href="#"
                 className="btn-open flex items-center gap-1 font-semibold"
@@ -460,7 +460,7 @@ export const NavBar = () => {
                           <div className="group-2 p-[10px]">
                             <a
                               className="categorie-container inline-block"
-                              href="#"
+                              href="/Checkout"
                             >
                               <div className="categorie-img h-[150px] w-[150px]">
                                 <img
@@ -470,7 +470,7 @@ export const NavBar = () => {
                                 />
                               </div>
                               <span className="group-2-hover-font block text-center">
-                                Desktops
+                              Checkout
                               </span>
                             </a>
                           </div>
@@ -659,20 +659,24 @@ export const NavBar = () => {
                   </li>
                 </ul>
               </div>
+            </li> */}
+            <li className="underlined-animated">
+              <a href="/">Home</a>
             </li>
             <li className="underlined-animated">
-              <a href="index.html">Home</a>
+              <a href="/adminDashboard">Dashboard</a>
             </li>
             <li className="underlined-animated">
-              <a href="#">Desktops</a>
+              <a href="/Checkout">Checkout</a>
             </li>
             <li className="underlined-animated">
-              <a href="#">Notebooks</a>
+              <a href="/UserProfile">UserProfile</a>
             </li>
-            <li className="underlined-animated">
+            {/* <li className="underlined-animated">
               <a href="#">Smartphones</a>
-            </li>
-            <li className="underlined-animated group relative">
+            </li> */}
+
+            {/* <li className="underlined-animated group relative">
               <a
                 href="#"
                 className="btn-open flex items-center gap-1 font-semibold"
@@ -1138,474 +1142,7 @@ export const NavBar = () => {
                   </li>
                 </ul>
               </div>
-            </li>
-            <li className="underlined-animated group relative">
-              <a
-                href="#"
-                className="btn-open flex items-center gap-1 font-semibold"
-              >
-                <span>Products</span>
-                <i className="bi bi-caret-down-fill transition-all-300 flex rotate-0 text-xs text-primary group-hover:rotate-180"></i>
-              </a>
-              <div className="submenu transition-all-300 invisible absolute left-0 pt-[10px] opacity-0 group-hover:visible group-hover:opacity-100">
-                <ul className="relative w-[250px] bg-white text-base shadow-custom1">
-                  <li className="group-1">
-                    <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
-                      <span className="group-1-hover-font">Pc components</span>
-                      <i className="bi bi-caret-right-fill group-1-hover-visible invisible ml-auto flex text-xs text-primary"></i>
-                    </a>
-                    <div className="submenu group-1-hover-visible transition-all-300 invisible absolute top-0 left-full min-h-full min-w-[680px] opacity-0">
-                      <div className="bg-white shadow-custom-2">
-                        <div className="border-b-2 border-primary py-[10px]">
-                          <span className="px-5 text-3xl font-bold uppercase text-primary">
-                            Pc components
-                          </span>
-                        </div>
-                        <div className="submenu-categories flex flex-wrap">
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/pc_components/motherboards.jpg"
-                                  alt="motherboard"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                Motherboards
-                              </span>
-                            </a>
-                          </div>
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/pc_components/processors.jpg"
-                                  alt="processors"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                Processors
-                              </span>
-                            </a>
-                          </div>
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/pc_components/rams.jpg"
-                                  alt="rams"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                RAMS
-                              </span>
-                            </a>
-                          </div>
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/pc_components/video_cards.jpg"
-                                  alt="video cards"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                Video Cards
-                              </span>
-                            </a>
-                          </div>
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/pc_components/power_supplys.jpg"
-                                  alt="video cards"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block object-contain text-center">
-                                Power Supplys
-                              </span>
-                            </a>
-                          </div>
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/pc_components/hard_drives.jpg"
-                                  alt="video cards"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                Hard Drives
-                              </span>
-                            </a>
-                          </div>
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/pc_components/ssd_disk.jpg"
-                                  alt="video cards"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                SSD Disk
-                              </span>
-                            </a>
-                          </div>
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/pc_components/computer_case.jpg"
-                                  alt="video cards"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                Case
-                              </span>
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="group-1">
-                    <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
-                      <span className="group-1-hover-font">Peripherals</span>
-                      <i className="bi bi-caret-right-fill group-1-hover-visible invisible ml-auto flex text-xs text-primary"></i>
-                    </a>
-                    <div className="submenu group-1-hover-visible transition-all-300 invisible absolute top-0 left-full min-h-full min-w-[680px] opacity-0">
-                      <div className="bg-white shadow-custom-2">
-                        <div className="border-b-2 border-primary py-[10px]">
-                          <span className="px-5 text-3xl font-bold uppercase text-primary">
-                            Peripherals
-                          </span>
-                        </div>
-                        <div className="submenu-categories flex flex-wrap">
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/peripherals/keywords.jpg"
-                                  alt="motherboard"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                Keywords
-                              </span>
-                            </a>
-                          </div>
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/peripherals/mouse.jpg"
-                                  alt="processors"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                Mouses
-                              </span>
-                            </a>
-                          </div>
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/peripherals/mic.jpg"
-                                  alt="rams"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                Mics
-                              </span>
-                            </a>
-                          </div>
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/peripherals/webcam.jpg"
-                                  alt="rams"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                Webcam
-                              </span>
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="group-1">
-                    <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
-                      <span className="group-1-hover-font">Computers</span>
-                      <i className="bi bi-caret-right-fill group-1-hover-visible invisible ml-auto flex text-xs text-primary"></i>
-                    </a>
-                    <div className="submenu group-1-hover-visible transition-all-300 invisible absolute top-0 left-full min-h-full min-w-[680px] opacity-0">
-                      <div className="bg-white shadow-custom-2">
-                        <div className="border-b-2 border-primary py-[10px]">
-                          <span className="px-5 text-3xl font-bold uppercase text-primary">
-                            Computers
-                          </span>
-                        </div>
-                        <div className="submenu-categories flex flex-wrap">
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/computers/desktops.jpg"
-                                  alt="motherboard"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                Desktops
-                              </span>
-                            </a>
-                          </div>
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/computers/notebooks.jpg"
-                                  alt="processors"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                Notebooks
-                              </span>
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="group-1">
-                    <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
-                      <span className="group-1-hover-font">Monitors</span>
-                    </a>
-                  </li>
-                  <li className="group-1">
-                    <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
-                      <span className="group-1-hover-font">Printers</span>
-                    </a>
-                  </li>
-                  <li className="group-1">
-                    <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
-                      <span className="group-1-hover-font">Gaming</span>
-                      <i className="bi bi-caret-right-fill group-1-hover-visible invisible ml-auto flex text-xs text-primary"></i>
-                    </a>
-                    <div className="submenu group-1-hover-visible transition-all-300 invisible absolute top-0 left-full min-h-full min-w-[680px] opacity-0">
-                      <div className="bg-white shadow-custom-2">
-                        <div className="border-b-2 border-primary py-[10px]">
-                          <span className="px-5 text-3xl font-bold uppercase text-primary">
-                            Gaming
-                          </span>
-                        </div>
-                        <div className="submenu-categories flex flex-wrap">
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/gaming/consoles.jpg"
-                                  alt="motherboard"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                Consoles
-                              </span>
-                            </a>
-                          </div>
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/gaming/games.jpg"
-                                  alt="processors"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                Games
-                              </span>
-                            </a>
-                          </div>
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/gaming/accessories.jpg"
-                                  alt="processors"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                Accessories
-                              </span>
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="group-1">
-                    <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
-                      <span className="group-1-hover-font">Tablets</span>
-                    </a>
-                  </li>
-                  <li className="group-1">
-                    <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
-                      <span className="group-1-hover-font">Smartphones</span>
-                    </a>
-                  </li>
-                  <li className="group-1">
-                    <a href="#" className="flex items-center gap-2 p-2">
-                      <i className="bi bi-circle-fill group-1-hover-visible invisible flex text-[6px] text-primary"></i>
-                      <span className="group-1-hover-font">Software</span>
-                      <i className="bi bi-caret-right-fill group-1-hover-visible invisible ml-auto flex text-xs text-primary"></i>
-                    </a>
-                    <div className="submenu group-1-hover-visible transition-all-300 invisible absolute top-0 left-full min-h-full min-w-[680px] opacity-0">
-                      <div className="bg-white shadow-custom-2">
-                        <div className="border-b-2 border-primary py-[10px]">
-                          <span className="px-5 text-3xl font-bold uppercase text-primary">
-                            Software
-                          </span>
-                        </div>
-                        <div className="submenu-categories flex flex-wrap">
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/software/os.jpg"
-                                  alt="motherboard"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                Operating System
-                              </span>
-                            </a>
-                          </div>
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/software/office.jpg"
-                                  alt="processors"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                Office Package
-                              </span>
-                            </a>
-                          </div>
-                          <div className="group-2 p-[10px]">
-                            <a
-                              className="categorie-container inline-block"
-                              href="#"
-                            >
-                              <div className="categorie-img h-[150px] w-[150px]">
-                                <img
-                                  className="img-product group-2-hover-img"
-                                  src="images/categories/software/antivirus.jpg"
-                                  alt="processors"
-                                />
-                              </div>
-                              <span className="group-2-hover-font block text-center">
-                                Antivirus
-                              </span>
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </li>
+            </li> */}
             <li className="underlined-animated">
               <a href="FAQs">FAQ's</a>
             </li>
