@@ -4,6 +4,7 @@ const multer = require("multer");
 const router = require("./routes/productsRoutes");
 const usersRouter = require("./routes/usersRoutes");
 const dbConnection = require("./dbConfig");
+const fs = require("fs");
 
 const app = express();
 const port = 3001;
@@ -11,7 +12,27 @@ const port = 3001;
 // Configuración de CORS
 app.use(cors());
 
-const upload = multer();
+// Directorio donde se almacenarán los archivos de imagen
+const uploadDirectory = "uploads/";
+
+// Asegúrate de que la carpeta de destino exista, si no existe, créala
+if (!fs.existsSync(uploadDirectory)) {
+  fs.mkdirSync(uploadDirectory);
+}
+
+// Configurar Multer para aceptar solo archivos de imagen y almacenarlos en la carpeta temporal en el servidor
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadDirectory);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// Middleware de Multer para manejar archivos adjuntos
 app.use(upload.any());
 
 app.use(express.json());

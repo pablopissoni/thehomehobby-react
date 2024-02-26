@@ -145,7 +145,6 @@ function formatURL(url) {
   }
 }
 
-//create products
 const AWS = require("aws-sdk");
 
 const createProduct = (req, res, connection) => {
@@ -156,7 +155,6 @@ const createProduct = (req, res, connection) => {
     tags,
     marca_id,
     sub_categoria_id,
-    imagen,
     galeria,
     categoria_id,
     status,
@@ -167,6 +165,8 @@ const createProduct = (req, res, connection) => {
     envio_free,
     envio_rapido,
   } = req.body;
+  console.log("Request body:", req.body);
+  console.log("Files received:", req.files);
 
   const parsedMarcaId = parseInt(marca_id);
   const parsedSubCategoriaId = parseInt(sub_categoria_id);
@@ -209,35 +209,27 @@ const createProduct = (req, res, connection) => {
       .json({ error: "El campo 'sub_categoria_id' debe ser un número entero" });
   }
 
+  console.log("Valor de categoria_id:", categoria_id);
   // Verificar que el ID de la categoría sea un número entero
-  if (!Number.isInteger(Number(categoria_id))) {
+  if (!Number.isInteger(+categoria_id)) {
     return res
       .status(400)
       .json({ error: "El campo 'categoria_id' debe ser un número entero" });
   }
 
   // Check if image file is uploaded
-  if (!req.files || !req.files.imagen) {
+  const imagen = req.files.find((file) => file.fieldname === "imagen");
+  if (!imagen || !imagen.buffer) {
     return res.status(400).json({
       error: "El campo 'imagen' es obligatorio y debe ser una imagen",
     });
   }
+  console.log("Contenido de imagen:", imagen); // Verificar si imagen contiene la información esperada
+  console.log("Contenido del buffer de imagen:", imagen.buffer); // Verificar si imagen.buffer contiene el contenido del archivo
 
-  if (
-    !Array.isArray(galeria) ||
-    !galeria.every((item) => typeof item === "object")
-  ) {
-    return res.status(400).json({
-      error: "El campo 'galeria' debe ser un arreglo de objetos",
-    });
-  }
-
-  // Verificar que el ID de la categoría sea un número entero
-  if (!Number.isInteger(categoria_id)) {
-    return res
-      .status(400)
-      .json({ error: "El campo 'categoria_id' debe ser un número entero" });
-  }
+  console.log("Request files:", req.files); // Agregado para verificar los archivos adjuntos recibidos
+  console.log("Imagen file:", imagen); // Agregado para verificar el archivo de imagen recibido
+  console.log("Imagen field:", imagen); // Agregado para verificar el valor del campo imagen en el cuerpo de la solicitud
 
   const lastIdQuery = "SELECT MAX(id) AS lastId FROM productos";
 
@@ -285,7 +277,7 @@ const createProduct = (req, res, connection) => {
     const imagenParams = {
       Bucket: "thehomehobby",
       Key: `storage/imagen${nuevoProductoId}.jpg`, // ruta en S3
-      Body: imagen, // datos de la imagen
+      Body: imagen.buffer, // datos de la imagen
       ACL: "public-read", // permisos públicos de lectura
     };
 
@@ -315,15 +307,6 @@ const createProduct = (req, res, connection) => {
     });
   });
 };
-
-function isValidURL(url) {
-  try {
-    new URL(url);
-    return true;
-  } catch (error) {
-    return false;
-  }
-}
 
 // Lógica para eliminar un producto por ID
 const deleteProduct = (req, res, connection) => {
