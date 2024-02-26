@@ -153,8 +153,8 @@ export const FormAddProd = ({ setCloseModal }) => {
 
   const handleSubmit = () => {
     event.preventDefault();
-    // alert("Nuevo producto")
-    postProduct();
+    alert("Test beta Nuevo producto")
+    // postProduct();
     // alert("eyy mas despacio chiquitin");
   };
   // --- HANDLEs ---

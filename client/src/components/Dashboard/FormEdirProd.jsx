@@ -177,8 +177,8 @@ export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
   const handleSubmit = () => {
     event.preventDefault();
     // prodEdit ? alert("Edito producto") : alert("Nuevo producto");
-     putProduct(prodEdit.id);
-    // alert("eyy mas despacio chiquitin");
+    //  putProduct(prodEdit.id);
+    alert("Test button edit product");
   };
   // --- HANDLEs ---
 console.log("ID PROD >>> ", prodEdit.id)
