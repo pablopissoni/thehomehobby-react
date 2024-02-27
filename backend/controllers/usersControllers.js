@@ -2,13 +2,40 @@ const AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 const jwt = require("jsonwebtoken");
 const dbConnection = require("../dbConfig");
 const app = require("../server");
-
 const poolData = {
   UserPoolId: process.env.COGNITO_USER_POOL_ID,
   ClientId: process.env.COGNITO_CLIENT_ID,
 };
+const AWS = require("aws-sdk");
+
+// Configura las credenciales de AWS
+AWS.config.update({ region: "us-east-2" });
 
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+const cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
+
+async function getToken(req, res) {
+  const token = req.headers?.authorization?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({
+      error: "No se proporcionó un token JWT en el encabezado de autorización",
+    });
+  }
+
+  try {
+    const params = {
+      AccessToken: token,
+    };
+    const data = await cognitoIdentityServiceProvider.getUser(params).promise();
+    res.status(200).json({ data });
+  } catch (error) {
+    res.status(401).json({
+      error: "Error al verificar y decodificar el token JWT: " + error.message,
+    });
+  }
+}
 
 //registro
 const registerUser = async (req, res) => {
@@ -39,7 +66,6 @@ const registerUser = async (req, res) => {
         return res.status(400).json({ error: "Error al registrar usuario" });
       }
       const cognitoUser = result.user;
-      console.log("Usuario registrado en Cognito:", cognitoUser);
 
       if (result.userConfirmed) {
         const token = result.getIdToken().getJwtToken();
@@ -109,6 +135,9 @@ const loginUser = async (req, res) => {
       onSuccess: (session) => {
         console.log("Usuario autenticado en Cognito");
         const accessToken = session.getAccessToken().getJwtToken();
+
+        // cognitoUser.
+
         return res.status(201).json({
           success: true,
           message: "Usuario autenticado correctamente",
@@ -254,6 +283,7 @@ const resetPassword = async (req, res) => {
 };
 
 module.exports = {
+  getToken,
   registerUser,
   loginUser,
   confirmAccount,
