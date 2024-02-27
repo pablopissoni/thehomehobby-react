@@ -217,19 +217,9 @@ const createProduct = (req, res, connection) => {
       .json({ error: "El campo 'categoria_id' debe ser un número entero" });
   }
 
-  // Check if image file is uploaded
-  const imagen = req.files.find((file) => file.fieldname === "imagen");
-  if (!imagen || !imagen.buffer) {
-    return res.status(400).json({
-      error: "El campo 'imagen' es obligatorio y debe ser una imagen",
-    });
-  }
-  console.log("Contenido de imagen:", imagen); // Verificar si imagen contiene la información esperada
-  console.log("Contenido del buffer de imagen:", imagen.buffer); // Verificar si imagen.buffer contiene el contenido del archivo
+  // No se verifica la presencia del campo 'imagen'
 
   console.log("Request files:", req.files); // Agregado para verificar los archivos adjuntos recibidos
-  console.log("Imagen file:", imagen); // Agregado para verificar el archivo de imagen recibido
-  console.log("Imagen field:", imagen); // Agregado para verificar el valor del campo imagen en el cuerpo de la solicitud
 
   const lastIdQuery = "SELECT MAX(id) AS lastId FROM productos";
 
@@ -260,7 +250,6 @@ const createProduct = (req, res, connection) => {
       tags: JSON.stringify(tags),
       marca_id,
       sub_categoria_id,
-      imagen,
       galeria: JSON.stringify(galeria),
       categoria_id,
       status,
@@ -274,35 +263,38 @@ const createProduct = (req, res, connection) => {
       updated_at: new Date(),
     };
 
-    const imagenParams = {
-      Bucket: "thehomehobby",
-      Key: `storage/imagen${nuevoProductoId}.jpg`, // ruta en S3
-      Body: imagen.buffer, // datos de la imagen
-      ACL: "public-read", // permisos públicos de lectura
-    };
+    const imagen = req.files.find((file) => file.fieldname === "imagen");
+    if (imagen && imagen.buffer) {
+      const imagenParams = {
+        Bucket: "thehomehobby",
+        Key: `storage/imagen${nuevoProductoId}.jpg`, // ruta en S3
+        Body: imagen.buffer, // datos de la imagen
+        ACL: "public-read", // permisos públicos de lectura
+      };
 
-    // Subir la imagen a S3
-    s3.upload(imagenParams, (err, data) => {
-      if (err) {
-        console.error("Error al subir la imagen:", err);
-        return res.status(500).json({ error: "Error en el servidor" });
-      }
-      console.log("Imagen subida exitosamente a:", data.Location);
-
-      // Continuar con la lógica para subir la galería y los videos aquí
-      const query = "INSERT INTO productos SET ?";
-
-      connection.query(query, nuevoProducto, (error, results) => {
-        if (error) {
-          console.error("Error al realizar la inserción:", error);
+      // Subir la imagen a S3
+      s3.upload(imagenParams, (err, data) => {
+        if (err) {
+          console.error("Error al subir la imagen:", err);
           return res.status(500).json({ error: "Error en el servidor" });
         }
+        console.log("Imagen subida exitosamente a:", data.Location);
+      });
+    }
 
-        // Respuesta exitosa
-        res.status(201).json({
-          id: nuevoProductoId,
-          mensaje: "Producto creado exitosamente",
-        });
+    // Continuar con la lógica para subir la galería y los videos aquí
+    const query = "INSERT INTO productos SET ?";
+
+    connection.query(query, nuevoProducto, (error, results) => {
+      if (error) {
+        console.error("Error al realizar la inserción:", error);
+        return res.status(500).json({ error: "Error en el servidor" });
+      }
+
+      // Respuesta exitosa
+      res.status(201).json({
+        id: nuevoProductoId,
+        mensaje: "Producto creado exitosamente",
       });
     });
   });
