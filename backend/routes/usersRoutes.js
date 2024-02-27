@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const {
+  getToken,
   registerUser,
   loginUser,
   confirmAccount,
@@ -17,5 +18,8 @@ router.post("/confirm", confirmAccount);
 router.post("/resend_confirmation_email", resendConfirmationEmail);
 router.post("/recover", recoverAccount);
 router.post("/reset-password", resetPassword);
+
+// TEST
+router.post("/get-token", getToken);
 
 module.exports = router;
