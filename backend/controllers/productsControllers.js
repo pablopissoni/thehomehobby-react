@@ -144,8 +144,8 @@ function formatURL(url) {
     return url;
   }
 }
-
 const AWS = require("aws-sdk");
+const fs = require("fs");
 
 const createProduct = (req, res, connection) => {
   const {
@@ -158,7 +158,6 @@ const createProduct = (req, res, connection) => {
     galeria,
     categoria_id,
     status,
-    video,
     oferta_id,
     precio_base,
     filtros,
@@ -217,11 +216,9 @@ const createProduct = (req, res, connection) => {
       .json({ error: "El campo 'categoria_id' debe ser un número entero" });
   }
 
-  // No se verifica la presencia del campo 'imagen'
-
   console.log("Request files:", req.files); // Agregado para verificar los archivos adjuntos recibidos
 
-  const lastIdQuery = "SELECT MAX(id) AS lastId FROM productos";
+  const lastIdQuery = "SELECT MAX(id) AS lastId FROM productos;";
 
   connection.query(lastIdQuery, (error, results) => {
     if (error) {
@@ -229,7 +226,6 @@ const createProduct = (req, res, connection) => {
       return res.status(500).json({ error: "Error en el servidor" });
     }
 
-    // Obtener el último ID y asignar el siguiente
     const lastId = results[0].lastId || 0;
     const nuevoProductoId = lastId + 1;
 
@@ -238,12 +234,10 @@ const createProduct = (req, res, connection) => {
       secretAccessKey: "c0a0JTF+5S2mhdo3jazKlAPRc44V8awm8JlniSgc",
     });
 
-    // Crea una nueva instancia de S3
     const s3 = new AWS.S3();
 
-    // Si todas las validaciones pasan, crear el nuevo producto
     const nuevoProducto = {
-      id: nuevoProductoId, // Asignar el nuevo ID
+      id: nuevoProductoId,
       contenido: JSON.stringify(contenido),
       nombre_es,
       nombre_ingles,
@@ -253,7 +247,6 @@ const createProduct = (req, res, connection) => {
       galeria: JSON.stringify(galeria),
       categoria_id,
       status,
-      video,
       oferta_id,
       precio_base,
       filtros: JSON.stringify(filtros),
@@ -263,40 +256,81 @@ const createProduct = (req, res, connection) => {
       updated_at: new Date(),
     };
 
+    // Subir la imagen a Amazon S3
     const imagen = req.files.find((file) => file.fieldname === "imagen");
-    if (imagen && imagen.buffer) {
-      const imagenParams = {
-        Bucket: "thehomehobby",
-        Key: `storage/imagen${nuevoProductoId}.jpg`, // ruta en S3
-        Body: imagen.buffer, // datos de la imagen
-        ACL: "public-read", // permisos públicos de lectura
-      };
-
-      // Subir la imagen a S3
-      s3.upload(imagenParams, (err, data) => {
-        if (err) {
-          console.error("Error al subir la imagen:", err);
-          return res.status(500).json({ error: "Error en el servidor" });
-        }
-        console.log("Imagen subida exitosamente a:", data.Location);
-      });
+    if (!imagen) {
+      return res
+        .status(400)
+        .json({ error: "No se ha proporcionado una imagen" });
     }
 
-    // Continuar con la lógica para subir la galería y los videos aquí
-    const query = "INSERT INTO productos SET ?";
+    const imagenPath = `storage/${nuevoProductoId}_${imagen.originalname}`;
+    const imagenParams = {
+      Bucket: "thehomehobby",
+      Key: imagenPath,
+      Body: fs.createReadStream(imagen.path),
+      ACL: "public-read",
+    };
 
-    connection.query(query, nuevoProducto, (error, results) => {
-      if (error) {
-        console.error("Error al realizar la inserción:", error);
-        return res.status(500).json({ error: "Error en el servidor" });
+    s3.upload(imagenParams, (err, imagenData) => {
+      if (err) {
+        console.error("Error al subir la imagen a S3:", err);
+        return res.status(500).json({ error: "Error al subir la imagen a S3" });
       }
 
-      // Respuesta exitosa
-      res.status(201).json({
-        id: nuevoProductoId,
-        mensaje: "Producto creado exitosamente",
+      console.log("Imagen subida exitosamente a S3:", imagenData.Location);
+      nuevoProducto.imagen = imagenData.Location; // Asignar la URL de la imagen a nuevoProducto
+
+      // Subir el video a Amazon S3
+      const video = req.files.find((file) => file.fieldname === "video");
+      if (!video) {
+        return res
+          .status(400)
+          .json({ error: "No se ha proporcionado un video" });
+      }
+
+      const videoPath = `storage/${nuevoProductoId}_${video.originalname}`;
+      const videoParams = {
+        Bucket: "thehomehobby",
+        Key: videoPath,
+        Body: fs.createReadStream(video.path),
+        ACL: "public-read",
+      };
+
+      s3.upload(videoParams, (err, videoData) => {
+        if (err) {
+          console.error("Error al subir el video a S3:", err);
+          return res
+            .status(500)
+            .json({ error: "Error al subir el video a S3" });
+        }
+
+        console.log("Video subido exitosamente a S3:", videoData.Location);
+        nuevoProducto.video = videoData.Location; // Asignar la URL del video a nuevoProducto
+
+        // Insertar el producto en la base de datos
+        insertProduct(nuevoProducto);
       });
     });
+
+    // Función para insertar el producto en la base de datos
+    function insertProduct(producto) {
+      const insertProductQuery = "INSERT INTO productos SET ?";
+      connection.query(insertProductQuery, producto, (error, results) => {
+        if (error) {
+          console.error(
+            "Error al insertar el nuevo producto en la base de datos:",
+            error
+          );
+          return res.status(500).json({
+            error: "Error al insertar el nuevo producto en la base de datos",
+          });
+        }
+        console.log("Producto insertado exitosamente en la base de datos");
+        console.log("Producto:", producto);
+        res.status(200).json({ message: "Producto insertado exitosamente" });
+      });
+    }
   });
 };
 
