@@ -21,12 +21,12 @@ export const NavBar = () => {
   const isLocalhost = window.location.href.includes("localhost");
   const urlLogin = isLocalhost
     ? "http://localhost:5173/login"
-    : "https://thehomehobby/login";
+    : "http://thehomehobby.com.s3-website.us-east-2.amazonaws.com/login";
   const urlRegister = isLocalhost
     ? "http://localhost:5173/register"
-    : "https://thehomehobby/register";
+    : "http://thehomehobby.com.s3-website.us-east-2.amazonaws.com/register";
 
-  const home = isLocalhost ? "http://localhost:5173" : "https://thehomehobby";
+  const home = isLocalhost ? "http://localhost:5173" : "http://thehomehobby.com.s3-website.us-east-2.amazonaws.com";
 
   //--------------------
 
