@@ -78,7 +78,13 @@ export const PasswordReset = () => {
   return (
     <div className="bg-slate-100 flex items-center justify-center h-screen">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
-        <img src={LogoGrande} alt="Logo" className="w-24 mx-auto mb-4" />
+        {/* <img src={LogoGrande} alt="Logo" className="w-24 mx-auto mb-4" /> */}
+        <Link
+          to="/"
+          className="flex justify-center p-4 transition-transform duration-300 hover:scale-105"
+        >
+          <img className="" src={LogoGrande} alt="Logo" />
+        </Link>
         <h2 className="text-2xl font-bold mb-4">Reset Password</h2>
         {!emailSent ? (
           <form onSubmit={handleEmailSubmit} className="space-y-4">
