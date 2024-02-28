@@ -80,7 +80,7 @@ export const PasswordReset = () => {
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
         {/* <img src={LogoGrande} alt="Logo" className="w-24 mx-auto mb-4" /> */}
         <Link
-          to="/"
+          to="http://thehomehobby.com.s3-website.us-east-2.amazonaws.com"
           className="flex justify-center p-4 transition-transform duration-300 hover:scale-105"
         >
           <img className="" src={LogoGrande} alt="Logo" />
