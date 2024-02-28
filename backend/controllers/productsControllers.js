@@ -135,15 +135,16 @@ function formatURL(url) {
     return null;
   }
 
-  // Verificar si la URL contiene "/storage"
-  if (url.includes("/storage")) {
-    // Si contiene "/storage", agregar el prefijo
-    return `https://thehomehobby.s3.amazonaws.com${url}`;
-  } else {
-    // Si la URL no contiene "/storage", dejar la URL como está
+  // Verificar si la URL contiene "https://thehomehobby.s3.amazonaws.com"
+  if (url.includes("https://thehomehobby.s3.amazonaws.com")) {
+    // Si contiene el prefijo, devolver la URL sin modificaciones
     return url;
+  } else {
+    // Si la URL no contiene el prefijo, agregarlo
+    return `https://thehomehobby.s3.amazonaws.com${url}`;
   }
 }
+
 const AWS = require("aws-sdk");
 const fs = require("fs");
 const async = require("async");
@@ -231,8 +232,8 @@ const createProduct = (req, res, connection) => {
     const nuevoProductoId = lastId + 1;
 
     AWS.config.update({
-      accessKeyId: "AKIASSFS6RFCBNCABLI4",
-      secretAccessKey: "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",
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     });
 
     const s3 = new AWS.S3();
@@ -499,7 +500,6 @@ const parseContent = (content) => {
   }
 };
 
-// Función para analizar los filtros JSON
 // Función para analizar los filtros JSON
 const parseFilters = (filters) => {
   try {
