@@ -146,6 +146,7 @@ function formatURL(url) {
 }
 const AWS = require("aws-sdk");
 const fs = require("fs");
+const async = require("async");
 
 const createProduct = (req, res, connection) => {
   const {
@@ -256,62 +257,136 @@ const createProduct = (req, res, connection) => {
       updated_at: new Date(),
     };
 
-    // Subir la imagen a Amazon S3
-    const imagen = req.files.find((file) => file.fieldname === "imagen");
-    if (!imagen) {
-      return res
-        .status(400)
-        .json({ error: "No se ha proporcionado una imagen" });
-    }
+    let galleryUrls = [];
 
-    const imagenPath = `storage/${nuevoProductoId}_${imagen.originalname}`;
-    const imagenParams = {
-      Bucket: "thehomehobby",
-      Key: imagenPath,
-      Body: fs.createReadStream(imagen.path),
-      ACL: "public-read",
-    };
-
-    s3.upload(imagenParams, (err, imagenData) => {
-      if (err) {
-        console.error("Error al subir la imagen a S3:", err);
-        return res.status(500).json({ error: "Error al subir la imagen a S3" });
-      }
-
-      console.log("Imagen subida exitosamente a S3:", imagenData.Location);
-      nuevoProducto.imagen = imagenData.Location; // Asignar la URL de la imagen a nuevoProducto
-
-      // Subir el video a Amazon S3
-      const video = req.files.find((file) => file.fieldname === "video");
-      if (!video) {
-        return res
-          .status(400)
-          .json({ error: "No se ha proporcionado un video" });
-      }
-
-      const videoPath = `storage/${nuevoProductoId}_${video.originalname}`;
-      const videoParams = {
+    // Función para subir un archivo a Amazon S3
+    function uploadToS3(file, callback) {
+      const filePath = `storage/${nuevoProductoId}_${file.originalname}`;
+      const params = {
         Bucket: "thehomehobby",
-        Key: videoPath,
-        Body: fs.createReadStream(video.path),
+        Key: filePath,
+        Body: fs.createReadStream(file.path),
         ACL: "public-read",
       };
 
-      s3.upload(videoParams, (err, videoData) => {
+      s3.upload(params, (err, data) => {
         if (err) {
-          console.error("Error al subir el video a S3:", err);
+          console.error(`Error al subir ${file.fieldname} a S3:`, err);
+          callback(err);
+        } else {
+          console.log(
+            `${file.fieldname} subido exitosamente a S3:`,
+            data.Location
+          );
+          callback(null, data.Location);
+        }
+      });
+    }
+
+    // Función para procesar y subir los archivos de galería
+    function processGalleryFiles(files, callback) {
+      const filesToUpload = files.map((file) => ({
+        fieldname: file.fieldname,
+        originalname: file.originalname,
+        path: file.path,
+      }));
+
+      async.eachOfSeries(
+        filesToUpload,
+        (file, index, cb) => {
+          uploadToS3(file, (err, url) => {
+            if (err) {
+              cb(err);
+            } else {
+              galleryUrls.push({ url }); // Agrega la URL al array de URLs de galería
+              cb();
+            }
+          });
+        },
+        (err) => {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null, galleryUrls);
+          }
+        }
+      );
+    }
+
+    // Procesar y subir los archivos de galería
+    processGalleryFiles(
+      req.files.filter((file) => file.fieldname.startsWith("galeria")),
+      (err, urls) => {
+        if (err) {
           return res
             .status(500)
-            .json({ error: "Error al subir el video a S3" });
+            .json({ error: "Error al procesar los archivos de galería" });
         }
 
-        console.log("Video subido exitosamente a S3:", videoData.Location);
-        nuevoProducto.video = videoData.Location; // Asignar la URL del video a nuevoProducto
+        // Guardar las URLs en MySQL
+        const galeriaUrls = JSON.stringify(urls); // Convertir el array de URLs a formato JSON
+        nuevoProducto.galeria = galeriaUrls; // Asignar el array de URLs a nuevoProducto
 
-        // Insertar el producto en la base de datos
-        insertProduct(nuevoProducto);
-      });
-    });
+        // Subir la imagen a Amazon S3
+        const imagen = req.files.find((file) => file.fieldname === "imagen");
+        if (!imagen) {
+          return res
+            .status(400)
+            .json({ error: "No se ha proporcionado una imagen" });
+        }
+
+        const imagenPath = `storage/${nuevoProductoId}_${imagen.originalname}`;
+        const imagenParams = {
+          Bucket: "thehomehobby",
+          Key: imagenPath,
+          Body: fs.createReadStream(imagen.path),
+          ACL: "public-read",
+        };
+
+        s3.upload(imagenParams, (err, imagenData) => {
+          if (err) {
+            console.error("Error al subir la imagen a S3:", err);
+            return res
+              .status(500)
+              .json({ error: "Error al subir la imagen a S3" });
+          }
+
+          console.log("Imagen subida exitosamente a S3:", imagenData.Location);
+          nuevoProducto.imagen = imagenData.Location; // Asignar la URL de la imagen a nuevoProducto
+
+          // Subir el video a Amazon S3
+          const video = req.files.find((file) => file.fieldname === "video");
+          if (!video) {
+            return res
+              .status(400)
+              .json({ error: "No se ha proporcionado un video" });
+          }
+
+          const videoPath = `storage/${nuevoProductoId}_${video.originalname}`;
+          const videoParams = {
+            Bucket: "thehomehobby",
+            Key: videoPath,
+            Body: fs.createReadStream(video.path),
+            ACL: "public-read",
+          };
+
+          s3.upload(videoParams, (err, videoData) => {
+            if (err) {
+              console.error("Error al subir el video a S3:", err);
+              return res
+                .status(500)
+                .json({ error: "Error al subir el video a S3" });
+            }
+
+            console.log("Video subido exitosamente a S3:", videoData.Location);
+            nuevoProducto.video = videoData.Location; // Asignar la URL del video a nuevoProducto
+
+            // Insertar el producto en la base de datos
+            insertProduct(nuevoProducto);
+          });
+        });
+      }
+    );
 
     // Función para insertar el producto en la base de datos
     function insertProduct(producto) {
