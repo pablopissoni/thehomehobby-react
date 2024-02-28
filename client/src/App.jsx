@@ -31,7 +31,7 @@ const App = () => {
     <div>
       {!isIgnored && <NavBar />} {/* No aparece en las URLs de "ignorePaths" */}
       <Routes>
-        <Route path="https://thehomehobby-react.vercel.app" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/products/:id" element={<SearchProducts />} />{" "}
         {/* Se renderiza la lista de produtos relacionados con el producto de la busqueda */}
         <Route path="/login" element={<Login />} />
