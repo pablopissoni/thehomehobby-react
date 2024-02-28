@@ -23,24 +23,23 @@ export const SearchProducts = () => {
     getProducts(id);
   }, [id]);
   // ----- USE EFFECTs ----
-  
+
   //* ---- Get Products by search ----
   async function getProducts(id, page = 1) {
     const isLocal = window.location.href.includes("localhost");
     const urlGetProductsId = isLocal
-    ? `http://localhost:3001/productos?name=${id}&page=${page}`
-    : `XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX${id}&page=${page}`;
+      ? `http://localhost:3001/productos?name=${id}&page=${page}`
+      : `https://thehomehobby-react.onrender.com/productos?name=${id}&page=${page}`;
     try {
       const response = await axios(urlGetProductsId);
       setProducSearchs(response.data);
       setPaginationData(response.data.info);
-
     } catch (error) {
       setProducSearchs({ message: "no products found" });
       console.error("Error en getProduct ID >>> ", error);
     }
   }
-  console.log("🚀 ~ SearchProducts ~ paginationData:", paginationData)
+  console.log("🚀 ~ SearchProducts ~ paginationData:", paginationData);
 
   // ---- Get Products by search ----
   return (

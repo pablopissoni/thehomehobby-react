@@ -37,7 +37,7 @@ import test_product3 from "../../assets/test_product3.png";
 export const Details = () => {
   //* ---- HOOKS ----
   const { id } = useParams();
-  const [ count, setCount ] = useState(0)
+  const [count, setCount] = useState(0);
   const [valueHTML, setValueHTML] = useState({
     descripcion: "Cargando",
     ficha: "Cargando",
@@ -61,7 +61,7 @@ export const Details = () => {
       const isLocalhost = window.location.href.includes("localhost");
       const urlDetailsId = isLocalhost
         ? `http://localhost:3001/productos/${id}`
-        : `XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX${id}`;
+        : `https://thehomehobby-react.onrender.com/productos/${id}`;
 
       const response = await axios.get(urlDetailsId);
       setProduct(response.data[0]); // Solo el primer objeto encontrado
@@ -426,13 +426,13 @@ export const Details = () => {
                         className="quantity-btn increment text-primary"
                         type="button"
                         onClick={() => setCount(count + 1)}
-                        >
+                      >
                         <i className="bi bi-caret-up-fill"></i>
                       </button>
                       <button
                         className="quantity-btn decrement text-primary"
                         type="button"
-                        onClick={count > 0? () => setCount(count - 1) : null}
+                        onClick={count > 0 ? () => setCount(count - 1) : null}
                       >
                         <i className="bi bi-caret-down-fill"></i>
                       </button>
@@ -525,14 +525,18 @@ export const Details = () => {
                   </div>
                 </div>
               )}
-              <button className="btn-see-more absolute bottom-0 z-10 flex w-full justify-center hover:text-primary"
+              <button
+                className="btn-see-more absolute bottom-0 z-10 flex w-full justify-center hover:text-primary"
                 onClick={() => setCharactModalIsOpen(!charactModalIsOpen)}
               >
-                <i className={`bi bi-chevron-compact-down transition-transform duration-300 flex text-3xl  ${charactModalIsOpen ? 'rotate-180' : 'animate-bounce'}`}></i>
+                <i
+                  className={`bi bi-chevron-compact-down transition-transform duration-300 flex text-3xl  ${
+                    charactModalIsOpen ? "rotate-180" : "animate-bounce"
+                  }`}
+                ></i>
               </button>
             </div>
           </div>
-
         </div>
       </div>
     </div>

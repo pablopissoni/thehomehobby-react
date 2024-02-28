@@ -103,7 +103,7 @@ export const FormAddProd = ({ setCloseModal }) => {
       // Por ejemplo, puedes mostrar una vista previa de la imagen antes de subirla al servidor
 
       // Actualiza el formData con la imagen seleccionada
-      setProduct((prevent) => ({...prevent, imagen: file}));
+      setProduct((prevent) => ({ ...prevent, imagen: file }));
     }
   };
   // const handleImagenChange = (e) => {
@@ -153,7 +153,7 @@ export const FormAddProd = ({ setCloseModal }) => {
 
   const handleSubmit = () => {
     event.preventDefault();
-    alert("Test beta Nuevo producto")
+    alert("Test beta Nuevo producto");
     // postProduct();
     // alert("eyy mas despacio chiquitin");
   };
@@ -165,7 +165,7 @@ export const FormAddProd = ({ setCloseModal }) => {
       const isLocalhost = window.location.href.includes("localhost");
       const urlPostProduct = isLocalhost
         ? `http://localhost:3001/productos`
-        : `XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`;
+        : `https://thehomehobby-react.onrender.com/productos`;
 
       const response = await axios.post(urlPostProduct, product);
       console.log("🚀 ~ POST ~ response:", response.data);

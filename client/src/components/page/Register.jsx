@@ -19,11 +19,11 @@ export const Register = () => {
 
   const urlUserConfirm = isLocalhost
     ? "http://localhost:3001/users/confirm"
-    : "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+    : "https://thehomehobby-react.onrender.com/users/confirm";
 
   const urlUserRegister = isLocalhost
     ? "http://localhost:3001/users/register"
-    : "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+    : "https://thehomehobby-react.onrender.com/users/register";
 
   //* ---- HOOKs ---------
   const [errors, setErrors] = useState({});

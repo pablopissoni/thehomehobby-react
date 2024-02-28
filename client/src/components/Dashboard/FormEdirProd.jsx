@@ -181,14 +181,14 @@ export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
     alert("Test button edit product");
   };
   // --- HANDLEs ---
-console.log("ID PROD >>> ", prodEdit.id)
+  console.log("ID PROD >>> ", prodEdit.id);
   //* --- PUT ---
   const putProduct = async (id) => {
     try {
       const isLocalhost = window.location.href.includes("localhost");
       const urlPutProduct = isLocalhost
         ? `http://localhost:3001/productos/${id}`
-        : `XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/${id}`;
+        : `https://thehomehobby-react.onrender.com/productos/${id}`;
 
       const response = await axios.put(urlPutProduct, product);
       console.log("🚀 ~ PUT ~ response:", response.data);

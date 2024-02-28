@@ -24,7 +24,7 @@ export const ProductsDashboard = () => {
     const isLocal = window.location.href.includes("localhost");
     const urlGetProductsId = isLocal
       ? `http://localhost:3001/productos?name=${name}&page=${page}`
-      : `XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX${name}&page=${page}`;
+      : `https://thehomehobby-react.onrender.com/productos?name=${name}&page=${page}`;
     try {
       const response = await axios(urlGetProductsId);
       setProducSearchs(response.data.data);
@@ -54,11 +54,16 @@ export const ProductsDashboard = () => {
   // --- HANDLEs ---
   return (
     <div>
-        <div className="mb-4">
+      <div className="mb-4">
         {/* {isFormEdit && <FormAddProd prodEdit={editTempProduct} setCloseModal={setIsFormEdit}/>} */}
-        {isFormEdit && <FormEdirProd prodEdit={editTempProduct} setCloseModal={setIsFormEdit}/>}
+        {isFormEdit && (
+          <FormEdirProd
+            prodEdit={editTempProduct}
+            setCloseModal={setIsFormEdit}
+          />
+        )}
         {/* {isFormEdit && <div>{editTempProduct.nombre_es}</div>} */}
-        </div>
+      </div>
       {/* SearchBar  */}
       <div
         className={`header-search transition-all-300 order-3 col-span-4 mt-[10px] self-center lg:order-2 lg:col-span-6 lg:mt-0
@@ -67,7 +72,7 @@ export const ProductsDashboard = () => {
         <form className="search" onSubmit={handleSearch}>
           <div className="flex h-[40px] max-w-[500px] overflow-hidden rounded-[50px] bg-white">
             <input
-            className="search w-full rounded-sm pl-2 outline-none focus:border-2 focus:border-b-cyan-500"
+              className="search w-full rounded-sm pl-2 outline-none focus:border-2 focus:border-b-cyan-500"
               type="search"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -83,8 +88,8 @@ export const ProductsDashboard = () => {
       {/* Sección - Tabla de Productos */}
       <div className="mt-8 bg-white p-4 shadow rounded-lg">
         <h2 className="text-gray-500 text-lg font-semibold pb-4">
-          Productos encontrados <strong>{paginationData.totalItems}</strong>{" "}
-          de: <strong>{searchTerm}</strong>
+          Productos encontrados <strong>{paginationData.totalItems}</strong> de:{" "}
+          <strong>{searchTerm}</strong>
         </h2>
         <div className="my-1"></div>
         {/* Espacio de separación */}
@@ -131,7 +136,7 @@ export const ProductsDashboard = () => {
                     # {product?.id}
                   </td>
                   <td className="py-2 px-4 border-b border-grey-light transition-transform duration-300 hover:scale-150">
-                  <button onClick={() => handleEdit(product)}>
+                    <button onClick={() => handleEdit(product)}>
                       <i className="bi bi-pen hover:text-blue-500"></i>
                     </button>
                   </td>

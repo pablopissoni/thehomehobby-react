@@ -36,9 +36,7 @@ export const HomePage = () => {
   function getProducts() {
     // peticion desde localhost o deploy
     const isLocalhost = window.location.href.includes("localhost");
-    const url = isLocalhost
-      ? "http://localhost:3001/productos"
-      : "http://localhost:3001/productos";
+    const url = "https://thehomehobby-react.onrender.com/productos";
 
     axios
       .get(url)
@@ -52,14 +50,12 @@ export const HomePage = () => {
       });
   }
   // ----- GET Productos -------------
-  
+
   //* ----- GET Categories -------------
   function getCategories() {
     // peticion desde localhost o deploy
     const isLocalhost = window.location.href.includes("localhost");
-    const urlCategories = isLocalhost
-      ? "http://localhost:3001/categories"
-      : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+    const urlCategories = "https://thehomehobby-react.onrender.com/categories";
 
     axios
       .get(urlCategories)
@@ -258,17 +254,26 @@ export const HomePage = () => {
       /> */}
 
       {/* -- Sliders Map -- */}
-      {categories && categories.map((category) => (
-        category.status === 1 && ( // filtro solo los que tienen STATUS 1 que deben ser los activos
-        <SliderComponents
-          key={category?.id}
-          img={`https://thehomehobby.s3.amazonaws.com${category?.image}`}
-          titleImg={category?.contenido[0]?.nombre || category?.contenido[1]?.nombre}
-          title={category?.contenido[0]?.nombre || category?.contenido[1]?.nombre}
-          // products={}
-          prodCategoryId={category?.id}
-        />)
-      ))}
+      {categories &&
+        categories.map(
+          (category) =>
+            category.status === 1 && ( // filtro solo los que tienen STATUS 1 que deben ser los activos
+              <SliderComponents
+                key={category?.id}
+                img={`https://thehomehobby.s3.amazonaws.com${category?.image}`}
+                titleImg={
+                  category?.contenido[0]?.nombre ||
+                  category?.contenido[1]?.nombre
+                }
+                title={
+                  category?.contenido[0]?.nombre ||
+                  category?.contenido[1]?.nombre
+                }
+                // products={}
+                prodCategoryId={category?.id}
+              />
+            )
+        )}
       {/* Sección de categorías */}
       <section>
         <div className="categories-section container mx-auto my-5 px-2 sm:px-8">

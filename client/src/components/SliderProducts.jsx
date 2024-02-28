@@ -9,18 +9,20 @@ import { Pagination, Navigation } from "swiper/modules";
 export const SliderProducts = ({ products, prodCategoryId }) => {
   const [slidesPerView, setSlidesPerView] = useState(4); // Valor predeterminado para dispositivos no móviles
   const [productsByCateg, setProductsByCateg] = useState([]);
-  console.log("🚀 ~ SliderProducts ~ productsByCateg:", productsByCateg.data)
+  console.log("🚀 ~ SliderProducts ~ productsByCateg:", productsByCateg.data);
 
-//* ---- USE EFFECTs ----
+  //* ---- USE EFFECTs ----
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/productos?category=${prodCategoryId}`);
+        const response = await fetch(
+          `https://thehomehobby-react.onrender.com/productos?category=${prodCategoryId}`
+        );
         if (response.ok) {
           const data = await response.json();
           setProductsByCateg(data);
         } else {
-          throw new Error('Error al obtener los productos');
+          throw new Error("Error al obtener los productos");
         }
       } catch (error) {
         console.error(error);
@@ -52,8 +54,7 @@ export const SliderProducts = ({ products, prodCategoryId }) => {
       window.removeEventListener("resize", handleResize);
     };
   }, []); // Se ejecuta solo una vez al montar el componente
-//  ---- USE EFFECTs ----
-
+  //  ---- USE EFFECTs ----
 
   return (
     <Swiper
@@ -71,21 +72,24 @@ export const SliderProducts = ({ products, prodCategoryId }) => {
       modules={[Pagination, Navigation]}
       className="mySwiper px-10"
     >
-      {productsByCateg.data && productsByCateg.data?.map((prod, index) => (
-        <SwiperSlide key={index}>
-          <CardProduct
-            id={prod?.id}
-            off={prod?.oferta_id}
-            img={prod?.imagen}
-            stars={prod?.stars}
-            stock={prod?.stock}
-            title={prod?.nombre_ingles ? prod?.nombre_ingles : prod?.nombre_es}
-            description={prod?.description}
-            price={prod?.precio_base}
-            priceOff={prod?.priceOff}
-          />
-        </SwiperSlide>
-      ))}
+      {productsByCateg.data &&
+        productsByCateg.data?.map((prod, index) => (
+          <SwiperSlide key={index}>
+            <CardProduct
+              id={prod?.id}
+              off={prod?.oferta_id}
+              img={prod?.imagen}
+              stars={prod?.stars}
+              stock={prod?.stock}
+              title={
+                prod?.nombre_ingles ? prod?.nombre_ingles : prod?.nombre_es
+              }
+              description={prod?.description}
+              price={prod?.precio_base}
+              priceOff={prod?.priceOff}
+            />
+          </SwiperSlide>
+        ))}
     </Swiper>
   );
 };

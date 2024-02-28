@@ -10,9 +10,11 @@ export const Login = () => {
   const isLocal = window.location.href.includes("localhost");
   const urlLogin = isLocal
     ? "http://localhost:3001/users/login"
-    : "XXXXXXXXXXX DEPLOY"; //! COLOCAR RUTA DEPLOY
+    : "https://thehomehobby-react.onrender.com/users/login"; //! COLOCAR RUTA DEPLOY
 
-  const url = isLocal ? "http://localhost:5173/" : "XXXXXXXXXXX DEPLOY"; //! COLOCAR RUTA DEPLOY
+  const url = isLocal
+    ? "http://localhost:5173/"
+    : "http://thehomehobby.com.s3-website.us-east-2.amazonaws.com"; //! COLOCAR RUTA DEPLOY
   // URL local o deploy
 
   //* ---- HOOKs --------
