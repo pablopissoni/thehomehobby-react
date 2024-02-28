@@ -31,7 +31,7 @@ const App = () => {
     <div>
       {!isIgnored && <NavBar />} {/* No aparece en las URLs de "ignorePaths" */}
       <Routes>
-        <Route path="homepage" element={<HomePage />} />
+        <Route path="https://thehomehobby-react.vercel.app" element={<HomePage />} />
         <Route path="/products/:id" element={<SearchProducts />} />{" "}
         {/* Se renderiza la lista de produtos relacionados con el producto de la busqueda */}
         <Route path="/login" element={<Login />} />
@@ -40,7 +40,7 @@ const App = () => {
         <Route path="/details/:id" element={<Details />} />
         <Route path="/ContactUs" element={<ContactUs />} />
         <Route path="/FAQs" element={<FAQs />} />
-        <Route path="homepage/Checkout" element={<Checkout />} />
+        <Route path="/Checkout" element={<Checkout />} />
         <Route path="/UserProfile" element={<UserProfile />} />
         <Route path="/adminDashboard" element={<AdminDashboard />} />
         {/* <Route path="/detail/:id" element={<Login/>} /> */}
