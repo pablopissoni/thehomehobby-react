@@ -6,13 +6,17 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
 
-export const SliderProducts = ({ products, prodCategoryId }) => {
+export const SliderProducts = ({ products, prodCategoryId, productsByCategProp}) => {
   const [slidesPerView, setSlidesPerView] = useState(4); // Valor predeterminado para dispositivos no móviles
   const [productsByCateg, setProductsByCateg] = useState([]);
-  console.log("🚀 ~ SliderProducts ~ productsByCateg:", productsByCateg.data);
+  // console.log("🚀 ~ SliderProducts ~ productsByCateg:", productsByCateg.data);
 
   //* ---- USE EFFECTs ----
   useEffect(() => {
+    if(productsByCategProp){
+      setProductsByCateg(productsByCategProp)
+    } else {
+
     const fetchProducts = async () => {
       try {
         const response = await fetch(
@@ -30,7 +34,8 @@ export const SliderProducts = ({ products, prodCategoryId }) => {
     };
 
     fetchProducts();
-  }, [prodCategoryId]);
+  }
+  }, [prodCategoryId, productsByCategProp]);
   // }, []);
 
   useEffect(() => {

@@ -15,6 +15,7 @@ import sliderMobile3 from "../assets/slider-mobile3.png";
 // import sliderMobile3 from "../assets/slider-mobile3.png";
 import notebookBanner from "../assets/notebookBanner.jpg";
 import hogarBanner from "../assets/Hogar-Banner.jpg";
+import { SliderCategory } from "./SliderCategory";
 
 // import { useDispatch, useSelector } from 'react-redux';
 // import { fetchProducts } from '../actions/productActions';
@@ -24,6 +25,7 @@ export const HomePage = () => {
   //* -- USE STATE --------
   const [products, setProducts] = useState([]); // Get Productos
   const [categories, setCategories] = useState([]); // Get Categories
+  const [productsByCateg, setProductsByCateg] = useState([]); // Get Product by Category
   //* -- USE STATE --------
   // const dispatch = useDispatch();
   // const products = useSelector((state) => state.products);
@@ -71,13 +73,30 @@ export const HomePage = () => {
   console.log("🚀 ~ .then ~ categories.data:", categories);
   // ----- GET Categories -------------
 
+  //* ----- GET Product by Category ----------
+  const fetchProductsByCategory = async (prodCategoryId) => {
+    try {
+      const response = await fetch(
+        `https://thehomehobby-react.onrender.com/productos?category=${prodCategoryId}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setProductsByCateg(data.data);
+      } else {
+        throw new Error("Error al obtener los productos");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  // ------ GET Product by Category ----------
+
   //* ----- USE EFFECT -------------
   useEffect(() => {
     // getProducts();
     getCategories();
   }, []);
   //* ----- USE EFFECT -------------
-  // console.log("🚀 PRODUCTS.data:", products.data);
   return (
     <div>
       {/* <ProductList products={products} /> */}
@@ -172,7 +191,18 @@ export const HomePage = () => {
           </div>
         </div>
       </section>
-      {/* Slider con productos */}
+      {/* Slider categorias */}
+      <section>
+        <div className="container mx-auto my-5 px-2 sm:px-8">
+          <div className=" mt-5 flex justify-center border-b-2 border-[rgba(119,119,119,.17)]">
+            <h1 className="mb-[-2px] inline-block border-b-2 border-primary pb-3 text-2xl font-bold uppercase">
+              Offers
+            </h1>
+          </div>
+          <SliderCategory categories={categories}/>
+        </div>
+      </section>
+
       <section>
         <div className="offers-section container mx-auto my-5 px-2 sm:px-8">
           <div className="liner-container mt-5 flex justify-center border-b-2 border-[rgba(119,119,119,.17)]">
@@ -183,7 +213,7 @@ export const HomePage = () => {
           <div className="swiper-container">
             <div className="swiper swiper-cards group relative flex items-center py-5 swiper-initialized swiper-horizontal swiper-free-mode swiper-backface-hidden">
               {/* <SliderProducts slidesToShow={4} /> */}
-              <SliderProducts products={TestProdObj} /> {/* Productos test */}
+              {/* <SliderProducts products={TestProdObj} /> Productos test */}
             </div>
           </div>
         </div>
@@ -254,7 +284,7 @@ export const HomePage = () => {
       /> */}
 
       {/* -- Sliders Map -- */}
-      {categories &&
+      {/* {categories &&
         categories.map(
           (category) =>
             category.status === 1 && ( // filtro solo los que tienen STATUS 1 que deben ser los activos
@@ -273,9 +303,9 @@ export const HomePage = () => {
                 prodCategoryId={category?.id}
               />
             )
-        )}
+        )} */}
       {/* Sección de categorías */}
-      <section>
+      {/* <section>
         <div className="categories-section container mx-auto my-5 px-2 sm:px-8">
           <div className="liner-container mb-5 flex justify-center border-b-2 border-[rgba(119,119,119,.17)]">
             <h1 className="mb-[-2px] inline-block border-b-2 border-primary pb-3 text-2xl font-bold uppercase">
@@ -286,7 +316,7 @@ export const HomePage = () => {
             <div className="swiper swiper-default group relative flex items-center py-5 swiper-initialized swiper-horizontal swiper-backface-hidden"></div>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };
