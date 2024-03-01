@@ -403,7 +403,7 @@ const createProduct = (req, res, connection) => {
           });
         }
         console.log("Producto insertado exitosamente en la base de datos");
-        console.log("Producto:", producto);
+
         res.status(200).json({ message: "Producto insertado exitosamente" });
       });
     }
