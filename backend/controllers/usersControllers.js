@@ -142,6 +142,7 @@ const loginUser = async (req, res) => {
           success: true,
           message: "Usuario autenticado correctamente",
           accessToken: accessToken,
+          email: email,
         });
       },
       onFailure: (err) => {
