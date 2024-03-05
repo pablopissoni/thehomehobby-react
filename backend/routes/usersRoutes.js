@@ -5,21 +5,21 @@ const {
   getToken,
   registerUser,
   loginUser,
-  confirmAccount,
   resendConfirmationEmail,
   recoverAccount,
   resetPassword,
+  getAllUsers,
+  deleteUser,
 } = require("../controllers/usersControllers");
 
 // Rutas relacionadas con la gestión de usuarios
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.post("/confirm", confirmAccount);
 router.post("/resend_confirmation_email", resendConfirmationEmail);
 router.post("/recover", recoverAccount);
 router.post("/reset-password", resetPassword);
-
-// TEST
+router.get("/users", getAllUsers);
+router.delete("/users/:userId", deleteUser);
 router.post("/get-token", getToken);
 
 module.exports = router;
