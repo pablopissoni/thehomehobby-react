@@ -103,32 +103,8 @@ export const HomePage = () => {
       {/* Sección de banners */}
       <section className="banners-section container mx-auto my-5 px-2 sm:px-8">
         <div className="grid grid-cols-12 gap-5">
-          <div className="swiper-container col-span-12 overflow-hidden rounded-lg md:col-span-8">
+          <div className="swiper-container col-span-12 overflow-hidden rounded-lg ">
             <Slider />
-          </div>
-          <div className="group relative col-span-4 hidden overflow-hidden rounded-lg md:block">
-            <div className="overlay-gradient absolute z-[1] h-full w-full"></div>
-            <img
-              className="transition-all-300 h-full w-full object-cover hover:transform group-hover:scale-110"
-              src={sliderMobile3}
-              alt="banner-img"
-            />
-            <div className="absolute top-0 left-0 flex h-full w-full items-center">
-              <div className="z-[2] p-5">
-                <h3 className="text-lg font-bold uppercase text-primary drop-shadow-xl">
-                  Armed pc gamer
-                </h3>
-                <p className="my-5 text-white drop-shadow-md">
-                  Choose your pc and play!
-                </p>
-                <a
-                  className="btn-effect inline-block rounded-lg bg-primary py-2 px-3 text-white"
-                  href="#"
-                >
-                  <span>Shop now</span>
-                </a>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -199,7 +175,7 @@ export const HomePage = () => {
               Offers
             </h1>
           </div>
-          <SliderCategory categories={categories}/>
+          <SliderCategory categories={categories} />
         </div>
       </section>
 

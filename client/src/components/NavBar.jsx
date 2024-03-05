@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // --- imgages ---
 import Logo from "../assets/Logo miniatura.svg";
@@ -9,7 +9,32 @@ import { ShoppingCart } from "./ShoppingCart";
 import { Wishlist } from "./Wishlist";
 import { NavBarMobile } from "./NavBarMobile";
 
+import { Listbox, Transition } from "@headlessui/react";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+
 export const NavBar = () => {
+  // headless Lenguaje
+  const people = [
+    { name: "Security Cameras" },
+    { name: "Home Decorations" },
+    { name: "Kitchen Sink" },
+    { name: "Faucets" },
+    { name: "Dining Room" },
+    { name: "Cookware" },
+    { name: "Cleaning Products" },
+    { name: "Door Locks" },
+    { name: "Sofá" },
+    { name: "Curtain" },
+    { name: "Bulkhead Light" },
+    { name: "Lamp Lighting" },
+  ];
+  const [selected, setSelected] = useState(people[0]);
+
+  // headless Categories
+  const categoriesList = [{ name: "Categories" }, { name: "Categories" }];
+  const [selectedCategories, setSelectedCategories] = useState(
+    categoriesList[0]
+  );
   //Mostrar NavBarMobile
   const [showNavBarMobile, setShowNavBarMobile] = useState(false);
   //Mostrar WishList
@@ -26,7 +51,9 @@ export const NavBar = () => {
     ? "http://localhost:5173/register"
     : "http://thehomehobby.com.s3-website.us-east-2.amazonaws.com/register";
 
-  const home = isLocalhost ? "http://localhost:5173" : "http://thehomehobby.com.s3-website.us-east-2.amazonaws.com";
+  const home = isLocalhost
+    ? "http://localhost:5173"
+    : "http://thehomehobby.com.s3-website.us-east-2.amazonaws.com";
 
   //--------------------
 
@@ -43,9 +70,11 @@ export const NavBar = () => {
     }
   };
 
+  // Headless
+
   return (
     <header className="header-section relative z-30 shadow-custom1">
-      <div className="hidden bg-secondary sm:flex">
+      {/* <div className=" bg-secondary sm:flex">
         <div className="container mx-auto grid h-full grid-cols-12 px-2 py-[6px] sm:px-8">
           <div className="col-span-8 self-center">
             <div className="flex gap-[15px]">
@@ -80,13 +109,14 @@ export const NavBar = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div className="bg-secondary">
-        <div className="container mx-auto grid h-full grid-cols-4 gap-1 px-2 py-5 sm:px-8 lg:grid-cols-12 lg:gap-0">
+      </div> */}
+      <div className="bg-secondary h-16">
+        <div className="container mx-auto grid  grid-cols-4   sm:px-8 lg:grid-cols-12 lg:gap-0">
           <div className="order-1 col-span-2 self-center lg:order-1 lg:col-span-3">
             <a href={home}>
+              {" "}
               <img
-                className="inline bg-white rounded-md"
+                className="inline bg-white rounded-md h-16"
                 src={LogoGrande}
                 alt="logo"
               />
@@ -98,7 +128,69 @@ export const NavBar = () => {
             }`}
           >
             <form className="search" onSubmit={handleSearch}>
-              <div className="flex h-[40px] overflow-hidden rounded-[50px] bg-white">
+              <div className="flex h-[40px]   bg-white">
+                <Listbox
+                  value={selectedCategories}
+                  onChange={setSelectedCategories}
+                >
+                  <div className="relative bg-gray-300">
+                    <Listbox.Button className="relative w-full cursor-default rounded-lg bg-gray-300 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm ">
+                      <span className="block truncate">
+                        {selectedCategories.name}
+                      </span>
+                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                        <ChevronUpDownIcon
+                          className="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                      </span>
+                    </Listbox.Button>
+                    <Transition
+                      as={Fragment}
+                      leave="transition ease-in duration-100"
+                      leaveFrom="opacity-100"
+                      leaveTo="opacity-0"
+                    >
+                      <Listbox.Options className="absolute mt-1  overflow-auto  bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                        {people.map((categories, categoriesIdx) => (
+                          <Listbox.Option
+                            key={categoriesIdx}
+                            className={({ active }) =>
+                              `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                                active
+                                  ? "bg-amber-100 text-amber-900"
+                                  : "text-gray-900"
+                              }`
+                            }
+                            value={categories}
+                          >
+                            {({ selectedCategories }) => (
+                              <>
+                                <span
+                                  className={`block truncate ${
+                                    selectedCategories
+                                      ? "font-medium"
+                                      : "font-normal"
+                                  }`}
+                                >
+                                  {categories.name}
+                                </span>
+                                {selectedCategories ? (
+                                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                                    <CheckIcon
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
+                                  </span>
+                                ) : null}
+                              </>
+                            )}
+                          </Listbox.Option>
+                        ))}
+                      </Listbox.Options>
+                    </Transition>
+                  </div>
+                </Listbox>
                 <input
                   className="search w-full border-2 border-red-100 rounded-sm pl-2 outline-none focus:border-2 focus:border-b-cyan-500"
                   type="search"
@@ -106,6 +198,7 @@ export const NavBar = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search..."
                 />
+
                 <button className="btn-search px-3 text-red-600" type="submit">
                   <i className="bi bi-search flex text-xl"></i>
                 </button>
@@ -113,6 +206,63 @@ export const NavBar = () => {
             </form>
           </div>
           <div className="order-2 col-span-2 flex gap-2 self-center justify-self-end lg:order-3 lg:col-span-3 xl:gap-5">
+            {/* Paises */}
+            {/* <Listbox value={selected} onChange={setSelected}>
+              <div className="relative mt-1">
+                <Listbox.Button className="relative w-full cursor-default rounded-lg  py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 font-extrabold">
+                  <span className="block truncate">{selected.name}</span>
+                  <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                    <ChevronUpDownIcon
+                      className="h-5 w-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </Listbox.Button>
+                <Transition
+                  as={Fragment}
+                  leave="transition ease-in duration-100"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                    {people.map((person, personIdx) => (
+                      <Listbox.Option
+                        key={personIdx}
+                        className={({ active }) =>
+                          `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                            active
+                              ? "bg-amber-100 text-amber-900"
+                              : "text-gray-900"
+                          }`
+                        }
+                        value={person}
+                      >
+                        {({ selected }) => (
+                          <>
+                            <span
+                              className={`block truncate ${
+                                selected ? "font-medium" : "font-normal"
+                              }`}
+                            >
+                              {person.name}
+                            </span>
+                            {selected ? (
+                              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                                <CheckIcon
+                                  className="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            ) : null}
+                          </>
+                        )}
+                      </Listbox.Option>
+                    ))}
+                  </Listbox.Options>
+                </Transition>
+              </div>
+            </Listbox> */}
+
             <div className="flex items-center lg:hidden">
               <button
                 className="btn-open-modal text-white"
@@ -190,7 +340,7 @@ export const NavBar = () => {
           </div>
         </div>
       </div>
-      <div className="hidden bg-white lg:block">
+      <div className="hidden bg-white lg:block h-10">
         <nav className="container mx-auto px-2 sm:px-8">
           <ul className="menu flex flex-wrap items-center justify-between py-[10px] text-lg">
             {/* <li className="underlined-animated group relative">
@@ -672,9 +822,9 @@ export const NavBar = () => {
             <li className="underlined-animated">
               <a href="/UserProfile">UserProfile</a>
             </li>
-            {/* <li className="underlined-animated">
+            <li className="underlined-animated">
               <a href="#">Smartphones</a>
-            </li> */}
+            </li>
 
             {/* <li className="underlined-animated group relative">
               <a

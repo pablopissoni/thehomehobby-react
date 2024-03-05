@@ -11,6 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.18",
+    "@heroicons/react": "^2.1.1",
     "@tippyjs/react": "^4.2.6",
     "axios": "^1.6.5",
     "bootstrap-icons": "^1.11.3",
