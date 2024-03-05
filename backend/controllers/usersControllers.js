@@ -340,35 +340,150 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-// Controlador para eliminar un usuario
 const deleteUser = (req, res) => {
   const userId = req.params.userId; // Obtener el ID del usuario de los parámetros de la consulta
 
-  // Realizar la consulta para eliminar el usuario con el ID especificado
+  // Realizar la consulta para obtener el email del usuario con el ID especificado
   dbConnection.query(
-    "DELETE FROM users WHERE id = ?",
+    "SELECT email FROM users WHERE id = ?",
     userId,
-    (error, result) => {
+    async (error, result) => {
       if (error) {
-        console.error("Error al eliminar usuario:", error);
+        console.error("Error al buscar email del usuario:", error);
         return res.status(500).json({
-          error: "Error al eliminar usuario en la base de datos",
+          error: "Error al buscar email del usuario en la base de datos",
         });
       }
 
-      // Verificar si se eliminó algún usuario
-      if (result.affectedRows === 0) {
+      // Verificar si se encontró el email del usuario
+      if (result.length === 0) {
         return res.status(404).json({
           error: "Usuario no encontrado",
         });
       }
 
-      console.log("Usuario eliminado con éxito");
-      res.status(200).json({
-        message: "Usuario eliminado correctamente",
-      });
+      const userEmail = result[0].email;
+
+      // Eliminar al usuario de AWS Cognito
+      const cognitoParams = {
+        UserPoolId: process.env.COGNITO_USER_POOL_ID,
+        Username: userEmail,
+      };
+
+      try {
+        await cognitoIdentityServiceProvider
+          .adminDeleteUser(cognitoParams)
+          .promise();
+        console.log("Usuario eliminado de AWS Cognito con éxito");
+      } catch (error) {
+        console.error("Error al eliminar usuario de AWS Cognito:", error);
+        return res.status(500).json({
+          error: "Error al eliminar usuario de AWS Cognito",
+        });
+      }
+
+      // Realizar la consulta para eliminar el usuario con el ID especificado de la base de datos MySQL
+      dbConnection.query(
+        "DELETE FROM users WHERE id = ?",
+        userId,
+        (error, result) => {
+          if (error) {
+            console.error(
+              "Error al eliminar usuario de la base de datos:",
+              error
+            );
+            return res.status(500).json({
+              error: "Error al eliminar usuario en la base de datos",
+            });
+          }
+
+          // Verificar si se eliminó algún usuario
+          if (result.affectedRows === 0) {
+            return res.status(404).json({
+              error: "Usuario no encontrado",
+            });
+          }
+
+          console.log("Usuario eliminado con éxito de la base de datos");
+          res.status(200).json({
+            message: "Usuario eliminado correctamente",
+          });
+        }
+      );
     }
   );
+};
+
+const editUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const { name, lastName, phone, email, password } = req.body;
+
+    dbConnection.query(
+      "UPDATE users SET name = ?, lastName = ?, phone = ?, email = ?, password = ? WHERE id = ?",
+      [name, lastName, phone, email, password, userId],
+      async (error, result) => {
+        if (error) {
+          console.error("Error updating user in database:", error);
+          return res.status(500).json({
+            error: "Error updating user in the database",
+          });
+        }
+
+        if (result.affectedRows === 0) {
+          return res.status(404).json({
+            error: "User not found",
+          });
+        }
+
+        const cognitoUser = await findCognitoUserByEmail(email);
+
+        if (!cognitoUser) {
+          console.error("Cognito user not found for email:", email);
+          return res.status(404).json({
+            error: "Cognito user not found",
+          });
+        }
+
+        console.log("User updated successfully in database and AWS Cognito");
+        res.status(200).json({
+          message: "User updated successfully",
+        });
+      }
+    );
+  } catch (error) {
+    console.error("Error updating user:", error);
+    let errorCode = 500;
+
+    if (error.code === "BadRequestException") {
+      errorCode = 400;
+    }
+
+    return res.status(errorCode).json({ error: error.message });
+  }
+};
+
+const findCognitoUserByEmail = async (email) => {
+  const params = {
+    UserPoolId: process.env.COGNITO_USER_POOL_ID,
+    AttributesToGet: ["email"],
+    Filter: `email = "${email}"`,
+    Limit: 1,
+  };
+
+  try {
+    const data = await cognitoIdentityServiceProvider
+      .listUsers(params)
+      .promise();
+    if (data.Users && data.Users.length > 0) {
+      return data.Users[0];
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error searching for Cognito user by email:", error);
+    throw error;
+  }
 };
 
 module.exports = {
@@ -380,4 +495,5 @@ module.exports = {
   resetPassword,
   getAllUsers,
   deleteUser,
+  editUser,
 };
