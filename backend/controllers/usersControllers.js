@@ -417,16 +417,16 @@ const deleteUser = (req, res) => {
 const editUser = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const { name, lastName, phone, email, password } = req.body;
+    const { role } = req.body;
 
     dbConnection.query(
-      "UPDATE users SET name = ?, lastName = ?, phone = ?, email = ?, password = ? WHERE id = ?",
-      [name, lastName, phone, email, password, userId],
-      async (error, result) => {
+      "UPDATE users SET role = ? WHERE id = ?",
+      [role, userId],
+      (error, result) => {
         if (error) {
-          console.error("Error updating user in database:", error);
+          console.error("Error updating user role in database:", error);
           return res.status(500).json({
-            error: "Error updating user in the database",
+            error: "Error updating user role in the database",
           });
         }
 
@@ -436,23 +436,14 @@ const editUser = async (req, res) => {
           });
         }
 
-        const cognitoUser = await findCognitoUserByEmail(email);
-
-        if (!cognitoUser) {
-          console.error("Cognito user not found for email:", email);
-          return res.status(404).json({
-            error: "Cognito user not found",
-          });
-        }
-
-        console.log("User updated successfully in database and AWS Cognito");
+        console.log("User role updated successfully in database");
         res.status(200).json({
-          message: "User updated successfully",
+          message: "User role updated successfully",
         });
       }
     );
   } catch (error) {
-    console.error("Error updating user:", error);
+    console.error("Error updating user role:", error);
     let errorCode = 500;
 
     if (error.code === "BadRequestException") {
@@ -460,29 +451,6 @@ const editUser = async (req, res) => {
     }
 
     return res.status(errorCode).json({ error: error.message });
-  }
-};
-
-const findCognitoUserByEmail = async (email) => {
-  const params = {
-    UserPoolId: process.env.COGNITO_USER_POOL_ID,
-    AttributesToGet: ["email"],
-    Filter: `email = "${email}"`,
-    Limit: 1,
-  };
-
-  try {
-    const data = await cognitoIdentityServiceProvider
-      .listUsers(params)
-      .promise();
-    if (data.Users && data.Users.length > 0) {
-      return data.Users[0];
-    } else {
-      return null;
-    }
-  } catch (error) {
-    console.error("Error searching for Cognito user by email:", error);
-    throw error;
   }
 };
 
