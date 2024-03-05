@@ -1,6 +1,7 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 // eslint-disable-next-line no-unused-vars
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import LogoGrande from "../../assets/logo The Home Hobby.svg";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -24,14 +25,8 @@ export const Login = () => {
   });
 
   const [errorMessage, setErrorMessage] = useState("");
-
-  const [successMessage, setSuccessMessage] = useState({
-    message: "",
-    error: "",
-  });
-  // ---- HOOKs --------
-
-  //* --- HANDLES ----------------
+  const [successMessage, setSuccessMessage] = useState("");
+  // --- HANDLES ----------------
   const handleInput = (event) => {
     const { name, value } = event.target;
     setLoginData({
@@ -47,6 +42,7 @@ export const Login = () => {
       console.log("Login Response:", response.data);
       if (response.status === 201) {
         // Clear any previous error messages
+
         setErrorMessage("");
         // Redirect the user to the main page if authentication is successful
         window.location.href = url;
@@ -55,7 +51,6 @@ export const Login = () => {
         setErrorMessage("Incorrect email or password.");
       } else if (response.status === 203) {
         // Set an error message specifically for unconfirmed accounts
-        setErrorMessage(""); // Limpiar el mensaje de error antes de establecer uno nuevo
         setErrorMessage(
           "Your account has not been confirmed. Please check your email for the confirmation link."
         );
@@ -70,15 +65,7 @@ export const Login = () => {
     }
   };
 
-  // --- HANDLES ----------------
-
-  // Clear success message after component unmounts
-  // useEffect(() => {
-  //   return () => {
-  //     setSuccessMessage("");
-  //   };
-  // }, []);
-  console.log("🚀 ~ Login ~ successMessage:", successMessage);
+  const [confirmationResent, setConfirmationResent] = useState(false);
 
   const handleResendConfirmation = async () => {
     try {
@@ -88,17 +75,15 @@ export const Login = () => {
           email: loginData.email,
         }
       );
-      setSuccessMessage({
-        message: "Confirmation email resent successfully!",
-        error: "",
-      });
+      setSuccessMessage("Confirmation email resent successfully!");
       setErrorMessage(""); // Limpiar el mensaje de error después de un éxito
+      setConfirmationResent(true); // Indicar que se reenvió el correo de confirmación
     } catch (error) {
       console.error("Error resending confirmation email:", error);
       if (error.response && error.response.status === 404) {
         // Aquí, si se recibe el código de estado 404, significa que el usuario no está confirmado.
         // En lugar de mostrar un mensaje de error, simplemente limpiamos los mensajes existentes.
-        setSuccessMessage({ message: "", error: "" });
+        setSuccessMessage(""); // Limpiar el mensaje de éxito
       } else {
         // Si hay algún otro error, mostramos el mensaje de error.
         setErrorMessage(
@@ -154,7 +139,6 @@ export const Login = () => {
                       onChange={handleInput}
                     />
                   </div>
-
                   {/* Input for Password */}
                   <div className="mb-3">
                     <label
@@ -191,18 +175,7 @@ export const Login = () => {
                     </button>
                   </div>
                   {/* </div> */}
-                  {/* Success Message */}
-                  {successMessage?.message && (
-                    <div className="text-green-600 text-center mt-3 lg:ml-4">
-                      {successMessage.message}
-                    </div>
-                  )}
                   {/* Error Message */}
-                  {successMessage?.error && (
-                    <div className="text-red-600 mt-3 lg:ml-4">
-                      {successMessage.error}
-                    </div>
-                  )}
 
                   {errorMessage && (
                     <div className="text-red-600 mt-3 lg:ml-4">
@@ -219,7 +192,11 @@ export const Login = () => {
                       )}
                     </div>
                   )}
-
+                  {confirmationResent && (
+                    <div className="text-green-600 text-center mt-3 lg:ml-4">
+                      Confirmation email resent successfully!
+                    </div>
+                  )}
                   {/* Link for Forgot Password */}
                   <div className="text-end mt-3 flex justify-center lg:w-2/3">
                     <Link
