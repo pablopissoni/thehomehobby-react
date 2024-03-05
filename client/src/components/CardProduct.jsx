@@ -57,11 +57,11 @@ export const CardProduct = ({
           <i className="bi bi-star-fill flex text-base text-star"></i>
           <i className="bi bi-star-fill flex text-base text-gray-200"></i>
         </div>
-        <div>
+        {/* <div>
           <span className="rounded-md bg-green-300 py-1 px-2 text-xs font-bold uppercase text-white">
             instock
           </span>
-        </div>
+        </div> */}
       </div>
       <div className="my-1">
         <a className="clamp break-all font-medium" href="#">
@@ -72,13 +72,13 @@ export const CardProduct = ({
       <div className="my-1">
         <p className="clamp-2 text-sm text-gray-400">{description}</p>
       </div>
-      <div className="my-2 flex gap-2">
+      {/* <div className="my-2 flex gap-2">
         <div className="block h-3 w-3 rounded-full bg-blue-600"></div>
         <div className="block h-3 w-3 rounded-full bg-red-600"></div>
         <div className="block h-3 w-3 rounded-full bg-yellow-600"></div>
         <div className="block h-3 w-3 rounded-full bg-black"></div>
-      </div>
-      <div className="my-2 flex gap-2">
+      </div> */}
+      {/* <div className="my-2 flex gap-2">
         <span className="font-bold">Size:</span>
         <ul className="flex gap-3">
           <li>S</li>
@@ -86,10 +86,10 @@ export const CardProduct = ({
           <li>L</li>
           <li>XL</li>
         </ul>
-      </div>
-      <div className="my-1">
-        <span className="text-lg font-bold">${priceOff}</span>
-        <span className="text-sm text-primary line-through">${price}</span>
+      </div> */}
+      <div className="my-1 mt-auto">
+        <span className="text-3xl  font-bold">${price}</span>
+        {/* <span className="text-sm text-primary line-through">${price}</span> */}
       </div>
       <div className="mt-auto">
         <Link
