@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import axios from "axios";
@@ -7,7 +6,7 @@ import { Link } from "react-router-dom";
 import { validateRegistration } from "../../utils/validationRegister";
 
 export const Register = () => {
-  //* Direciones URL LocalHost y Produccion
+  // Direcciones URL
   const isLocalhost = window.location.href.includes("localhost");
   const urlHome = isLocalhost
     ? "http://localhost:5173/"
@@ -17,18 +16,13 @@ export const Register = () => {
     ? "http://localhost:5173/login"
     : "https://thehomehobby.com/login";
 
-  const urlUserConfirm = isLocalhost
-    ? "http://localhost:3001/users/confirm"
-    : "https://thehomehobby-react.onrender.com/users/confirm";
-
   const urlUserRegister = isLocalhost
     ? "http://localhost:3001/users/register"
     : "https://thehomehobby-react.onrender.com/users/register";
 
-  //* ---- HOOKs ---------
+  // Hooks de estado
   const [errors, setErrors] = useState({});
   const [userRegister, setUserRegister] = useState({
-    // token: "",
     name: "",
     lastName: "",
     phone: "",
@@ -37,10 +31,9 @@ export const Register = () => {
     passwordConfirmation: "",
   });
   const [showModal, setShowModal] = useState(false);
-  const [confirmationMessage, setConfirmationMessage] = useState("");
   const [registrationError, setRegistrationError] = useState("");
-  // eslint-disable-next-line no-unused-vars
-  // const [registrationSuccess, setRegistrationSuccess] = useState(false);
+
+  // Función para abrir el modal
   const openModal = () => {
     setShowModal(true);
   };
@@ -50,10 +43,7 @@ export const Register = () => {
     setShowModal(false);
   };
 
-  //* -------- Validaciones de los Inputs en Form --------
-
-  //* ----- HANDLEs ----------
-  // Manejo los valores del formulario
+  // Manejar los valores del formulario
   function handleInput(event) {
     const { name, value } = event.target;
     setUserRegister({
@@ -62,7 +52,7 @@ export const Register = () => {
     });
   }
 
-  // Funcion para enviar el formulario
+  // Enviar el formulario
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -77,7 +67,6 @@ export const Register = () => {
     try {
       const response = await axios.post(urlUserRegister, userRegister);
       console.log("Server response:", response.data);
-      // Limpiar mensaje de error de registro al registrarse con éxito
       setRegistrationError("");
       setUserRegister({
         name: "",
@@ -87,21 +76,16 @@ export const Register = () => {
         password: "",
         passwordConfirmation: "",
       });
-      // Mostrar el modal de registro exitoso
       openModal();
     } catch (error) {
       console.error("Error sending request:", error);
-      if (error.response.status === 420) {
+      if (error.response.status === 409) {
         setRegistrationError("User already exists");
       } else {
         setRegistrationError("Error registering user");
       }
     }
   }
-
-  console.log("DATOS DE USUARIO: ", userRegister);
-
-  // ----- HANDLEs ----------
 
   return (
     <main
@@ -111,11 +95,8 @@ export const Register = () => {
       <div className="bg-white">
         <div className="">
           <div className="">
-            {/* <div className="flex items-center justify-content-center"> */}
             <div className="">
-              {/* <div className="md:w-8/12 xl:w-6/12 mx-auto"> */}
-              <div className="card  lg:w-[800px] w-[300px]  flex-col justify-center shadow-lg">
-                {/* Logo img */}
+              <div className="card lg:w-[800px] w-[300px] flex-col justify-center shadow-lg">
                 <div className="transition-transform duration-300 hover:scale-105">
                   <Link to={urlHome}>
                     <div className="auth-side-wrapper flex justify-center justify-content-center p-4">
@@ -123,32 +104,21 @@ export const Register = () => {
                     </div>
                   </Link>
                 </div>
-                {/* Titulo y form */}
-                {/* <div className=""> */}
                 <div className="px-3 py-5 ">
                   <Link
                     to={urlHome}
-                    // href="https://thehomehobby.com"
                     className="noble-ui-logo block mb-2 transition-transform duration-300 hover:scale-105"
                   >
                     <h2 className="text-2xl font-bold text-center">
                       The <span className="text-red-700">Home Hobby </span>
                     </h2>
                   </Link>
-                  {/* Formulario */}
                   <form
                     onSubmit={handleSubmit}
-                    className="flex flex-col items-center "
-                    // method="post"
-                    // action="https://thehomehobby.com/register"
+                    className="flex flex-col items-center"
                   >
-                    <input
-                      type="hidden"
-                      name="_token"
-                      value="9H6SsrY2ZwuVG3vTc1LlMyioR9xl8XDh89IIuasX"
-                      autoComplete="off"
-                    />
-                    {/* name */}
+                    {/* Input fields */}
+                    {/* Name */}
                     <div className="mb-3 ">
                       <label
                         htmlFor="userName"
@@ -168,7 +138,7 @@ export const Register = () => {
                         autoComplete="name"
                       />
                       {errors.name && (
-                        <span className="flex w-[200px] lg:w-auto text-red-600  text-sm">
+                        <span className="flex w-[200px] lg:w-auto text-red-600 text-sm">
                           {errors.name}
                         </span>
                       )}
@@ -193,7 +163,7 @@ export const Register = () => {
                         autoComplete="name"
                       />
                       {errors.lastName && (
-                        <span className="flex w-[200px] lg:w-auto text-red-600  text-sm">
+                        <span className="flex w-[200px] lg:w-auto text-red-600 text-sm">
                           {errors.lastName}
                         </span>
                       )}
@@ -217,8 +187,13 @@ export const Register = () => {
                         required=""
                         autoComplete="name"
                       />
+                      {errors.phone && (
+                        <span className="flex w-[200px] lg:w-auto text-red-600 text-sm">
+                          {errors.phone}
+                        </span>
+                      )}
                     </div>
-                    {/* Email Addres */}
+                    {/* Email Address */}
                     <div className="mb-3">
                       <label
                         htmlFor="userEmail"
@@ -234,11 +209,9 @@ export const Register = () => {
                         value={userRegister.email}
                         onChange={handleInput}
                         placeholder="Email"
-                        // require=""
-                        // autofocus=""
                       />
                       {errors.email && (
-                        <span className="flex w-[200px] lg:w-auto text-red-600  text-sm">
+                        <span className="flex w-[200px] lg:w-auto text-red-600 text-sm">
                           {errors.email}
                         </span>
                       )}
@@ -284,7 +257,6 @@ export const Register = () => {
                         onChange={handleInput}
                         className="form-control mt-2 w-full lg:w-[350px] border border-gray-200 rounded-sm pl-2 outline-none focus:border-2 focus:border-b-cyan-500"
                         id="passwordConfirmation"
-                        // autoComplete="current-password"
                         placeholder="Password"
                         required=""
                       />
@@ -296,9 +268,11 @@ export const Register = () => {
                         </span>
                       )}
                     </div>
+                    {/* Registration error message */}
                     {registrationError && (
                       <p className="text-red-600">{registrationError}</p>
                     )}
+                    {/* Successful registration modal */}
                     {showModal && (
                       <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
                         <div className="bg-white p-8 rounded-md shadow-md">
@@ -326,7 +300,7 @@ export const Register = () => {
                       </div>
                     )}
 
-                    {/* Register */}
+                    {/* Register button */}
                     <button
                       type="submit"
                       className="text-center text-white px-6 mt-6 bg-red-600 py-1 rounded-sm cursor-pointer transition-transform duration-200 hover:scale-105 hover:shadow-lg"
@@ -334,23 +308,19 @@ export const Register = () => {
                       Register
                     </button>
 
-                    {/* Codigo de Confirmacion */}
-
                     {/* I already have an account */}
                     <div className="text-center transition-transform duration-300 hover:scale-105 mt-3">
                       <Link
                         to={urlLogin}
-                        className="text-dark hover:text-cyan-600 "
+                        className="text-dark hover:text-cyan-600"
                       >
                         I already have an account
                       </Link>
                     </div>
                   </form>
                 </div>
-                {/* </div> */}
               </div>
             </div>
-            {/* </div> */}
           </div>
         </div>
       </div>
