@@ -10,6 +10,7 @@ const {
   resetPassword,
   getAllUsers,
   deleteUser,
+  editUser,
 } = require("../controllers/usersControllers");
 
 // Rutas relacionadas con la gestión de usuarios
@@ -20,6 +21,7 @@ router.post("/recover", recoverAccount);
 router.post("/reset-password", resetPassword);
 router.get("/users", getAllUsers);
 router.delete("/users/:userId", deleteUser);
+router.put("/:userId", editUser);
 router.post("/get-token", getToken);
 
 module.exports = router;
