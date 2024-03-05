@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const dbConnection = require("../dbConfig");
 const app = require("../server");
 const bcrypt = require("bcrypt");
+const { v4: uuidv4 } = require("uuid");
 
 const poolData = {
   UserPoolId: process.env.COGNITO_USER_POOL_ID,
@@ -47,114 +48,94 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10); // 10 es el número de rondas de hashing
     // Definir el valor predeterminado para el campo role
     const defaultRole = "user";
-    // Consultar el último ID insertado en la base de datos
-    dbConnection.query("SELECT MAX(id) AS maxId FROM users", (err, result) => {
-      if (err) {
-        console.error(
-          "Error al consultar el último ID en la base de datos:",
-          err
-        );
-        return res
-          .status(500)
-          .json({ error: "Error al registrar usuario en la base de datos" });
-      }
+    const userId = uuidv4();
 
-      const lastId = result[0].maxId || 0; // Si no hay registros, comenzar desde 0
-      const newId = lastId + 1;
+    // Insertar usuario en la base de datos MySQL con contraseña encriptada
+    const userData = {
+      id: userId, // Utilizar el nuevo ID
+      name: name,
+      lastName: lastName,
+      phone: phone,
+      email: email,
+      password: hashedPassword,
+      role: defaultRole, // Contraseña encriptada
+    };
 
-      // Insertar usuario en la base de datos MySQL con contraseña encriptada
-      const userData = {
-        id: newId, // Utilizar el nuevo ID
-        name: name,
-        lastName: lastName,
-        phone: phone,
-        email: email,
-        password: hashedPassword,
-        role: defaultRole, // Contraseña encriptada
-      };
+    // Continuar con la inserción en la base de datos MySQL
+    dbConnection.query(
+      "INSERT INTO users SET ?",
+      userData,
+      (error, dbResult) => {
+        if (error) {
+          console.error(
+            "Error al insertar usuario en la base de datos:",
+            error
+          );
 
-      // Continuar con la inserción en la base de datos MySQL
-      dbConnection.query(
-        "INSERT INTO users SET ?",
-        userData,
-        (error, dbResult) => {
-          if (error) {
-            console.error(
-              "Error al insertar usuario en la base de datos:",
-              error
-            );
+          let errorCode = 500; // Código de error predeterminado
 
+          // Verificar el tipo de error específico
+          if (error.code === "ER_DUP_ENTRY") {
+            errorCode = 409; // Conflict
+          }
+
+          return res.status(errorCode).json({
+            error: "Error al insertar usuario en la base de datos",
+          });
+        }
+        console.log("Usuario insertado en la base de datos:", dbResult);
+
+        // Realizar el registro en AWS Cognito
+        const attributeList = [
+          new AmazonCognitoIdentity.CognitoUserAttribute({
+            Name: "name",
+            Value: name,
+          }),
+          new AmazonCognitoIdentity.CognitoUserAttribute({
+            Name: "family_name",
+            Value: lastName,
+          }),
+          new AmazonCognitoIdentity.CognitoUserAttribute({
+            Name: "phone_number",
+            Value: phone,
+          }),
+        ];
+
+        userPool.signUp(email, password, attributeList, null, (err, result) => {
+          if (err) {
+            console.error("Error al registrar usuario en Cognito:", err);
             let errorCode = 500; // Código de error predeterminado
 
             // Verificar el tipo de error específico
-            if (error.code === "ER_DUP_ENTRY") {
+            if (err.code === "UsernameExistsException") {
               errorCode = 409; // Conflict
             }
 
-            return res.status(errorCode).json({
-              error: "Error al insertar usuario en la base de datos",
+            return res.status(errorCode).json({ error: err.message });
+          }
+          const cognitoUser = result.user;
+
+          if (result.userConfirmed) {
+            const token = result.getIdToken().getJwtToken();
+            console.log(
+              "Usuario registrado exitosamente en Cognito:",
+              cognitoUser.getUsername()
+            );
+            console.log("Token JWT:", token);
+            return res.status(201).json({
+              message:
+                "Usuario registrado exitosamente en la base de datos y en AWS Cognito",
+              token,
+            });
+          } else {
+            return res.status(201).json({
+              message:
+                "Usuario registrado en AWS Cognito. Por favor, confirme su cuenta.",
             });
           }
-          console.log("Usuario insertado en la base de datos:", dbResult);
-
-          // Realizar el registro en AWS Cognito
-          const attributeList = [
-            new AmazonCognitoIdentity.CognitoUserAttribute({
-              Name: "name",
-              Value: name,
-            }),
-            new AmazonCognitoIdentity.CognitoUserAttribute({
-              Name: "family_name",
-              Value: lastName,
-            }),
-            new AmazonCognitoIdentity.CognitoUserAttribute({
-              Name: "phone_number",
-              Value: phone,
-            }),
-          ];
-
-          userPool.signUp(
-            email,
-            password,
-            attributeList,
-            null,
-            (err, result) => {
-              if (err) {
-                console.error("Error al registrar usuario en Cognito:", err);
-                let errorCode = 500; // Código de error predeterminado
-
-                // Verificar el tipo de error específico
-                if (err.code === "UsernameExistsException") {
-                  errorCode = 409; // Conflict
-                }
-
-                return res.status(errorCode).json({ error: err.message });
-              }
-              const cognitoUser = result.user;
-
-              if (result.userConfirmed) {
-                const token = result.getIdToken().getJwtToken();
-                console.log(
-                  "Usuario registrado exitosamente en Cognito:",
-                  cognitoUser.getUsername()
-                );
-                console.log("Token JWT:", token);
-                return res.status(201).json({
-                  message:
-                    "Usuario registrado exitosamente en la base de datos y en AWS Cognito",
-                  token,
-                });
-              } else {
-                return res.status(201).json({
-                  message:
-                    "Usuario registrado en AWS Cognito. Por favor, confirme su cuenta.",
-                });
-              }
-            }
-          );
-        }
-      );
-    });
+        });
+      }
+    );
   } catch (error) {
     console.error("Error al registrar usuario:", error);
     let errorCode = 500; // Código de error predeterminado
@@ -165,34 +146,6 @@ const registerUser = async (req, res) => {
     }
 
     return res.status(errorCode).json({ error: error.message });
-  }
-};
-
-const confirmAccount = async (req, res) => {
-  try {
-    const { email, confirmationCode } = req.body;
-
-    const userData = {
-      Username: email,
-      Pool: userPool,
-    };
-
-    const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
-
-    cognitoUser.confirmRegistration(confirmationCode, true, (err, result) => {
-      if (err) {
-        console.error("Error al confirmar cuenta en Cognito:", err);
-        return res.status(400).json({ error: "Error al confirmar cuenta" });
-      } else {
-        console.log("Cuenta confirmada:", result);
-        return res
-          .status(200)
-          .json({ message: "Cuenta confirmada exitosamente" });
-      }
-    });
-  } catch (error) {
-    console.error("Error al confirmar cuenta:", error);
-    return res.status(400).json({ error: "Error al confirmar cuenta" });
   }
 };
 
@@ -367,12 +320,64 @@ const resetPassword = async (req, res) => {
   }
 };
 
+const getAllUsers = async (req, res) => {
+  try {
+    // Consultar todos los usuarios en la base de datos MySQL
+    dbConnection.query("SELECT * FROM newschema.users", (error, result) => {
+      if (error) {
+        console.error("Error al obtener usuarios de la base de datos:", error);
+        return res
+          .status(500)
+          .json({ error: "Error al obtener usuarios de la base de datos" });
+      }
+
+      // Devolver los datos de los usuarios como respuesta
+      return res.status(200).json({ users: result });
+    });
+  } catch (error) {
+    console.error("Error al obtener usuarios:", error);
+    return res.status(500).json({ error: "Error al obtener usuarios" });
+  }
+};
+
+// Controlador para eliminar un usuario
+const deleteUser = (req, res) => {
+  const userId = req.params.userId; // Obtener el ID del usuario de los parámetros de la consulta
+
+  // Realizar la consulta para eliminar el usuario con el ID especificado
+  dbConnection.query(
+    "DELETE FROM users WHERE id = ?",
+    userId,
+    (error, result) => {
+      if (error) {
+        console.error("Error al eliminar usuario:", error);
+        return res.status(500).json({
+          error: "Error al eliminar usuario en la base de datos",
+        });
+      }
+
+      // Verificar si se eliminó algún usuario
+      if (result.affectedRows === 0) {
+        return res.status(404).json({
+          error: "Usuario no encontrado",
+        });
+      }
+
+      console.log("Usuario eliminado con éxito");
+      res.status(200).json({
+        message: "Usuario eliminado correctamente",
+      });
+    }
+  );
+};
+
 module.exports = {
   getToken,
   registerUser,
   loginUser,
-  confirmAccount,
   resendConfirmationEmail,
   recoverAccount,
   resetPassword,
+  getAllUsers,
+  deleteUser,
 };
