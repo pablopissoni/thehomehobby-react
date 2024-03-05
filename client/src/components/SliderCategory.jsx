@@ -4,7 +4,7 @@ import { SliderProducts } from "./SliderProducts";
 export const SliderCategory = ({ categories }) => {
   //* -- USE STATE --------
   const [productsByCateg, setProductsByCateg] = useState([]); // Get Product by Category
-
+  const [selectedCategory, setSelectedCategory] = useState(null)
   //* ----- GET Product by Category ----------
   const fetchProductsByCategory = async (prodCategoryId) => {
     try {
@@ -29,6 +29,13 @@ export const SliderCategory = ({ categories }) => {
   }
     , []); // eslint-disable-line react-hooks/exhaustive-deps
   //  ------ USE EFFECT ----------
+  
+  //*  ------ Handle Category ----------
+  const handleCategoryClick = (categoryId) => {
+    fetchProductsByCategory(categoryId); // Fetch products when category is clicked
+    setSelectedCategory(categoryId); // Update selected category
+  };
+  //   ------ Handle Category ----------
 
   console.log("🚀 productsByCateg:", productsByCateg);
 
@@ -40,9 +47,11 @@ export const SliderCategory = ({ categories }) => {
           categories?.map((category) => (
             category.status === 1 &&
            ( <button
-            className="border border-gray-100 px-2"
+            className={`border border-gray-100 font-bold px-2 hover:bg-slate-200 ${
+              selectedCategory === category.id ? "border-b-2 border-b-primary" : ""
+            }`}
               key={category.id}
-              onClick={() => fetchProductsByCategory(category.id)}
+              onClick={() => handleCategoryClick(category.id)}
             >
               {category?.contenido[0]?.nombre || category?.contenido[1]?.nombre}
             </button>)
