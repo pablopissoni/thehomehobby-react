@@ -1,36 +1,45 @@
-// validatorRegister.js
 export const validateRegistration = (userRegister) => {
   const regexEmail = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
+  const regexPhone = /^\+[1-9]\d{1,14}$/; // AWS format for phone numbers
   const errorsObj = {};
 
-  // Validacion Name
+  // Name validation
   if (userRegister.name === "") {
-    errorsObj.name = "El nombre es obligatorio";
+    errorsObj.name = "Name is required";
   }
 
-  // Validacion LastName
+  // Last name validation
   if (userRegister.lastName === "") {
-    errorsObj.lastName = "El apellido es obligatorio";
+    errorsObj.lastName = "Last name is required";
   }
 
-  // Validacion Email
-  if (userRegister.email === "") {
-    errorsObj.email = "El email es obligatorio";
+  // Phone validation
+  if (userRegister.phone === "") {
+    errorsObj.phone = "Phone number is required";
   } else {
-    if (!regexEmail.test(userRegister.email)) {
-      errorsObj.email = "Formato de email incorrecto";
+    if (!regexPhone.test(userRegister.phone)) {
+      errorsObj.phone = "Incorrect phone number format";
     }
   }
 
-  // Validacion Password
+  // Email validation
+  if (userRegister.email === "") {
+    errorsObj.email = "Email is required";
+  } else {
+    if (!regexEmail.test(userRegister.email)) {
+      errorsObj.email = "Incorrect email format";
+    }
+  }
+
+  // Password validation
   if (userRegister.password.length < 8) {
-    errorsObj.password = "La contraseña debe tener al menos 8 caracteres";
+    errorsObj.password = "Password must be at least 8 characters long";
   }
   if (userRegister.password !== userRegister.passwordConfirmation) {
-    errorsObj.passwordConfirmation = "La contraseña no coincide";
+    errorsObj.passwordConfirmation = "Passwords do not match";
   }
   if (userRegister.passwordConfirmation === "") {
-    errorsObj.passwordConfirmation = "Repita su contraseña";
+    errorsObj.passwordConfirmation = "Repeat your password";
   }
 
   return errorsObj;
