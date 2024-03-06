@@ -10,7 +10,12 @@ export const FormAddProd = ({ setCloseModal }) => {
   const [tags, setTags] = useState("");
   const [isEnglish, setIsEnglish] = useState(true);
   const [imagen, setImagen] = useState(null);
-  const [gallery, setGallery] = useState([]);
+  const [galeria, setGaleria] = useState([
+    { url: "" },
+    { url: "" },
+    { url: "" },
+  ]);
+  console.log("🚀 ~ FormAddProd ~ galeria:", galeria);
   // console.log("🚀 ~ FormAddProd ~ gallery:", gallery);
   console.log("🚀 ~ FormAddProd ~ imagen:", imagen);
   const [product, setProduct] = useState({
@@ -42,13 +47,13 @@ export const FormAddProd = ({ setCloseModal }) => {
     galeria: [
       //! test
       {
-        url: "https://tecnitium.com/wp-content/uploads/2022/05/testing-1.jpg",
+        url: "",
       },
       {
-        url: "https://tecnitium.com/wp-content/uploads/2022/05/testing-1.jpg",
+        url: "",
       },
       {
-        url: "https://tecnitium.com/wp-content/uploads/2022/05/testing-1.jpg",
+        url: "",
       },
     ],
     video: "", //! test
@@ -106,6 +111,21 @@ export const FormAddProd = ({ setCloseModal }) => {
       setProduct((prevent) => ({ ...prevent, imagen: file }));
     }
   };
+
+  const handleGaleriaChange = (e,index) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Aquí puedes realizar cualquier manipulación necesaria con la imagen seleccionada
+      // Por ejemplo, puedes mostrar una vista previa de la imagen antes de subirla al servidor
+
+      // Modificar la primera propiedad 'url' del objeto de la galería
+      // Clonar el estado actual de la galería
+      const copyGaleria = [...product.galeria];
+      copyGaleria[index].url = file;
+      setProduct((prevent)=>({...prevent, galeria: copyGaleria}));
+    }
+  };
+
   const handleVideoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -208,8 +228,13 @@ export const FormAddProd = ({ setCloseModal }) => {
         formData.append(`contenido[${index}][ficha]`, item.ficha);
       });
 
+      product.galeria.forEach((item, index) => {
+        formData.append(`galeria[${index}][url]`, item.url);
+      });
+
       // Tags como array
-      product.tags.forEach((tag) => { //! verificar porque objeto
+      product.tags.forEach((tag) => {
+        //! verificar porque objeto
         formData.append("tags[]", tag);
       });
       // const tagsArray = JSON.parse(product.tags);
@@ -230,7 +255,7 @@ export const FormAddProd = ({ setCloseModal }) => {
       formData.append("status", status);
       formData.append("envio_free", envio_free);
       formData.append("envio_rapido", envio_rapido);
-      // formData.append("envio_rapido", JSON.stringify(product.envio_rapido)); 
+      // formData.append("envio_rapido", JSON.stringify(product.envio_rapido));
       // formData.append("filtros", JSON.stringify(filtros));
 
       console.log("🚀 ~ FormAddProd ~ formData:", formData.keys("video"));
@@ -508,10 +533,27 @@ export const FormAddProd = ({ setCloseModal }) => {
                       </label>
                       <input
                         type="file"
-                        id="galleryInput"
+                        id="imagen"
+                        name="imagen"
                         accept="image/*"
-                        multiple
-                        onChange={handleGalleryChange}
+                        className="mt-2"
+                        onChange={(e)=> handleGaleriaChange(e,0)}
+                      />
+                      <input
+                        type="file"
+                        id="imagen"
+                        name="imagen"
+                        accept="image/*"
+                        className="mt-2"
+                        onChange={(e)=> handleGaleriaChange(e,1)}
+                      />
+                      <input
+                        type="file"
+                        id="imagen"
+                        name="imagen"
+                        accept="image/*"
+                        className="mt-2"
+                        onChange={(e)=> handleGaleriaChange(e,2)}
                       />
                     </div>
                     {/* <input
