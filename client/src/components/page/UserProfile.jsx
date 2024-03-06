@@ -1,7 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import LogoGrande from "../../assets/logo The Home Hobby.svg";
 import UserDefault from "../../assets/DefaultUser.jpg";
+
 export const UserProfile = () => {
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    // Realizar la solicitud GET para obtener los usuarios
+    axios
+      .get("http://localhost:3001/users/users")
+      .then((response) => {
+        const users = response.data.users;
+        if (users.length > 0) {
+          // Si hay usuarios, establecer los datos del primer usuario en el estado
+          setUserData(users[0]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+  }, []);
   return (
     <section>
       <div className="bg-gray-100">
@@ -14,7 +33,11 @@ export const UserProfile = () => {
                     src={UserDefault}
                     className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"
                   />
-                  <h1 className="text-xl font-bold">Pepito perez</h1>
+                  {userData && (
+                    <h1 className="text-xl font-bold">
+                      {userData.name} {userData.lastname}
+                    </h1>
+                  )}
 
                   <div className="mt-6 flex flex-wrap gap-4 justify-center">
                     <a
