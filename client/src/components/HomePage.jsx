@@ -169,7 +169,7 @@ export const HomePage = () => {
       </section>
       {/* Slider categorias */}
       <section>
-        <div className="container mx-auto my-5 px-2 sm:px-8">
+        <div className="container mx-auto my-10 px-2 sm:px-8">
           <div className=" mt-5 flex justify-center border-b-2 border-[rgba(119,119,119,.17)]">
             <h1 className="mb-[-2px] inline-block border-b-2 border-primary pb-3 text-2xl font-bold uppercase">
               Offers
@@ -179,7 +179,7 @@ export const HomePage = () => {
         </div>
       </section>
 
-      <section>
+      {/* <section>
         <div className="offers-section container mx-auto my-5 px-2 sm:px-8">
           <div className="liner-container mt-5 flex justify-center border-b-2 border-[rgba(119,119,119,.17)]">
             <h1 className="mb-[-2px] inline-block border-b-2 border-primary pb-3 text-2xl font-bold uppercase">
@@ -187,13 +187,13 @@ export const HomePage = () => {
             </h1>
           </div>
           <div className="swiper-container">
-            <div className="swiper swiper-cards group relative flex items-center py-5 swiper-initialized swiper-horizontal swiper-free-mode swiper-backface-hidden">
+            <div className="swiper swiper-cards group relative flex items-center py-5 swiper-initialized swiper-horizontal swiper-free-mode swiper-backface-hidden"> */}
               {/* <SliderProducts slidesToShow={4} /> */}
               {/* <SliderProducts products={TestProdObj} /> Productos test */}
-            </div>
+            {/* </div>
           </div>
         </div>
-      </section>
+      </section> */}
       {/* Sección de banners 2 */}
       <section>
         <div className="banners-section-2 container mx-auto my-5 px-2 sm:px-8">

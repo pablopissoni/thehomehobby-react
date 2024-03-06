@@ -38,7 +38,7 @@ export const FormAddProd = ({ setCloseModal }) => {
     sub_categoria_id: undefined,
     categoria_id: undefined, //obligatorio algun valor
     oferta_id: undefined,
-    imagen: "https://tecnitium.com/wp-content/uploads/2022/05/testing-1.jpg", //! test
+    imagen: "", //! test
     galeria: [
       //! test
       {
@@ -51,7 +51,7 @@ export const FormAddProd = ({ setCloseModal }) => {
         url: "https://tecnitium.com/wp-content/uploads/2022/05/testing-1.jpg",
       },
     ],
-    video: "https://player.vimeo.com/video/225519343?h=a9a924c301", //! test
+    video: "", //! test
     status: 1, //obligatorio 0/1
     envio_free: 0, //obligatorio 0/1
     envio_rapido: 0, //obligatorio 0/1
@@ -106,17 +106,16 @@ export const FormAddProd = ({ setCloseModal }) => {
       setProduct((prevent) => ({ ...prevent, imagen: file }));
     }
   };
-  // const handleImagenChange = (e) => {
-  //   //! Beta para carga de IMG
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => {
-  //       setImagen(reader.result);
-  //     };
-  //   }
-  // };
+  const handleVideoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Aquí puedes realizar cualquier manipulación necesaria con la imagen seleccionada
+      // Por ejemplo, puedes mostrar una vista previa de la imagen antes de subirla al servidor
+
+      // Actualiza el formData con la imagen seleccionada
+      setProduct((prevent) => ({ ...prevent, video: file }));
+    }
+  };
 
   const handleGalleryChange = (e) => {
     const files = e.target.files;
@@ -154,26 +153,119 @@ export const FormAddProd = ({ setCloseModal }) => {
   const handleSubmit = () => {
     event.preventDefault();
     alert("Test beta Nuevo producto");
-    // postProduct();
+
+    postProduct(
+      product.contenido, //array
+      product.precio_base,
+      product.nombre_es,
+      product.nombre_ingles,
+      product.tags, //array
+      product.marca_id,
+      product.sub_categoria_id,
+      product.categoria_id,
+      // product.oferta_id,
+      product.imagen, //file
+      //  product.galeria, //array file
+      product.video, //file
+      product.status,
+      product.envio_free,
+      product.envio_rapido
+      // product.filtros
+    );
     // alert("eyy mas despacio chiquitin");
   };
   // --- HANDLEs ---
 
   //* --- POST ---
-  const postProduct = async () => {
+  const postProduct = async (
+    contenido, //array
+    precio_base,
+    nombre_es,
+    nombre_ingles,
+    tags, //array
+    marca_id,
+    sub_categoria_id,
+    categoria_id,
+    // oferta_id,
+    imagen, //file
+    video, //file
+    galeria, //array file
+    status,
+    envio_free,
+    envio_rapido
+    // filtros //object
+  ) => {
     try {
+      console.log("PRODUCT >>> ", product);
+
+      const formData = new FormData();
+
+      product.contenido.forEach((item, index) => {
+        formData.append(`contenido[${index}][idioma]`, item.idioma);
+        formData.append(`contenido[${index}][nombre]`, item.nombre);
+        formData.append(`contenido[${index}][slug]`, item.slug);
+        formData.append(`contenido[${index}][descripcion]`, item.descripcion);
+        formData.append(`contenido[${index}][ficha]`, item.ficha);
+      });
+
+      // Tags como array
+      product.tags.forEach((tag) => { //! verificar porque objeto
+        formData.append("tags[]", tag);
+      });
+      // const tagsArray = JSON.parse(product.tags);
+      // formData.append("contenido", JSON.stringify(contenido));
+      formData.append("precio_base", precio_base);
+      formData.append("nombre_es", nombre_es);
+      formData.append("nombre_ingles", nombre_ingles);
+      // formData.append("tags", JSON.stringify(tags));
+      // formData.append("tags", JSON.stringify(tagsArray));
+      formData.append("marca_id", marca_id);
+      formData.append("sub_categoria_id", sub_categoria_id);
+      formData.append("categoria_id", categoria_id);
+      // formData.append("oferta_id", oferta_id);
+      // formData.append('size', size);
+      formData.append("imagen", imagen);
+      // formData.append("galeria", JSON.stringify(galeria));
+      formData.append("video", video);
+      formData.append("status", status);
+      formData.append("envio_free", envio_free);
+      formData.append("envio_rapido", envio_rapido);
+      // formData.append("envio_rapido", JSON.stringify(product.envio_rapido)); 
+      // formData.append("filtros", JSON.stringify(filtros));
+
+      console.log("🚀 ~ FormAddProd ~ formData:", formData.keys("video"));
+
       const isLocalhost = window.location.href.includes("localhost");
       const urlPostProduct = isLocalhost
         ? `http://localhost:3001/productos`
         : `https://thehomehobby-react.onrender.com/productos`;
 
-      const response = await axios.post(urlPostProduct, product);
-      console.log("🚀 ~ POST ~ response:", response.data);
+      const response = await axios.post(urlPostProduct, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("🚀 ~ POST ~ response >>> ", response.data);
       alert(JSON.stringify(response.data));
     } catch (error) {
-      console.log("ERROR POST: ", error);
+      console.error("Error creating product:", error.message);
     }
   };
+  // const postProduct = async () => {
+  //   try {
+  //     const isLocalhost = window.location.href.includes("localhost");
+  //     const urlPostProduct = isLocalhost
+  //       ? `http://localhost:3001/productos`
+  //       : `https://thehomehobby-react.onrender.com/productos`;
+
+  //     const response = await axios.post(urlPostProduct, product);
+  //     console.log("🚀 ~ POST ~ response:", response.data);
+  //     alert(JSON.stringify(response.data));
+  //   } catch (error) {
+  //     console.log("ERROR POST: ", error);
+  //   }
+  // };
   // --- POST ---
 
   //* --- REACT QUILL ---
@@ -434,14 +526,11 @@ export const FormAddProd = ({ setCloseModal }) => {
                       Video
                     </label>
                     <input
-                      className="w-full shadow-inner p-4 border-0"
-                      type="text"
-                      name="email"
-                      value={product.video}
-                      onChange={(e) =>
-                        setProduct({ ...product, video: e.target.value })
-                      }
-                      placeholder="beta"
+                      type="file"
+                      id="video"
+                      name="video"
+                      accept="video/*"
+                      onChange={handleVideoChange}
                     />
                   </div>
                 </div>
