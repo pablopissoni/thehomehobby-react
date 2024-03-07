@@ -22,7 +22,7 @@ export const AdminDashboard = () => {
     try {
       // peticion desde localhost o deploy
       const isLocalhost = window.location.href.includes("localhost");
-      const urlCategories = "https://thehomehobby-react.onrender.com/categories";
+      const urlCategories = isLocalhost? "http://localhost:3001/categories" : "https://thehomehobby-react.onrender.com/categories";
   
       const response = await axios.get(urlCategories);
       setCategories(response.data);
@@ -50,14 +50,14 @@ export const AdminDashboard = () => {
     try {
       // peticion desde localhost o deploy
       const isLocalhost = window.location.href.includes("localhost");
-      const urlSubCategories = isLocalhost? "http://localhost:3001/marcas" : "https://thehomehobby-react.onrender.com/marcas";
+      const urlMarcas = isLocalhost? "http://localhost:3001/marcas" : "https://thehomehobby-react.onrender.com/marcas";
       // const urlSubCategories = "https://thehomehobby-react.onrender.com/subcategories";
   
-      const response = await axios.get(urlSubCategories);
+      const response = await axios.get(urlMarcas);
       // console.log("🚀 ~ getSubCategories ~ response:", response)
       setMarcas(response.data);
     } catch (error) {
-      console.error("Error al obtener las SubCategories:", error);
+      console.error("Error al obtener las Marcas:", error);
     }
   }
 
@@ -65,14 +65,13 @@ export const AdminDashboard = () => {
     try {
       // peticion desde localhost o deploy
       const isLocalhost = window.location.href.includes("localhost");
-      const urlSubCategories = isLocalhost? "http://localhost:3001/ofertas" : "https://thehomehobby-react.onrender.com/ofertas";
-      // const urlSubCategories = "https://thehomehobby-react.onrender.com/subcategories";
+      const urlOfertas = isLocalhost? "http://localhost:3001/ofertas" : "https://thehomehobby-react.onrender.com/ofertas";
   
-      const response = await axios.get(urlSubCategories);
+      const response = await axios.get(urlOfertas);
       // console.log("🚀 ~ getSubCategories ~ response:", response)
       setOfertas(response.data);
     } catch (error) {
-      console.error("Error al obtener las SubCategories:", error);
+      console.error("Error al obtener las Ofertas:", error);
     }
   }
   //  ----------- GETs ------------
