@@ -188,12 +188,12 @@ export const AdminDashboard = () => {
           </nav>
 
           {/* Ítem de Cerrar Sesión */}
-          <a
+          {/* <a
             className="block text-gray-500 py-2.5 px-4 my-2 font-bold rounded transition duration-200 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-300 hover:text-white mt-auto"
             href="#"
           >
             <i className="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
-          </a>
+          </a> */}
 
           {/* Señalador de ubicación */}
           <div className="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>

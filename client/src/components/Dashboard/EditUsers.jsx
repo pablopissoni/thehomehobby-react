@@ -4,9 +4,33 @@ import axios from "axios";
 export const EditUsers = () => {
   //* ----- USE STATE -----
   const [users, setUsers] = useState([]);
+//   const [role, setRole] = useState("")
+
   console.log("🚀 ~ EditUsers ~ users:", users);
   // ----- USE STATE -----
 
+  //* ----------- PUT ------------
+    const handleRoleUser = async (id, userRole) => {
+        try{
+        const newRole = userRole === "user" ? "admin" : "user";
+
+        // peticion desde localhost o deploy
+        const isLocalhost = window.location.href.includes("localhost");
+        const urlCategories = isLocalhost
+          ? `http://localhost:3001/users/${id}`
+          : `https://thehomehobby-react.onrender.com/users/${id}`;
+
+        const response = await axios.put(urlCategories, { role: newRole });
+        console.log("🚀 ~ handleRoleUser ~ response: ", response);
+        getUsers();
+      } catch (error) {
+        console.error("Error al Editar el Rol del Usuario: ", error);
+      }
+    }
+
+    
+  // ----------- PUT ------------
+  
   //* ----------- GETs ------------
   async function getUsers() {
     try {
@@ -34,9 +58,7 @@ export const EditUsers = () => {
     <div>
       {/* Sección - Tabla de Productos */}
       <div className="mt-8 bg-white p-4 shadow rounded-lg">
-        <h2 className="text-gray-500 text-lg font-semibold ">
-          Usuarios
-        </h2>
+        <h2 className="text-gray-500 text-lg font-semibold ">Usuarios</h2>
         <div className="my-1"></div>
         {/* Espacio de separación */}
         {/* Línea con gradiente */}
@@ -61,11 +83,8 @@ export const EditUsers = () => {
               <th className="py-2 px-2 bg-grey-lightest text-left font-bold uppercase text-sm text-grey-light border-b border-gray-400">
                 Telefono
               </th>
-              <th className="py-2 px-2 bg-grey-lightest text-left font-bold uppercase text-sm text-grey-light border-b border-gray-400">
+              <th className="py-2 px-2 bg-grey-lightest  font-bold uppercase text-sm text-grey-light border-b text-center border-gray-400">
                 role
-              </th>
-              <th className="py-2 px-2 bg-grey-lightest text-left font-bold uppercase text-sm text-grey-light border-b border-gray-400">
-                *
               </th>
             </tr>
           </thead>
@@ -74,7 +93,7 @@ export const EditUsers = () => {
               users?.map((user, index) => (
                 <tr key={index} className="hover:bg-grey-lighter">
                   <td className="py-2 px-4 border-b border-grey-light">
-                    <i className="bi bi-person"></i>
+                    <i className="bi bi-person-fill"></i>
                   </td>
                   <td className="py-2 px-4 border-b border-grey-light">
                     # {user?.id}
@@ -91,12 +110,9 @@ export const EditUsers = () => {
                   <td className="py-2 px-4 border-b border-grey-light">
                     {user?.phone}
                   </td>
-                  <td className="py-2 px-4 border-b border-grey-light">
-                    {user?.role}
-                  </td>
-                  <td className="py-2 px-4 border-b border-grey-light transition-transform duration-300 hover:scale-125">
-                    <button>
-                      <i className="bi bi-pen hover:text-blue-500"></i>
+                  <td className="py-2 px-4 border-b border-grey-light transition-transform duration-300 hover:scale-110 hover:text-blue-500  hover:font-bold text-center">
+                    <button onClick={() => handleRoleUser(user.id, user.role)} className="bg-slate-200 px-2 rounded-lg">
+                      {user?.role}
                     </button>
                   </td>
                 </tr>
