@@ -1,26 +1,39 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react/no-unknown-property */
+import { useEffect, useState } from "react";
 import axios from "axios";
-import LogoGrande from "../../assets/logo The Home Hobby.svg";
 import UserDefault from "../../assets/DefaultUser.jpg";
 
 export const UserProfile = () => {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    // Realizar la solicitud GET para obtener los usuarios
-    axios
-      .get("http://localhost:3001/users/users")
-      .then((response) => {
-        const users = response.data.users;
-        if (users.length > 0) {
-          // Si hay usuarios, establecer los datos del primer usuario en el estado
-          setUserData(users[0]);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-      });
+    const fetchUserData = async () => {
+      const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        // Manejar el caso en que no se disponga de un token de acceso
+        return;
+      }
+
+      try {
+        const response = await axios.post(
+          "http://localhost:3001/users/get-token",
+          {}, // Enviar un cuerpo vacío, si es necesario
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setUserData(response.data.data);
+      } catch (error) {
+        // Manejar el error al obtener los datos del usuario
+        console.error("Error al obtener los datos del usuario:", error);
+      }
+    };
+
+    fetchUserData();
   }, []);
+
   return (
     <section>
       <div className="bg-gray-100">
@@ -31,60 +44,79 @@ export const UserProfile = () => {
                 <div className="flex flex-col items-center">
                   <img
                     src={UserDefault}
-                    className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"
+                    className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0" // Cambia 'class' a 'className'
+                    alt="User profile"
                   />
-                  {userData && (
-                    <h1 className="text-xl font-bold">
-                      {userData.name} {userData.lastname}
-                    </h1>
-                  )}
 
-                  <div className="mt-6 flex flex-wrap gap-4 justify-center">
-                    <a
-                      href="#"
-                      className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-                    >
-                      Edit password
-                    </a>
-                    <a
-                      href="#"
-                      className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-                    >
-                      Edit username
-                    </a>
+                  <div>
+                    <h2>User Profile</h2>
+                    <p>
+                      Name:{" "}
+                      {userData &&
+                        userData.UserAttributes &&
+                        userData.UserAttributes.find(
+                          (attr) => attr.Name === "name"
+                        ).Value}
+                    </p>
+                    <p>
+                      Last Name:{" "}
+                      {userData &&
+                        userData.UserAttributes &&
+                        userData.UserAttributes.find(
+                          (attr) => attr.Name === "family_name"
+                        ).Value}
+                    </p>
+                    <p>
+                      Email:{" "}
+                      {userData &&
+                        userData.UserAttributes &&
+                        userData.UserAttributes.find(
+                          (attr) => attr.Name === "email"
+                        ).Value}
+                    </p>
+                    <p>
+                      Phone Number:{" "}
+                      {userData &&
+                        userData.UserAttributes &&
+                        userData.UserAttributes.find(
+                          (attr) => attr.Name === "phone_number"
+                        ).Value}
+                    </p>
                   </div>
+                  <div className="mt-6 flex flex-wrap gap-4 justify-center"></div>
                 </div>
               </div>
             </div>
             <div className="col-span-4 sm:col-span-9">
               <div className="bg-white shadow rounded-lg p-6">
                 <h2 className="text-xl font-bold mb-4">purchase history</h2>
-                <div class="relative m-10 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                <div className="relative m-10 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
                   <a
-                    class="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl"
+                    className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl"
                     href="#"
                   >
                     <img
-                      class="object-cover"
+                      className="object-cover"
                       src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
                       alt="product image"
                     />
-                    <span class="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
+                    <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
                       39% OFF
                     </span>
                   </a>
-                  <div class="mt-4 px-5 pb-5">
+
+                  <div className="mt-4 px-5 pb-5">
                     <a href="#">
-                      <h5 class="text-xl tracking-tight text-slate-900">
+                      <h5 className="text-xl tracking-tight text-slate-900">
                         Nike Air MX Super 2500 - Red
                       </h5>
                     </a>
-                    <div class="mt-2 mb-5 flex items-center justify-between">
+                    <div className="mt-2 mb-5 flex items-center justify-between">
                       <p>
-                        <span class="text-3xl font-bold text-slate-900">
+                        <span className="text-3xl font-bold text-slate-900">
                           $449
                         </span>
-                        <span class="text-sm text-slate-900 line-through">
+                        <span className="text-sm text-slate-900 line-through">
                           $699
                         </span>
                       </p>
@@ -100,6 +132,7 @@ export const UserProfile = () => {
                         </svg>
                         <svg
                           aria-hidden="true"
+                          // eslint-disable-next-line react/no-unknown-property
                           class="h-5 w-5 text-yellow-300"
                           fill="currentColor"
                           viewBox="0 0 20 20"
@@ -145,15 +178,15 @@ export const UserProfile = () => {
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="mr-2 h-6 w-6"
+                        className="mr-2 h-6 w-6"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
-                        stroke-width="2"
+                        strokeWidth="2" // Cambia stroke-width a strokeWidth
                       >
                         <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeLinecap="round" // Cambia stroke-linecap a strokeLinecap
+                          strokeLinejoin="round" // Cambia stroke-linejoin a strokeLinejoin
                           d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                         />
                       </svg>
