@@ -544,6 +544,84 @@ const getAllCategories = (req, res, connection) => {
   });
 };
 
+// Lógica para obtener todas las sub-categorías
+const getAllSubCategories = (req, res, connection) => {
+  const query = "SELECT * FROM newschema.sub_categorias";
+
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.error("Error al realizar la consulta:", error);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+
+    // Formatear el contenido y los filtros para cada sub-categorías
+    const formattedResults = results.map((subCategorías) => ({
+      id: subCategorías.id,
+      image: subCategorías.image,
+      status: subCategorías.status,
+      categoria_id: subCategorías.categoria_id,
+      created_at: subCategorías.created_at,
+      updated_at: subCategorías.updated_at,
+      contenido: parseContent(subCategorías.contenido),
+    }));
+
+    res.json(formattedResults);
+  });
+};
+
+// Lógica para obtener todas las Marcas
+const getAllMarcas = (req, res, connection) => {
+  const query = "SELECT * FROM newschema.marcas";
+
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.error("Error al realizar la consulta:", error);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+
+    // Formatear el contenido y los filtros para cada marcas
+    const formattedResults = results.map((marcas) => ({
+      id: marcas.id,
+      nombre: marcas.nombre,
+      logo: marcas.logo,
+      url: marcas.url,
+      created_at: marcas.created_at,
+      updated_at: marcas.updated_at,
+      status: marcas.status,
+    }));
+
+    res.json(formattedResults);
+  });
+};
+
+// Lógica para obtener todas las ofertas
+const getAllOfertas = (req, res, connection) => {
+  const query = "SELECT * FROM newschema.ofertas";
+
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.error("Error al realizar la consulta:", error);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+
+    // Formatear el contenido y los filtros para cada marcas
+    const formattedResults = results.map((oferta) => ({
+      id: oferta.id,
+      nombre: oferta.nombre,
+      descuento: oferta.descuento,
+      tipo: oferta.tipo,
+      fecha_inicio: oferta.fecha_inicio,
+      fecha_fin: oferta.fecha_fin,
+      status: oferta.status,
+      created_at: oferta.created_at,
+      updated_at: oferta.updated_at,
+      activa: oferta.activa,
+    }));
+
+    res.json(formattedResults);
+  });
+};
+
 module.exports = {
   getAllProducts: getAllProducts,
   getProductById: getProductById,
@@ -551,4 +629,7 @@ module.exports = {
   deleteProduct: deleteProduct,
   updateProduct: updateProduct,
   getAllCategories: getAllCategories,
+  getAllSubCategories:getAllSubCategories,
+  getAllMarcas:getAllMarcas,
+  getAllOfertas:getAllOfertas,
 };

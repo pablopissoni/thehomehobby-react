@@ -34,9 +34,33 @@ router.get("/categories", (req, res, next) => {
   }
 });
 
+router.get("/subcategories", (req, res, next) => {
+  try {
+    productsController.getAllSubCategories(req, res, req.dbConnection);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/marcas", (req, res, next) => {
+  try {
+    productsController.getAllMarcas(req, res, req.dbConnection);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/ofertas", (req, res, next) => {
+  try {
+    productsController.getAllOfertas(req, res, req.dbConnection);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.put("/productos/:id", (req, res, next) => {
   try {
-    productsController.updateProduct(req, res, req.dbConnection);
+    productsController.getAllMarcas(req, res, req.dbConnection);
   } catch (error) {
     next(error);
   }
