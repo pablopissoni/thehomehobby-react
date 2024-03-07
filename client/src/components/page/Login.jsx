@@ -41,8 +41,9 @@ export const Login = () => {
       const response = await axios.post(urlLogin, loginData);
       console.log("Login Response:", response.data);
       if (response.status === 201) {
+        // Almacenar token de acceso en el almacenamiento local
+        localStorage.setItem("accessToken", response.data.accessToken);
         // Clear any previous error messages
-
         setErrorMessage("");
         // Redirect the user to the main page if authentication is successful
         window.location.href = url;
