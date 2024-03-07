@@ -1,4 +1,5 @@
-import React, { useState, Fragment } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, Fragment, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // --- imgages ---
 import Logo from "../assets/Logo miniatura.svg";
@@ -8,6 +9,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { ShoppingCart } from "./ShoppingCart";
 import { Wishlist } from "./Wishlist";
 import { NavBarMobile } from "./NavBarMobile";
+import axios from "axios";
 
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
@@ -29,6 +31,7 @@ export const NavBar = () => {
     { name: "Lamp Lighting" },
   ];
   const [selected, setSelected] = useState(people[0]);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
   // headless Categories
   const categoriesList = [{ name: "Categories" }, { name: "Categories" }];
@@ -68,6 +71,52 @@ export const NavBar = () => {
     } else {
       navigate(`products/${searchTerm}`);
     }
+  };
+
+  useEffect(() => {
+    const checkUserLoggedIn = async () => {
+      const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        setIsUserLoggedIn(false);
+        return;
+      }
+
+      try {
+        const response = await axios.post(
+          "http://localhost:3001/users/get-token",
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setIsUserLoggedIn(true);
+      } catch (error) {
+        console.error(
+          "Error al verificar el estado de inicio de sesión del usuario:",
+          error
+        );
+        setIsUserLoggedIn(false);
+      }
+    };
+
+    checkUserLoggedIn();
+  }, []);
+
+  useEffect(() => {
+    console.log("¿Usuario logeado?", isUserLoggedIn);
+  }, [isUserLoggedIn]);
+
+  // Función para manejar el cierre de sesión
+  const handleLogout = () => {
+    // Realiza cualquier lógica necesaria para cerrar sesión
+    // Por ejemplo, eliminar el token de acceso del almacenamiento local
+    localStorage.removeItem("accessToken");
+    // Actualiza el estado para indicar que el usuario ha cerrado sesión
+    setIsUserLoggedIn(false);
+    // Redirige al usuario a la página de inicio de sesión
+    navigate("/login");
   };
 
   // Headless
@@ -307,32 +356,49 @@ export const NavBar = () => {
               <div className="transition-all-300 invisible absolute top-full z-30 w-[120%] pt-[10px] opacity-0 group-hover:visible group-hover:opacity-100">
                 <div className="arrow relative">
                   <ul className="overflow-hidden rounded-md bg-white p-[6px] shadow-custom1">
-                    <li className="hover:font-semibold">
-                      <a
-                        href={urlLogin} //LocalHost y Url de produccion
-                        className="btn-open-modal"
-                        data-tab="0"
-                        data-target=".entry-modal"
-                      >
-                        <div className="pointer-events-none flex items-center gap-2 p-1">
-                          <i className="bi bi-box-arrow-in-right flex text-xl text-primary"></i>
-                          <span>Login</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li className="hover:font-semibold">
-                      <a
-                        href={urlRegister} //LocalHost y Url de produccion
-                        className="btn-open-modal"
-                        data-tab="1"
-                        data-target=".entry-modal"
-                      >
-                        <div className="pointer-events-none flex items-center gap-2 p-1">
-                          <i className="bi bi-person flex text-xl text-primary"></i>
-                          <span>Sign up</span>
-                        </div>
-                      </a>
-                    </li>
+                    {isUserLoggedIn ? (
+                      <li className="hover:font-semibold">
+                        {/* Utilizar la función handleLogout para manejar el cierre de sesión */}
+                        <button
+                          onClick={handleLogout}
+                          className="btn-open-modal"
+                        >
+                          <div className="pointer-events-none flex items-center gap-2 p-1">
+                            <i className="bi bi-box-arrow-right flex text-xl text-primary"></i>
+                            <span>Sign out</span>
+                          </div>
+                        </button>
+                      </li>
+                    ) : (
+                      <Fragment>
+                        <li className="hover:font-semibold">
+                          <a
+                            href={urlLogin} // LocalHost y URL de producción
+                            className="btn-open-modal"
+                            data-tab="0"
+                            data-target=".entry-modal"
+                          >
+                            <div className="pointer-events-none flex items-center gap-2 p-1">
+                              <i className="bi bi-box-arrow-in-right flex text-xl text-primary"></i>
+                              <span>Login</span>
+                            </div>
+                          </a>
+                        </li>
+                        <li className="hover:font-semibold">
+                          <a
+                            href={urlRegister} // LocalHost y URL de producción
+                            className="btn-open-modal"
+                            data-tab="1"
+                            data-target=".entry-modal"
+                          >
+                            <div className="pointer-events-none flex items-center gap-2 p-1">
+                              <i className="bi bi-person flex text-xl text-primary"></i>
+                              <span>Sign up</span>
+                            </div>
+                          </a>
+                        </li>
+                      </Fragment>
+                    )}
                   </ul>
                 </div>
               </div>
