@@ -340,6 +340,42 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+// Consultar todos los usuarios en la base de datos MySQL
+const getUsers = async (req, res) => {
+  try {
+    // Consultar todos los usuarios en la base de datos MySQL
+    dbConnection.query("SELECT * FROM newschema.users", (error, result) => {
+      if (error) {
+        console.error("Error al obtener usuarios de la base de datos:", error);
+        return res
+          .status(500)
+          .json({ error: "Error al obtener usuarios de la base de datos" });
+      }
+
+      // Formatear el contenido y los filtros para cada sub-categorías
+      const formattedResults = result.map((user) => ({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        email_verified_at: user.email_verified_at,
+        password: user.password,
+        remember_token: user.remember_token,
+        created_at: user.created_at,
+        updated_at: user.updated_at,
+        role: user.role,
+        lastname: user.lastname,
+        phone: user.phone,
+      }));
+
+      // Devolver los datos de los usuarios como respuesta
+      return res.status(200).json(formattedResults);
+    });
+  } catch (error) {
+    console.error("Error al obtener usuarios:", error);
+    return res.status(500).json({ error: "Error al obtener usuarios" });
+  }
+};
+
 const deleteUser = (req, res) => {
   const userId = req.params.userId; // Obtener el ID del usuario de los parámetros de la consulta
 
@@ -419,6 +455,13 @@ const editUser = async (req, res) => {
     const userId = req.params.userId;
     const { role } = req.body;
 
+    // Validar que el valor de role sea "admin" o "user"
+    if (role !== "admin" && role !== "user") {
+      return res.status(400).json({
+        error: "El valor de 'role' debe ser 'admin' o 'user'",
+      });
+    }
+
     dbConnection.query(
       "UPDATE users SET role = ? WHERE id = ?",
       [role, userId],
@@ -464,4 +507,5 @@ module.exports = {
   getAllUsers,
   deleteUser,
   editUser,
+  getUsers,
 };
