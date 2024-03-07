@@ -5,17 +5,22 @@ import "react-quill/dist/quill.snow.css";
 
 import axios from "axios";
 
-export const FormAddProd = ({ setCloseModal }) => {
+export const FormAddProd = ({
+  setCloseModal,
+  categories,
+  subCategories,
+  marcas,
+  ofertas,
+}) => {
+  console.log("🚀 ~ FormAddProd ~ ofertas:", ofertas);
+  console.log("🚀 ~ FormAddProd ~ marcas:", marcas);
+  console.log("🚀 ~ FormAddProd ~ subCategories:", subCategories);
+  console.log("🚀 ~ FormAddProd ~ categories:", categories);
   //* --- HOOKs ---
   const [tags, setTags] = useState("");
   const [isEnglish, setIsEnglish] = useState(true);
   const [imagen, setImagen] = useState(null);
-  const [galeria, setGaleria] = useState([
-    { url: "" },
-    { url: "" },
-    { url: "" },
-  ]);
-  console.log("🚀 ~ FormAddProd ~ galeria:", galeria);
+
   // console.log("🚀 ~ FormAddProd ~ gallery:", gallery);
   console.log("🚀 ~ FormAddProd ~ imagen:", imagen);
   const [product, setProduct] = useState({
@@ -112,7 +117,7 @@ export const FormAddProd = ({ setCloseModal }) => {
     }
   };
 
-  const handleGaleriaChange = (e,index) => {
+  const handleGaleriaChange = (e, index) => {
     const file = e.target.files[0];
     if (file) {
       // Aquí puedes realizar cualquier manipulación necesaria con la imagen seleccionada
@@ -122,7 +127,7 @@ export const FormAddProd = ({ setCloseModal }) => {
       // Clonar el estado actual de la galería
       const copyGaleria = [...product.galeria];
       copyGaleria[index].url = file;
-      setProduct((prevent)=>({...prevent, galeria: copyGaleria}));
+      setProduct((prevent) => ({ ...prevent, galeria: copyGaleria }));
     }
   };
 
@@ -137,38 +142,38 @@ export const FormAddProd = ({ setCloseModal }) => {
     }
   };
 
-  const handleGalleryChange = (e) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      const uploadedImages = [];
-      const uploadPromises = Array.from(files).map((file) => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => {
-            // Aquí tendrías la lógica para subir la imagen a AWS
-            // Supongamos que 'uploadImageToAWS' es una función que sube la imagen a AWS y devuelve su URL
-            // uploadImageToAWS(file).then((url) => {
-            //   uploadedImages.push({ url });
-            //   resolve();
-            // }).catch((error) => {
-            //   console.error("Error al subir imagen a AWS:", error);
-            //   reject(error);
-            // });
-          };
-        });
-      });
+  // const handleGalleryChange = (e) => {
+  //   const files = e.target.files;
+  //   if (files && files.length > 0) {
+  //     const uploadedImages = [];
+  //     const uploadPromises = Array.from(files).map((file) => {
+  //       return new Promise((resolve, reject) => {
+  //         const reader = new FileReader();
+  //         reader.readAsDataURL(file);
+  //         reader.onload = () => {
+  //           // Aquí tendrías la lógica para subir la imagen a AWS
+  //           // Supongamos que 'uploadImageToAWS' es una función que sube la imagen a AWS y devuelve su URL
+  //           // uploadImageToAWS(file).then((url) => {
+  //           //   uploadedImages.push({ url });
+  //           //   resolve();
+  //           // }).catch((error) => {
+  //           //   console.error("Error al subir imagen a AWS:", error);
+  //           //   reject(error);
+  //           // });
+  //         };
+  //       });
+  //     });
 
-      // Espera a que todas las promesas de carga de imágenes se completen
-      Promise.all(uploadPromises)
-        .then(() => {
-          setGallery([...gallery, ...uploadedImages]);
-        })
-        .catch((error) => {
-          console.error("Error al cargar imágenes de la galería:", error);
-        });
-    }
-  };
+  //     // Espera a que todas las promesas de carga de imágenes se completen
+  //     Promise.all(uploadPromises)
+  //       .then(() => {
+  //         setGallery([...gallery, ...uploadedImages]);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error al cargar imágenes de la galería:", error);
+  //       });
+  //   }
+  // };
 
   const handleSubmit = () => {
     event.preventDefault();
@@ -537,7 +542,7 @@ export const FormAddProd = ({ setCloseModal }) => {
                         name="imagen"
                         accept="image/*"
                         className="mt-2"
-                        onChange={(e)=> handleGaleriaChange(e,0)}
+                        onChange={(e) => handleGaleriaChange(e, 0)}
                       />
                       <input
                         type="file"
@@ -545,7 +550,7 @@ export const FormAddProd = ({ setCloseModal }) => {
                         name="imagen"
                         accept="image/*"
                         className="mt-2"
-                        onChange={(e)=> handleGaleriaChange(e,1)}
+                        onChange={(e) => handleGaleriaChange(e, 1)}
                       />
                       <input
                         type="file"
@@ -553,7 +558,7 @@ export const FormAddProd = ({ setCloseModal }) => {
                         name="imagen"
                         accept="image/*"
                         className="mt-2"
-                        onChange={(e)=> handleGaleriaChange(e,2)}
+                        onChange={(e) => handleGaleriaChange(e, 2)}
                       />
                     </div>
                     {/* <input
@@ -650,6 +655,7 @@ export const FormAddProd = ({ setCloseModal }) => {
                 <div className="md:flex-1 mt-2 mb:mt-0 md:px-3">
                   {/* MARCA y OFERTA */}
                   <div className="md:flex mb-4">
+                    {/* MARCA */}
                     <div className="md:flex-1 md:pr-3">
                       <label className="block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
                         Marca
@@ -666,15 +672,20 @@ export const FormAddProd = ({ setCloseModal }) => {
                           className="flex-1 shadow-inner p-4 border-0"
                         >
                           <option value="">Selecciona una opcion</option>
-                          <option value="1">Opción 1</option>
-                          <option value="2">Opción 2</option>
-                          <option value="3">Opción 3</option>
-                          <option value="4">Opción 4</option>
-                          <option value="5">Opción 5</option>
+                          {marcas &&
+                            marcas.map(
+                              (marca, index) =>
+                                marca.status === 1 && (
+                                  <option key={index} value={marca.id}>
+                                    {marca.nombre}
+                                  </option>
+                                )
+                            )}
                         </select>
                       </div>
                     </div>
 
+                    {/* OFERTA */}
                     <div className="md:flex-1 md:pl-3 mt-2 md:mt-0">
                       <label className="block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
                         Oferta
@@ -691,14 +702,19 @@ export const FormAddProd = ({ setCloseModal }) => {
                           className="flex-1 shadow-inner p-4 border-0"
                         >
                           <option value="">Selecciona una opcion</option>
-                          <option value="2">Opción 2</option>
-                          <option value="3">Opción 3</option>
+                          {ofertas &&
+                            ofertas.map((oferta, index) => (
+                              <option key={index} value={oferta.id}>
+                                % {oferta.descuento}
+                              </option>
+                            ))}
                         </select>
                       </div>
                     </div>
                   </div>
                   {/* CATEGORIA Y SUBCATEGORIA */}
                   <div className="md:flex mb-4">
+                    {/* CATEGORIA */}
                     <div className="md:flex-1 md:pr-3">
                       <label className="block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
                         Categoria
@@ -715,12 +731,17 @@ export const FormAddProd = ({ setCloseModal }) => {
                           className="flex-1 shadow-inner p-4 border-0"
                         >
                           <option value="">Selecciona una opcion</option>
-                          <option value="4">Opción 1</option>
-                          <option value="5">Opción 2</option>
-                          <option value="6">Opción 3</option>
+                          {categories && categories.map((category, index) => (
+                            <option key={index} value={category.id} className={`${(category.status === 0)? "bg-red-200" : ""}`}>{
+                              category?.contenido[0]?.nombre ||
+                              category?.contenido[1]?.nombre
+                            }</option>
+                          ))}
                         </select>
                       </div>
                     </div>
+
+                    {/* SUBCATEGORIA */}
                     <div className="md:flex-1 md:pl-3 mt-2 md:mt-0">
                       <label className="block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
                         Sub Categoria
@@ -737,9 +758,12 @@ export const FormAddProd = ({ setCloseModal }) => {
                           className="flex-1 shadow-inner p-4 border-0"
                         >
                           <option value="">Selecciona una opcion</option>
-                          <option value="4">Opción 1</option>
-                          <option value="5">Opción 2</option>
-                          <option value="6">Opción 3</option>
+                          {subCategories && subCategories.map((subCateg, index) => (
+                            <option key={index} value={subCateg.id} className={`${(subCateg.status === 0)? "bg-red-200" : ""}`}>{
+                              subCateg?.contenido[0]?.nombre ||
+                              subCateg?.contenido[1]?.nombre
+                            }</option>
+                          ))}
                         </select>
                       </div>
                     </div>

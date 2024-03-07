@@ -141,60 +141,171 @@ export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
     }
   };
 
-  const handleGalleryChange = (e) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      const uploadedImages = [];
-      const uploadPromises = Array.from(files).map((file) => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => {
-            // Aquí tendrías la lógica para subir la imagen a AWS
-            // Supongamos que 'uploadImageToAWS' es una función que sube la imagen a AWS y devuelve su URL
-            // uploadImageToAWS(file).then((url) => {
-            //   uploadedImages.push({ url });
-            //   resolve();
-            // }).catch((error) => {
-            //   console.error("Error al subir imagen a AWS:", error);
-            //   reject(error);
-            // });
-          };
-        });
-      });
+  // const handleGalleryChange = (e) => {
+  //   const files = e.target.files;
+  //   if (files && files.length > 0) {
+  //     const uploadedImages = [];
+  //     const uploadPromises = Array.from(files).map((file) => {
+  //       return new Promise((resolve, reject) => {
+  //         const reader = new FileReader();
+  //         reader.readAsDataURL(file);
+  //         reader.onload = () => {
+  //           // Aquí tendrías la lógica para subir la imagen a AWS
+  //           // Supongamos que 'uploadImageToAWS' es una función que sube la imagen a AWS y devuelve su URL
+  //           // uploadImageToAWS(file).then((url) => {
+  //           //   uploadedImages.push({ url });
+  //           //   resolve();
+  //           // }).catch((error) => {
+  //           //   console.error("Error al subir imagen a AWS:", error);
+  //           //   reject(error);
+  //           // });
+  //         };
+  //       });
+  //     });
 
-      // Espera a que todas las promesas de carga de imágenes se completen
-      Promise.all(uploadPromises)
-        .then(() => {
-          setGallery([...gallery, ...uploadedImages]);
-        })
-        .catch((error) => {
-          console.error("Error al cargar imágenes de la galería:", error);
-        });
+  //     // Espera a que todas las promesas de carga de imágenes se completen
+  //     Promise.all(uploadPromises)
+  //       .then(() => {
+  //         setGallery([...gallery, ...uploadedImages]);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error al cargar imágenes de la galería:", error);
+  //       });
+  //   }
+  // };
+
+  const handleGaleriaChange = (e,index) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Aquí puedes realizar cualquier manipulación necesaria con la imagen seleccionada
+      // Por ejemplo, puedes mostrar una vista previa de la imagen antes de subirla al servidor
+
+      // Modificar la primera propiedad 'url' del objeto de la galería
+      // Clonar el estado actual de la galería
+      const copyGaleria = [...product.galeria];
+      copyGaleria[index].url = file;
+      setProduct((prevent)=>({...prevent, galeria: copyGaleria}));
     }
   };
 
+  const handleVideoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Aquí puedes realizar cualquier manipulación necesaria con la imagen seleccionada
+      // Por ejemplo, puedes mostrar una vista previa de la imagen antes de subirla al servidor
+
+      // Actualiza el formData con la imagen seleccionada
+      setProduct((prevent) => ({ ...prevent, video: file }));
+    }
+  };
+
+  console.log("prodEdit >>> ", prodEdit.id)
+
   const handleSubmit = () => {
     event.preventDefault();
-    // prodEdit ? alert("Edito producto") : alert("Nuevo producto");
-    //  putProduct(prodEdit.id);
-    alert("Test button edit product");
+    alert("Test beta Nuevo producto");
+
+    putProduct(
+      product.contenido, //array
+      product.precio_base,
+      product.nombre_es,
+      product.nombre_ingles,
+      product.tags, //array
+      product.marca_id,
+      product.sub_categoria_id,
+      product.categoria_id,
+      // product.oferta_id,
+      product.imagen, //file
+      //  product.galeria, //array file
+      product.video, //file
+      product.status,
+      product.envio_free,
+      product.envio_rapido,
+      // product.filtros
+      prodEdit.id
+    );
+    // alert("eyy mas despacio chiquitin");
   };
   // --- HANDLEs ---
-  console.log("ID PROD >>> ", prodEdit.id);
-  //* --- PUT ---
-  const putProduct = async (id) => {
+  const putProduct = async (
+    contenido, //array
+    precio_base,
+    nombre_es,
+    nombre_ingles,
+    tags, //array
+    marca_id,
+    sub_categoria_id,
+    categoria_id,
+    // oferta_id,
+    imagen, //file
+    video, //file
+    galeria, //array file
+    status,
+    envio_free,
+    envio_rapido,
+    id
+    // filtros //object
+  ) => {
     try {
+      console.log("PRODUCT >>> ", product);
+
+      const formData = new FormData();
+
+      product.contenido.forEach((item, index) => {
+        formData.append(`contenido[${index}][idioma]`, item.idioma);
+        formData.append(`contenido[${index}][nombre]`, item.nombre);
+        formData.append(`contenido[${index}][slug]`, item.slug);
+        formData.append(`contenido[${index}][descripcion]`, item.descripcion);
+        formData.append(`contenido[${index}][ficha]`, item.ficha);
+      });
+
+      product.galeria.forEach((item, index) => {
+        formData.append(`galeria[${index}][url]`, item.url);
+      });
+
+      // Tags como array
+      product.tags.forEach((tag) => {
+        //! verificar porque objeto
+        formData.append("tags[]", tag);
+      });
+      // const tagsArray = JSON.parse(product.tags);
+      // formData.append("contenido", JSON.stringify(contenido));
+      formData.append("precio_base", precio_base);
+      formData.append("nombre_es", nombre_es);
+      formData.append("nombre_ingles", nombre_ingles);
+      // formData.append("tags", JSON.stringify(tags));
+      // formData.append("tags", JSON.stringify(tagsArray));
+      formData.append("marca_id", marca_id);
+      formData.append("sub_categoria_id", sub_categoria_id);
+      formData.append("categoria_id", categoria_id);
+      // formData.append("oferta_id", oferta_id);
+      // formData.append('size', size);
+      formData.append("imagen", imagen);
+      // formData.append("galeria", JSON.stringify(galeria));
+      formData.append("video", video);
+      formData.append("status", status);
+      formData.append("envio_free", envio_free);
+      formData.append("envio_rapido", envio_rapido);
+      // formData.append("envio_rapido", JSON.stringify(product.envio_rapido));
+      // formData.append("filtros", JSON.stringify(filtros));
+
+      console.log("🚀 ~ FormAddProd ~ formData:", formData.keys("video"));
+
       const isLocalhost = window.location.href.includes("localhost");
       const urlPutProduct = isLocalhost
         ? `http://localhost:3001/productos/${id}`
         : `https://thehomehobby-react.onrender.com/productos/${id}`;
 
-      const response = await axios.put(urlPutProduct, product);
-      console.log("🚀 ~ PUT ~ response:", response.data);
+      const response = await axios.put(urlPutProduct, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("🚀 ~ POST ~ response >>> ", response.data);
       alert(JSON.stringify(response.data));
     } catch (error) {
-      console.log("ERROR PUT: ", error);
+      console.error("Error creating product:", error.message);
     }
   };
   // --- PUT ---
@@ -445,26 +556,40 @@ export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
                       </label>
                       <input
                         type="file"
-                        id="galleryInput"
+                        id="imagen"
+                        name="imagen"
                         accept="image/*"
-                        multiple
-                        onChange={handleGalleryChange}
+                        className="mt-2"
+                        onChange={(e)=> handleGaleriaChange(e,0)}
+                      />
+                      <input
+                        type="file"
+                        id="imagen"
+                        name="imagen"
+                        accept="image/*"
+                        className="mt-2"
+                        onChange={(e)=> handleGaleriaChange(e,1)}
+                      />
+                      <input
+                        type="file"
+                        id="imagen"
+                        name="imagen"
+                        accept="image/*"
+                        className="mt-2"
+                        onChange={(e)=> handleGaleriaChange(e,2)}
                       />
                     </div>
                   </div>
                   <div className="mb-4 md:ml-4 md:w-3/4">
-                    <label className="block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
+                  <label className="block uppercase tracking-wide text-charcoal-darker text-xs font-bold">
                       Video
                     </label>
                     <input
-                      className="w-full shadow-inner p-4 border-0"
-                      type="text"
-                      name="email"
-                      value={product?.video}
-                      onChange={(e) =>
-                        setProduct({ ...product, video: e.target.value })
-                      }
-                      placeholder="beta"
+                      type="file"
+                      id="video"
+                      name="video"
+                      accept="video/*"
+                      onChange={handleVideoChange}
                     />
                   </div>
                 </div>

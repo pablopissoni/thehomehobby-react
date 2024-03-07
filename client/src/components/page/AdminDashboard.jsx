@@ -1,15 +1,90 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LogoMini from "../../assets/Logo miniatura.svg";
 import { FormAddProd } from "../Dashboard/FormAddProd";
 import { Link } from "react-router-dom";
 import { ProductsDashboard } from "../Dashboard/ProductsDashboard";
+import axios from "axios";
 
 export const AdminDashboard = () => {
   // Estado para controlar la visibilidad del menú lateral
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
   const [isOriginalOpen, setOriginalOpen] = useState(false);
   const [isFormAddProd, setIsFormAddProd] = useState(false); // Nuevo producto
-  const [isProducts, setIsProducts] = useState(false);       // Lista de productos y Edicion
+  const [isProducts, setIsProducts] = useState(false); // Lista de productos y Edicion
+  const [categories, setCategories] = useState([]); // Get Categories
+  const [subCategories, setSubCategories] = useState([]); // Get SubCategories
+  const [marcas, setMarcas] = useState([]); // Get Marcas
+  const [ofertas, setOfertas] = useState([]); // Get Marcas
+
+
+  //* ----------- GETs ------------
+  async function getCategories() {
+    try {
+      // peticion desde localhost o deploy
+      const isLocalhost = window.location.href.includes("localhost");
+      const urlCategories = "https://thehomehobby-react.onrender.com/categories";
+  
+      const response = await axios.get(urlCategories);
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Error al obtener las categorías:", error);
+    }
+  }
+
+  async function getSubCategories() {
+    try {
+      // peticion desde localhost o deploy
+      const isLocalhost = window.location.href.includes("localhost");
+      const urlSubCategories = isLocalhost? "http://localhost:3001/subcategories" : "https://thehomehobby-react.onrender.com/subcategories";
+      // const urlSubCategories = "https://thehomehobby-react.onrender.com/subcategories";
+  
+      const response = await axios.get(urlSubCategories);
+      // console.log("🚀 ~ getSubCategories ~ response:", response)
+      setSubCategories(response.data);
+    } catch (error) {
+      console.error("Error al obtener las SubCategories:", error);
+    }
+  }
+
+  async function getMarcas() {
+    try {
+      // peticion desde localhost o deploy
+      const isLocalhost = window.location.href.includes("localhost");
+      const urlSubCategories = isLocalhost? "http://localhost:3001/marcas" : "https://thehomehobby-react.onrender.com/marcas";
+      // const urlSubCategories = "https://thehomehobby-react.onrender.com/subcategories";
+  
+      const response = await axios.get(urlSubCategories);
+      // console.log("🚀 ~ getSubCategories ~ response:", response)
+      setMarcas(response.data);
+    } catch (error) {
+      console.error("Error al obtener las SubCategories:", error);
+    }
+  }
+
+  async function getOfertas() {
+    try {
+      // peticion desde localhost o deploy
+      const isLocalhost = window.location.href.includes("localhost");
+      const urlSubCategories = isLocalhost? "http://localhost:3001/ofertas" : "https://thehomehobby-react.onrender.com/ofertas";
+      // const urlSubCategories = "https://thehomehobby-react.onrender.com/subcategories";
+  
+      const response = await axios.get(urlSubCategories);
+      // console.log("🚀 ~ getSubCategories ~ response:", response)
+      setOfertas(response.data);
+    } catch (error) {
+      console.error("Error al obtener las SubCategories:", error);
+    }
+  }
+  //  ----------- GETs ------------
+
+  //* ------ USE EFFECT --------
+  useEffect(() => {
+    getCategories();
+    getSubCategories();
+    getMarcas();
+    getOfertas();
+  },[]);
+  //  ------ USE EFFECT --------
 
   // Función para alternar la visibilidad del menú lateral
   const toggleSideNav = () => {
@@ -100,9 +175,9 @@ export const AdminDashboard = () => {
         {/* Área de contenido principal */}
         <div className="flex-1 p-4 w-full md:w-1/2">
           {/* Agregar Producto */}
-          {isFormAddProd && <FormAddProd setCloseModal={setIsFormAddProd}/>}
+          {isFormAddProd && <FormAddProd setCloseModal={setIsFormAddProd} categories={categories} subCategories={subCategories} marcas={marcas} ofertas={ofertas}/>}
           {/* Buscar productos y editar */}
-          {isProducts && <ProductsDashboard setCloseModal={setIsFormAddProd}/>}
+          {isProducts && <ProductsDashboard setCloseModal={setIsFormAddProd} />}
           {/*//! Oculto   */}
           {isOriginalOpen && (
             <>

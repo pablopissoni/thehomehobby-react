@@ -54,23 +54,18 @@ export const HomePage = () => {
   // ----- GET Productos -------------
 
   //* ----- GET Categories -------------
-  function getCategories() {
-    // peticion desde localhost o deploy
-    const isLocalhost = window.location.href.includes("localhost");
-    const urlCategories = "https://thehomehobby-react.onrender.com/categories";
-
-    axios
-      .get(urlCategories)
-      .then((res) => {
-        // console.log("res.data: ",res.data);
-        setCategories(res.data);
-        // categories.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  async function getCategories() {
+    try {
+      // peticion desde localhost o deploy
+      const isLocalhost = window.location.href.includes("localhost");
+      const urlCategories = "https://thehomehobby-react.onrender.com/categories";
+  
+      const response = await axios.get(urlCategories);
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Error al obtener las categorías:", error);
+    }
   }
-  console.log("🚀 ~ .then ~ categories.data:", categories);
   // ----- GET Categories -------------
 
   //* ----- GET Product by Category ----------
