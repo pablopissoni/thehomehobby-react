@@ -4,6 +4,7 @@ import { FormAddProd } from "../Dashboard/FormAddProd";
 import { Link } from "react-router-dom";
 import { ProductsDashboard } from "../Dashboard/ProductsDashboard";
 import axios from "axios";
+import { EditUsers } from "../Dashboard/EditUsers";
 
 export const AdminDashboard = () => {
   // Estado para controlar la visibilidad del menú lateral
@@ -11,19 +12,21 @@ export const AdminDashboard = () => {
   const [isOriginalOpen, setOriginalOpen] = useState(false);
   const [isFormAddProd, setIsFormAddProd] = useState(false); // Nuevo producto
   const [isProducts, setIsProducts] = useState(false); // Lista de productos y Edicion
+  const [isEditUsers, setIsEditUsers] = useState(false); // Lista de Users y Edicion
   const [categories, setCategories] = useState([]); // Get Categories
   const [subCategories, setSubCategories] = useState([]); // Get SubCategories
   const [marcas, setMarcas] = useState([]); // Get Marcas
   const [ofertas, setOfertas] = useState([]); // Get Marcas
-
 
   //* ----------- GETs ------------
   async function getCategories() {
     try {
       // peticion desde localhost o deploy
       const isLocalhost = window.location.href.includes("localhost");
-      const urlCategories = isLocalhost? "http://localhost:3001/categories" : "https://thehomehobby-react.onrender.com/categories";
-  
+      const urlCategories = isLocalhost
+        ? "http://localhost:3001/categories"
+        : "https://thehomehobby-react.onrender.com/categories";
+
       const response = await axios.get(urlCategories);
       setCategories(response.data);
     } catch (error) {
@@ -35,9 +38,11 @@ export const AdminDashboard = () => {
     try {
       // peticion desde localhost o deploy
       const isLocalhost = window.location.href.includes("localhost");
-      const urlSubCategories = isLocalhost? "http://localhost:3001/subcategories" : "https://thehomehobby-react.onrender.com/subcategories";
+      const urlSubCategories = isLocalhost
+        ? "http://localhost:3001/subcategories"
+        : "https://thehomehobby-react.onrender.com/subcategories";
       // const urlSubCategories = "https://thehomehobby-react.onrender.com/subcategories";
-  
+
       const response = await axios.get(urlSubCategories);
       // console.log("🚀 ~ getSubCategories ~ response:", response)
       setSubCategories(response.data);
@@ -50,9 +55,11 @@ export const AdminDashboard = () => {
     try {
       // peticion desde localhost o deploy
       const isLocalhost = window.location.href.includes("localhost");
-      const urlMarcas = isLocalhost? "http://localhost:3001/marcas" : "https://thehomehobby-react.onrender.com/marcas";
+      const urlMarcas = isLocalhost
+        ? "http://localhost:3001/marcas"
+        : "https://thehomehobby-react.onrender.com/marcas";
       // const urlSubCategories = "https://thehomehobby-react.onrender.com/subcategories";
-  
+
       const response = await axios.get(urlMarcas);
       // console.log("🚀 ~ getSubCategories ~ response:", response)
       setMarcas(response.data);
@@ -65,8 +72,10 @@ export const AdminDashboard = () => {
     try {
       // peticion desde localhost o deploy
       const isLocalhost = window.location.href.includes("localhost");
-      const urlOfertas = isLocalhost? "http://localhost:3001/ofertas" : "https://thehomehobby-react.onrender.com/ofertas";
-  
+      const urlOfertas = isLocalhost
+        ? "http://localhost:3001/ofertas"
+        : "https://thehomehobby-react.onrender.com/ofertas";
+
       const response = await axios.get(urlOfertas);
       // console.log("🚀 ~ getSubCategories ~ response:", response)
       setOfertas(response.data);
@@ -82,7 +91,7 @@ export const AdminDashboard = () => {
     getSubCategories();
     getMarcas();
     getOfertas();
-  },[]);
+  }, []);
   //  ------ USE EFFECT --------
 
   // Función para alternar la visibilidad del menú lateral
@@ -95,6 +104,7 @@ export const AdminDashboard = () => {
     setOriginalOpen(false);
     setIsFormAddProd(false);
     setIsProducts(false);
+    setIsEditUsers(false);
     setOpen(true);
   };
 
@@ -132,21 +142,44 @@ export const AdminDashboard = () => {
         >
           <nav>
             <Link
-              className="block cursor-pointer text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white"
+              className={`block cursor-pointer text-gray-500 py-2.5 px-4 my-4 font-bold rounded  transition duration-200 ${
+                isFormAddProd
+                  ? "bg-gradient-to-r from-red-800 to-red-500 text-white"
+                  : ""
+              } hover:bg-gradient-to-r hover:from-red-500 hover:to-red-300 hover:text-white`}
               // href="#"
               onClick={() => toggleTitleOpen(setIsFormAddProd)}
             >
               <i className="fas fa-file-alt mr-2"></i>Agregar Producto
             </Link>
             <Link
-              className="block cursor-pointer text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white"
+              className={`block cursor-pointer text-gray-500 py-2.5 px-4 my-4 font-bold rounded  transition duration-200 ${
+                isProducts
+                  ? "bg-gradient-to-r from-red-800 to-red-500 text-white"
+                  : ""
+              } hover:bg-gradient-to-r hover:from-red-500 hover:to-red-300 hover:text-white`}
               // href="#"
               onClick={() => toggleTitleOpen(setIsProducts)}
             >
-              <i className="fas fa-file-alt mr-2"></i>Ver Producto / Editar
+              <i className="fas fa-file-alt mr-2"></i>Producto / Editar
             </Link>
             <Link
-              className="block cursor-pointer text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white"
+              className={`block cursor-pointer text-gray-500 py-2.5 px-4 my-4 font-bold rounded  transition duration-200 ${
+                isEditUsers
+                  ? "bg-gradient-to-r from-red-800 to-red-500 text-white"
+                  : ""
+              } hover:bg-gradient-to-r hover:from-red-500 hover:to-red-300 hover:text-white`}
+              // href="#"
+              onClick={() => toggleTitleOpen(setIsEditUsers)}
+            >
+              <i className="fas fa-file-alt mr-2"></i>Users / Editar
+            </Link>
+            <Link
+              className={`block cursor-pointer text-gray-500 py-2.5 px-4 my-4 font-bold rounded  transition duration-200 ${
+                isOriginalOpen
+                  ? "bg-gradient-to-r from-red-800 to-red-500 text-white"
+                  : ""
+              } hover:bg-gradient-to-r hover:from-red-500 hover:to-red-300 hover:text-white`}
               onClick={() => toggleTitleOpen(setOriginalOpen)}
               // href="#"
             >
@@ -155,28 +188,38 @@ export const AdminDashboard = () => {
           </nav>
 
           {/* Ítem de Cerrar Sesión */}
-          <a
-            className="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white mt-auto"
+          {/* <a
+            className="block text-gray-500 py-2.5 px-4 my-2 font-bold rounded transition duration-200 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-300 hover:text-white mt-auto"
             href="#"
           >
             <i className="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
-          </a>
+          </a> */}
 
           {/* Señalador de ubicación */}
           <div className="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
 
-          {/* Copyright al final de la navegación lateral */}
+          {/* Copyright al final de la navegación lateral
           <p className="mb-1 px-5 py-3 text-left text-xs text-cyan-500">
             Copyright WCSLAT@2023
-          </p>
+          </p> */}
         </div>
 
         {/* Área de contenido principal */}
         <div className="flex-1 p-4 w-full md:w-1/2">
           {/* Agregar Producto */}
-          {isFormAddProd && <FormAddProd setCloseModal={setIsFormAddProd} categories={categories} subCategories={subCategories} marcas={marcas} ofertas={ofertas}/>}
+          {isFormAddProd && (
+            <FormAddProd
+              setCloseModal={setIsFormAddProd}
+              categories={categories}
+              subCategories={subCategories}
+              marcas={marcas}
+              ofertas={ofertas}
+            />
+          )}
           {/* Buscar productos y editar */}
           {isProducts && <ProductsDashboard setCloseModal={setIsFormAddProd} />}
+          {/* Editar Usuarios */}
+          {isEditUsers && <EditUsers setCloseModal={setIsEditUsers} />}
           {/*//! Oculto   */}
           {isOriginalOpen && (
             <>
