@@ -82,4 +82,12 @@ router.get("/categories", (req, res, next) => {
   }
 });
 
+router.get("/categories/:id", (req, res, next) => {
+  try {
+    productsController.getCategoryWithSubcategories(req, res, req.dbConnection);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
