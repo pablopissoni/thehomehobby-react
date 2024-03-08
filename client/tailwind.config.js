@@ -7,6 +7,7 @@ export default {
         primary: "#00ADDB",
         secondary: "#9E0B0B",
         star: "#fccc00b3",
+        fondo: "#E3E6E6",
       },
       boxShadow: {
         custom1:

@@ -15,7 +15,9 @@ import sliderMobile3 from "../assets/slider-mobile3.png";
 // import sliderMobile3 from "../assets/slider-mobile3.png";
 import notebookBanner from "../assets/notebookBanner.jpg";
 import hogarBanner from "../assets/Hogar-Banner.jpg";
+import BoxE from "../assets/BoxE.jpg";
 import { SliderCategory } from "./SliderCategory";
+import { Link } from "react-router-dom";
 
 // import { useDispatch, useSelector } from 'react-redux';
 // import { fetchProducts } from '../actions/productActions';
@@ -54,18 +56,23 @@ export const HomePage = () => {
   // ----- GET Productos -------------
 
   //* ----- GET Categories -------------
-  async function getCategories() {
-    try {
-      // peticion desde localhost o deploy
-      const isLocalhost = window.location.href.includes("localhost");
-      const urlCategories = "https://thehomehobby-react.onrender.com/categories";
-  
-      const response = await axios.get(urlCategories);
-      setCategories(response.data);
-    } catch (error) {
-      console.error("Error al obtener las categorías:", error);
-    }
+  function getCategories() {
+    // peticion desde localhost o deploy
+    const isLocalhost = window.location.href.includes("localhost");
+    const urlCategories = "https://thehomehobby-react.onrender.com/categories";
+
+    axios
+      .get(urlCategories)
+      .then((res) => {
+        // console.log("res.data: ",res.data);
+        setCategories(res.data);
+        // categories.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
+  console.log("🚀 ~ .then ~ categories.data:", categories);
   // ----- GET Categories -------------
 
   //* ----- GET Product by Category ----------
@@ -92,8 +99,47 @@ export const HomePage = () => {
     getCategories();
   }, []);
   //* ----- USE EFFECT -------------
+
+  const Boxes = [
+    {
+      Title: "Deals in",
+      Description: "Shop now",
+      Link: "",
+      Img: "BoxE",
+    },
+    {
+      Title: "Home décor under $50",
+      Description: "See more",
+      Link: "",
+      Img: "",
+    },
+    {
+      Title: "Refresh your space",
+      Description: "Shop now",
+      Link: "",
+      Img: "",
+    },
+    {
+      Title: "Celebrate the women in your life",
+      Description: "Shop now",
+      Link: "",
+      Img: "",
+    },
+    {
+      Title: "Upgrade your office furniture",
+      Description: "See more",
+      Link: "",
+      Img: "",
+    },
+    {
+      Title: "International top sellers in Kitchen",
+      Description: "Shop now",
+      Link: "",
+      Img: "",
+    },
+  ];
   return (
-    <div>
+    <div className="bg-fondo">
       {/* <ProductList products={products} /> */}
       {/* Sección de banners */}
       <section className="banners-section container mx-auto my-5 px-2 sm:px-8">
@@ -107,7 +153,7 @@ export const HomePage = () => {
       <section>
         <div className="information-section container mx-auto my-5 px-2 sm:px-8">
           <div className="grid grid-cols-12 gap-5">
-            <div className="col-span-12 flex sm:col-span-6 lg:col-span-3">
+            <div className="col-span-12 flex sm:col-span-6 lg:col-span-3 transition-all duration-300 hover:-translate-y-1">
               <div className="transition-all-300 flex w-full items-center gap-4 rounded-lg bg-white p-5 hover:shadow-lg xs:pl-[20%] sm:pl-5">
                 <div className="rounded-full border-2">
                   <i className="bi bi-truck flex p-3 text-[40px] text-primary"></i>
@@ -120,7 +166,7 @@ export const HomePage = () => {
                 </div>
               </div>
             </div>
-            <div className="col-span-12 flex sm:col-span-6 lg:col-span-3">
+            <div className="col-span-12 flex sm:col-span-6 lg:col-span-3 transition-all duration-300 hover:-translate-y-1">
               <div className="transition-all-300 flex w-full items-center gap-4 rounded-lg bg-white p-5 hover:shadow-lg xs:pl-[20%] sm:pl-5">
                 <div className="rounded-full border-2">
                   <i className="bi bi-cash-coin flex p-3 text-[40px] text-primary"></i>
@@ -133,7 +179,7 @@ export const HomePage = () => {
                 </div>
               </div>
             </div>
-            <div className="col-span-12 flex sm:col-span-6 lg:col-span-3">
+            <div className="col-span-12 flex sm:col-span-6 lg:col-span-3 transition-all duration-300 hover:-translate-y-1">
               <div className="transition-all-300 flex w-full items-center gap-4 rounded-lg bg-white p-5 hover:shadow-lg xs:pl-[20%] sm:pl-5">
                 <div className="rounded-full border-2">
                   <i className="bi bi-shield-check flex p-3 text-[40px] text-primary"></i>
@@ -146,7 +192,7 @@ export const HomePage = () => {
                 </div>
               </div>
             </div>
-            <div className="col-span-12 flex sm:col-span-6 lg:col-span-3">
+            <div className="col-span-12 flex sm:col-span-6 lg:col-span-3 transition-all duration-300 hover:-translate-y-1">
               <div className="transition-all-300 flex w-full items-center gap-4 rounded-lg bg-white p-5 hover:shadow-lg xs:pl-[20%] sm:pl-5">
                 <div className="rounded-full border-2">
                   <i className="bi bi-headset flex p-3 text-[40px] text-primary"></i>
@@ -165,6 +211,29 @@ export const HomePage = () => {
       {/* Slider categorias */}
       <section>
         <div className="container mx-auto my-10 px-2 sm:px-8">
+          {" "}
+          <div class="-mx-4 flex flex-wrap p-8 ">
+            {Boxes.map((box, index) => (
+              <div class="w-full px-4 md:w-1/2 lg:w-1/3 ">
+                <div class="mb-9 rounded-xl py-8 px-7 shadow-md transition-all hover:shadow-lg sm:p-9 lg:px-6 xl:px-9  duration-300 hover:-translate-y-1 bg-white">
+                  <div>
+                    <h3 class="mb-4 text-xl font-bold text-black sm:text-2xl lg:text-xl xl:text-2xl">
+                      {box.Title}
+                    </h3>
+                    <img src={BoxE} />
+                    <Link>
+                      <p class="text-base font-medium text-body-color">
+                        {box.Description}
+                      </p>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="container mx-auto my-10 px-2 sm:px-8 bg-white">
           <div className=" mt-5 flex justify-center border-b-2 border-[rgba(119,119,119,.17)]">
             <h1 className="mb-[-2px] inline-block border-b-2 border-primary pb-3 text-2xl font-bold uppercase">
               Offers
@@ -183,9 +252,9 @@ export const HomePage = () => {
           </div>
           <div className="swiper-container">
             <div className="swiper swiper-cards group relative flex items-center py-5 swiper-initialized swiper-horizontal swiper-free-mode swiper-backface-hidden"> */}
-              {/* <SliderProducts slidesToShow={4} /> */}
-              {/* <SliderProducts products={TestProdObj} /> Productos test */}
-            {/* </div>
+      {/* <SliderProducts slidesToShow={4} /> */}
+      {/* <SliderProducts products={TestProdObj} /> Productos test */}
+      {/* </div>
           </div>
         </div>
       </section> */}

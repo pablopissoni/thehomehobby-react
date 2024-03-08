@@ -249,7 +249,7 @@ export const NavBar = () => {
                 />
 
                 <button className="btn-search px-3 text-red-600" type="submit">
-                  <i className="bi bi-search flex text-xl"></i>
+                  <i className="bi bi-search flex text-xl transition-all duration-300 hover:-translate-y-1"></i>
                 </button>
               </div>
             </form>
@@ -322,19 +322,16 @@ export const NavBar = () => {
             </div>
             <div className="group-items hidden items-center gap-5 text-white lg:flex">
               <button
-                className="relative"
+                className="relative transition-all duration-300 hover:-translate-y-1"
                 onClick={() => setShowWishlist(true)}
               >
                 <a className="btn-open-modal" data-target=".wishlist-modal">
                   <i className="bi bi-heart pointer-events-none flex translate-y-1 transform text-[32px] text-white"></i>
                 </a>
-                <span className="badge absolute top-0 right-[-6px] h-[15px] min-w-[15px] px-[2px]">
-                  0
-                </span>
               </button>
 
               <button
-                className="relative"
+                className="relative transition-all duration-300 hover:-translate-y-1"
                 onClick={() => setShowShoppingCart(true)}
               >
                 <a
@@ -343,15 +340,12 @@ export const NavBar = () => {
                 >
                   <i className="bi bi-cart2 pointer-events-none flex text-[35px] text-white"></i>
                 </a>
-                <span className="badge absolute top-0 right-[-6px] h-[15px] min-w-[15px] px-[2px]">
-                  0
-                </span>
               </button>
             </div>
             <div className="group relative hidden lg:flex">
               <div className="flex cursor-pointer select-none items-center gap-1">
                 <span className="font-semibold text-white">My account</span>
-                <i className="bi bi-caret-down-fill transition-all-300 flex rotate-0 text-sm text-white group-hover:rotate-180"></i>
+                <i className="bi bi-caret-up-fill transition-all-300 flex rotate-0 text-sm text-white group-hover:rotate-180 transition-all "></i>
               </div>
               <div className="transition-all-300 invisible absolute top-full z-30 w-[120%] pt-[10px] opacity-0 group-hover:visible group-hover:opacity-100">
                 <div className="arrow relative">
