@@ -519,7 +519,6 @@ const parseFilters = (filters) => {
   }
 };
 
-// Lógica para obtener todas las categorías
 const getAllCategories = (req, res, connection) => {
   const query = "SELECT * FROM newschema.categorias";
 
@@ -541,6 +540,58 @@ const getAllCategories = (req, res, connection) => {
     }));
 
     res.json(formattedResults);
+  });
+};
+
+const getCategoryWithSubcategories = (req, res, connection) => {
+  const categoryId = req.params.id;
+  const query = `
+    SELECT c.*, sc.id AS sub_categoria_id, sc.image AS sub_categoria_image, sc.status AS sub_categoria_status, sc.categoria_id, sc.created_at AS sub_categoria_created_at, sc.updated_at AS sub_categoria_updated_at, sc.contenido AS sub_categoria_contenido
+    FROM newschema.categorias c
+    LEFT JOIN newschema.sub_categorias sc ON c.id = sc.categoria_id
+    WHERE c.id = ?;
+  `;
+
+  connection.query(query, categoryId, (error, results) => {
+    if (error) {
+      console.error("Error al realizar la consulta:", error);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: "Categoría no encontrada" });
+    }
+
+    // Organizar los resultados en una estructura adecuada
+    const categoryWithSubcategories = {
+      category: {
+        id: results[0].id,
+        image: results[0].image,
+        status: results[0].status,
+        created_at: results[0].created_at,
+        updated_at: results[0].updated_at,
+        contenido: parseContent(results[0].contenido),
+        filtros: parseFilters(results[0].filtros),
+      },
+      subcategories: [],
+    };
+
+    // Recorrer los resultados para obtener las subcategorías
+    results.forEach((result) => {
+      if (result.sub_categoria_id) {
+        categoryWithSubcategories.subcategories.push({
+          id: result.sub_categoria_id,
+          image: result.sub_categoria_image,
+          status: result.sub_categoria_status,
+          categoria_id: result.categoria_id,
+          created_at: result.sub_categoria_created_at,
+          updated_at: result.sub_categoria_updated_at,
+          contenido: parseContent(result.sub_categoria_contenido),
+        });
+      }
+    });
+
+    res.json(categoryWithSubcategories);
   });
 };
 
@@ -629,7 +680,8 @@ module.exports = {
   deleteProduct: deleteProduct,
   updateProduct: updateProduct,
   getAllCategories: getAllCategories,
-  getAllSubCategories:getAllSubCategories,
-  getAllMarcas:getAllMarcas,
-  getAllOfertas:getAllOfertas,
+  getAllSubCategories: getAllSubCategories,
+  getCategoryWithSubcategories: getCategoryWithSubcategories,
+  getAllMarcas: getAllMarcas,
+  getAllOfertas: getAllOfertas,
 };
