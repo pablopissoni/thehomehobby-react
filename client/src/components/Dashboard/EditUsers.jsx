@@ -4,7 +4,6 @@ import axios from "axios";
 export const EditUsers = () => {
   //* ----- USE STATE -----
   const [users, setUsers] = useState([]);
-//   const [role, setRole] = useState("")
 
   console.log("🚀 ~ EditUsers ~ users:", users);
   // ----- USE STATE -----
