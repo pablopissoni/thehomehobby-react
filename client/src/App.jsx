@@ -17,12 +17,15 @@ import { UserProfile } from "./components/page/UserProfile";
 import { SearchProducts } from "./components/page/SearchProducts";
 import { Footer } from "./components/Footer";
 import { AdminDashboard } from "./components/page/AdminDashboard";
+import { SubCategories } from "./components/page/SubCatecories";
 
 const App = () => {
   // Obtengo las ubicaciones y guardo en una variable las que quiero ignorar después
   const { pathname } = useLocation();
   const ignorePaths = ["/login", "/register", "/password-reset"];
   const ignoreFooter = ["/adminDashboard"];
+
+  const isIgnoredFooter = ignoreFooter.includes(pathname);
   const isIgnored = ignorePaths.includes(pathname);
   //-------------------------------
 
@@ -43,9 +46,10 @@ const App = () => {
         <Route path="/Checkout" element={<Checkout />} />
         <Route path="/UserProfile" element={<UserProfile />} />
         <Route path="/adminDashboard" element={<AdminDashboard />} />
+        <Route path="/category/:id" element={<SubCategories />} />
         {/* <Route path="/detail/:id" element={<Login/>} /> */}
       </Routes>
-      {!ignoreFooter && <Footer />}
+      {!isIgnoredFooter && <Footer />}
     </div>
     // </Provider>
   );

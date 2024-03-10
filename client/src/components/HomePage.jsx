@@ -56,21 +56,18 @@ export const HomePage = () => {
   // ----- GET Productos -------------
 
   //* ----- GET Categories -------------
-  function getCategories() {
-    // peticion desde localhost o deploy
-    const isLocalhost = window.location.href.includes("localhost");
-    const urlCategories = "https://thehomehobby-react.onrender.com/categories";
+  async function getCategories() {
+    try {
+      // peticion desde localhost o deploy
+      const isLocalhost = window.location.href.includes("localhost");
+      const urlCategories =
+        "https://thehomehobby-react.onrender.com/categories";
 
-    axios
-      .get(urlCategories)
-      .then((res) => {
-        // console.log("res.data: ",res.data);
-        setCategories(res.data);
-        // categories.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      const response = await axios.get(urlCategories);
+      setCategories(response.data);
+    } catch (error) {
+      console.log(error);
+    }
   }
   console.log("🚀 ~ .then ~ categories.data:", categories);
   // ----- GET Categories -------------
@@ -138,6 +135,8 @@ export const HomePage = () => {
       Img: "",
     },
   ];
+
+  console.log("categories>> ", categories);
   return (
     <div className="bg-fondo">
       {/* <ProductList products={products} /> */}
@@ -345,18 +344,35 @@ export const HomePage = () => {
             )
         )} */}
       {/* Sección de categorías */}
-      {/* <section>
+      <section>
         <div className="categories-section container mx-auto my-5 px-2 sm:px-8">
           <div className="liner-container mb-5 flex justify-center border-b-2 border-[rgba(119,119,119,.17)]">
             <h1 className="mb-[-2px] inline-block border-b-2 border-primary pb-3 text-2xl font-bold uppercase">
-              Categories
+              Shop by Category
             </h1>
           </div>
           <div className="swiper-container col-span-12 overflow-hidden rounded-lg md:col-span-8">
-            <div className="swiper swiper-default group relative flex items-center py-5 swiper-initialized swiper-horizontal swiper-backface-hidden"></div>
+            <div className="grid lg:grid-cols-6 md:grid-cols-3 sm:grid-cols-2 gap-4 mb-10">
+              {categories &&
+                categories.map(
+                  (category, index) =>
+                    category.status == 1 && (
+                      <Link
+                      to={`/category/${category.id}`}
+                        key={index}
+                        className="bg-white p-4 max-w-60 border border-gray-300 hover:shadow-lg cursor-pointer hover:text-red-500 font-medium"
+                      >
+                        {category?.contenido[0]?.nombre ||
+                          category?.contenido[1]?.nombre}
+                      </Link>
+                    )
+                )}
+            </div>
+            {/* <div className="swiper swiper-default group relative flex items-center py-5 swiper-initialized swiper-horizontal swiper-backface-hidden border border-blue-300">
+            </div> */}
           </div>
         </div>
-      </section> */}
+      </section>
     </div>
   );
 };
