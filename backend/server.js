@@ -3,6 +3,7 @@ const cors = require("cors");
 const multer = require("multer");
 const router = require("./routes/productsRoutes");
 const usersRouter = require("./routes/usersRoutes");
+const cartsRouter = require("./routes/cartsRoutes");
 const dbConnection = require("./dbConfig");
 const fs = require("fs");
 
@@ -60,4 +61,4 @@ dbConnection.connect((error) => {
 
 app.use("/", router);
 app.use("/users", usersRouter);
-app.use("/carrito, cartsRouter");
+app.use("/carrito", cartsRouter);
