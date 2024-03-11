@@ -48,8 +48,38 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10); // 10 es el número de rondas de hashing
     // Definir el valor predeterminado para el campo role
     const defaultRole = "user";
-    const userId = uuidv4();
+    const generateUniqueID = () => {
+      const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let id = "";
+      for (let i = 0; i < 15; i++) {
+        id += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      return id;
+    };
 
+    let userId;
+    let isDuplicateID = true;
+
+    // Generar un ID único y asegurarse de que no esté duplicado en la base de datos
+    while (isDuplicateID) {
+      userId = generateUniqueID();
+      // Consultar la base de datos para verificar si el ID ya existe
+      const existingUser = await new Promise((resolve, reject) => {
+        dbConnection.query(
+          "SELECT id FROM users WHERE id = ?",
+          [userId],
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+      });
+
+      if (existingUser.length === 0) {
+        isDuplicateID = false;
+      }
+    }
     // Insertar usuario en la base de datos MySQL con contraseña encriptada
     const userData = {
       id: userId, // Utilizar el nuevo ID
