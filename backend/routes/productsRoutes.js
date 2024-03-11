@@ -10,6 +10,14 @@ router.get("/productos", (req, res, next) => {
   }
 });
 
+router.get("/prodbysubcategory", (req, res, next) => {
+  try {
+    productsController.getProdBySubCategoryPage(req, res, req.dbConnection);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/productos/:id", (req, res, next) => {
   try {
     productsController.getProductById(req, res, req.dbConnection);
@@ -42,6 +50,14 @@ router.get("/subcategories", (req, res, next) => {
   }
 });
 
+router.get("/subcategories/:id", (req, res, next) => {
+  try {
+    productsController.getProdBySubCategory(req, res, req.dbConnection);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/marcas", (req, res, next) => {
   try {
     productsController.getAllMarcas(req, res, req.dbConnection);
@@ -58,7 +74,7 @@ router.get("/ofertas", (req, res, next) => {
   }
 });
 
-router.put("/productos/:id", (req, res, next) => {
+router.put("/productos/:id", (req, res, next) => { //! getAllMarcas ?
   try {
     productsController.getAllMarcas(req, res, req.dbConnection);
   } catch (error) {

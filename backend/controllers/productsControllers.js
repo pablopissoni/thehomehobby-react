@@ -519,6 +519,124 @@ const parseFilters = (filters) => {
   }
 };
 
+// Lógica para obtener productos de una SubCategoría con paginado
+const getProdBySubCategoryPage = (req, res, connection) => {
+  const page = req.query.page || 1;
+  const pageSize = 30;
+  const offset = (page - 1) * pageSize;
+  const searchTerm = req.query.name || "";
+  const subCategoryFilter = req.query.subcategory || ""; // Nuevo filtro por categoría
+
+  let countQuery =
+    "SELECT COUNT(*) as total FROM productos WHERE sub_categoria_id = ?";
+  let countParams = [`${searchTerm}`];
+
+  if (subCategoryFilter) {
+    countQuery += " AND sub_categoria_id = ?";
+    countParams.push(subCategoryFilter);
+  }
+
+  connection.query(countQuery, countParams, (error, countResult) => {
+    if (error) {
+      console.error("Error al realizar la consulta:", error);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+
+    const total = countResult[0].total;
+    const totalPages = Math.ceil(total / pageSize);
+    const nextPage = page < totalPages ? parseInt(page) + 1 : null;
+    const previousPage = page > 1 ? parseInt(page) - 1 : null;
+
+    if (page < 1 || page > totalPages) {
+      return res.status(404).json({ error: "Página no encontrada" });
+    }
+
+    let query =
+      "SELECT * FROM productos WHERE sub_categoria_id = ?";
+    let queryParams = [`${searchTerm}`];
+
+    if (subCategoryFilter) {
+      query += " AND sub_categoria_id = ?";
+      queryParams.push(subCategoryFilter);
+    }
+
+    query += " LIMIT ? OFFSET ?";
+
+    connection.query(
+      query,
+      [...queryParams, pageSize, offset],
+      (error, results) => {
+        if (error) {
+          console.error("Error al realizar la consulta:", error);
+          return res.status(500).json({ error: "Error en el servidor" });
+        }
+
+        if (results.length === 0) {
+          return res.status(404).json({
+            error: "No se encontraron productos en esta página",
+          });
+        }
+        const formattedResults = results.map((product) => {
+          const formattedProduct = {
+            ...product,
+            contenido: parsers.parseContent(product.contenido),
+            tags: parsers.parseTags(product.tags),
+            imagen: formatURL(product.imagen),
+            galeria: JSON.parse(product.galeria).map((item) => ({
+              url: formatURL(item.url),
+            })),
+            video: formatURL(product.video),
+            filtros: parsers.parseFilters(product.filtros),
+          };
+
+          return formattedProduct;
+        });
+
+        const response = {
+          info: {
+            totalItems: total,
+            totalPages: totalPages,
+            currentPage: page,
+            nextPage: nextPage,
+            previousPage: previousPage,
+          },
+          data: formattedResults,
+        };
+
+        res.json(response);
+      }
+    );
+  });
+};
+
+// Lógica para obtener productos de una SubCategoría
+const getProdBySubCategory = (req, res, connection) => {
+  const productId = req.params.id;
+  const query = "SELECT * FROM productos WHERE sub_categoria_id = ?";
+  connection.query(query, [productId], (error, results) => {
+    if (error) {
+      console.error("Error al realizar la consulta:", error);
+      res.status(500).json({ error: "Error en el servidor" });
+    } else if (results.length === 0) {
+      return res.status(404).json({ error: "El producto no fue encontrado" });
+    }
+
+    // Formatear el contenido y los filtros para cada categoría
+    const formattedResults = results.map((category) => ({
+      id: category.id,
+      image: category.image,
+      status: category.status,
+      created_at: category.created_at,
+      updated_at: category.updated_at,
+      contenido: parseContent(category.contenido),
+      filtros: parseFilters(category.filtros),
+    }));
+
+    res.json(formattedResults);
+  });
+};
+
+// Lógica para obtener todas las categorías
 const getAllCategories = (req, res, connection) => {
   const query = "SELECT * FROM newschema.categorias";
 
@@ -684,4 +802,6 @@ module.exports = {
   getCategoryWithSubcategories: getCategoryWithSubcategories,
   getAllMarcas: getAllMarcas,
   getAllOfertas: getAllOfertas,
+  getProdBySubCategory:getProdBySubCategory,
+  getProdBySubCategoryPage:getProdBySubCategoryPage,
 };
