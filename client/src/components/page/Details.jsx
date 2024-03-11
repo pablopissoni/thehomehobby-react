@@ -55,6 +55,44 @@ export const Details = () => {
   // product?.contenido[0]?.ficha
   // ---- HOOKS ----
 
+  const [token, setToken] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        console.log(
+          "No se encontró un token de acceso en el almacenamiento local."
+        );
+        return;
+      }
+
+      try {
+        const response = await axios.post(
+          "http://localhost:3001/users/get-token",
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        // Extraer el email del usuario de la respuesta
+        const userEmail = response.data?.data?.UserAttributes.find(
+          (attr) => attr.Name === "email"
+        )?.Value;
+        console.log("Email del usuario logeado:", userEmail);
+        // Actualizar el estado con el email del usuario
+        setUserEmail(userEmail);
+      } catch (error) {
+        console.error("Error al obtener el token del servidor:", error);
+      }
+    };
+
+    fetchToken();
+  }, []);
+
   //* ----- GET Producto -------------
   async function getProductId() {
     try {
@@ -65,7 +103,9 @@ export const Details = () => {
 
       const response = await axios.get(urlDetailsId);
       setProduct(response.data[0]); // Solo el primer objeto encontrado
-      console.log("response.data[0]", response.data[0]);
+      {
+        /*console.log("response.data[0]", response.data[0]);*/
+      }
 
       // Ficha y Descripcion HTML en Español e Ingles
       //! la base de datos no respeta el orden de idioma
@@ -98,19 +138,21 @@ export const Details = () => {
   }, []);
   // -------- USE EFFECTS ------
 
-  console.log("🚀 valueHTML:>> ", valueHTML);
+  {
+    /*console.log("🚀 valueHTML:>> ", valueHTML); */
+  }
 
   //* ---- HANDLES ----
   const handleCommentClick = () => {
     setCommentModalIsOpen(true);
     setReviewModalIsOpen(false);
-    console.log("🚀 ~ Details ~ commentModalIsOpen:", commentModalIsOpen);
+    //console.log("🚀 ~ Details ~ commentModalIsOpen:", commentModalIsOpen);
   };
 
   const handleReviewClick = () => {
     setCommentModalIsOpen(false);
     setReviewModalIsOpen(true);
-    console.log("🚀 ~ Details ~ reviewModalIsOpen:", reviewModalIsOpen);
+    //console.log("🚀 ~ Details ~ reviewModalIsOpen:", reviewModalIsOpen);
   };
   //? test array img
   // const test_img = [test_product1, test_product2, test_product3];
@@ -118,7 +160,7 @@ export const Details = () => {
   // handleSubmit Form
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Submitted");
+    //console.log("Form Submitted");
   };
   // ---- HANDLES ----
 
@@ -159,9 +201,61 @@ export const Details = () => {
   // quill.root.innerHTML = product?.contenido[0]?.ficha; //! al agregar se rompe porque parece leerlo antes de cargar la peticion
   // ---- QUILL HTML ----
 
+  const addToCart = async () => {
+    try {
+      // Obtener el userId del usuario logeado
+      const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        console.log(
+          "No se encontró un token de acceso en el almacenamiento local."
+        );
+        return;
+      }
+
+      const response = await axios.post(
+        "http://localhost:3001/users/get-token",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      const userId = response.data?.data?.mysqlUsers[0]?.id;
+
+      // Si no se puede obtener el userId, mostrar un mensaje de error
+      if (!userId) {
+        console.error("No se pudo obtener el userId del usuario logeado.");
+        return;
+      }
+
+      // Enviar la solicitud al servidor
+      const responseCart = await axios.post(
+        "http://localhost:3001/carrito/carrito",
+        {
+          userId: userId,
+          productId: id,
+        }
+      );
+
+      // Mostrar mensaje en la consola indicando si el producto se agregó correctamente al carrito
+      console.log(
+        "Producto agregado al carrito exitosamente:",
+        responseCart.data
+      );
+    } catch (error) {
+      // Manejar cualquier error que ocurra durante la solicitud
+      console.error("Error al agregar el producto al carrito:", error);
+    }
+  };
+
   return (
     <div className="flex min-h-full flex-col bg-body font-poppins text-txt bg-gray-100">
       <div className="product-details container mx-auto my-5 px-2 sm:px-8">
+        {/* Mostrar el email del usuario logeado */}
+        <p>Email del usuario logeado: {userEmail}</p>
+
         <div className="grid grid-cols-12 gap-5 rounded-lg bg-white p-2 xs:p-8">
           {/* SWIPER */}
           <div className="col-span-12 h-auto md:col-span-6">
@@ -441,13 +535,15 @@ export const Details = () => {
                   <div className="flex gap-2">
                     <button
                       className="btn-effect transition-all-300 flex h-full w-full items-center justify-center gap-2 rounded-lg bg-primary p-2"
-                      type="submit"
+                      type="button"
+                      onClick={addToCart}
                     >
                       <i className="bi bi-cart-fill flex text-xl text-white"></i>
                       <span className="font-bold uppercase text-white">
                         Add to cart
                       </span>
                     </button>
+
                     <a
                       className="tippy tippy-wishlist btn-wishlist transition-all-300 flex min-h-[40px] min-w-[40px] cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary p-2 hover:bg-primary-hover"
                       // href="javascript:void(0)"
