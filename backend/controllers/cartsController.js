@@ -1,19 +1,35 @@
 const addToCart = (req, res, connection) => {
   const { userId, productId } = req.body;
 
-  // Generar un ID único de 12 caracteres aleatorios
-  const cartId = generateUniqueId();
-
-  // Realizar la inserción en la base de datos
-  const query = "INSERT INTO carrito (id, userId, productId) VALUES (?, ?, ?)";
-  connection.query(query, [cartId, userId, productId], (error, result) => {
+  // Verificar si el userId existe en la tabla de usuarios
+  const userQuery = "SELECT * FROM users WHERE id = ?";
+  connection.query(userQuery, [userId], (error, userResult) => {
     if (error) {
-      console.error("Error al insertar en la base de datos:", error);
+      console.error("Error al verificar el usuario:", error);
       return res.status(500).json({ error: "Error en el servidor" });
     }
-    res
-      .status(201)
-      .json({ id: cartId, message: "Producto agregado al carrito con éxito" });
+
+    // Si no se encontró ningún usuario con el userId proporcionado, devolver un error
+    if (userResult.length === 0) {
+      return res.status(404).json({ error: "El usuario no existe" });
+    }
+
+    // Generar un ID único de 12 caracteres aleatorios
+    const cartId = generateUniqueId();
+
+    // Realizar la inserción en la base de datos
+    const query =
+      "INSERT INTO carrito (id, userId, productId) VALUES (?, ?, ?)";
+    connection.query(query, [cartId, userId, productId], (error, result) => {
+      if (error) {
+        console.error("Error al insertar en la base de datos:", error);
+        return res.status(500).json({ error: "Error en el servidor" });
+      }
+      res.status(201).json({
+        id: cartId,
+        message: "Producto agregado al carrito con éxito",
+      });
+    });
   });
 };
 
