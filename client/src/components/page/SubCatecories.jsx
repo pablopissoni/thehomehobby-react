@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import demoPublicidad from "../../assets/pub_demo001Desktop_1420x150.png";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 
 export const SubCategories = () => {
@@ -112,7 +112,8 @@ export const SubCategories = () => {
           <div className="grid xl:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-2 mb-10 ml-4 ">
             {subCategory &&
               subCategory.map((sub) => (
-                <div
+                <Link
+                to={`/prodbycategory/${sub.id}`}
                   key={sub.id}
                   className="border p-4 cursor-pointer hover:shadow-xl"
                 >
@@ -124,7 +125,7 @@ export const SubCategories = () => {
                   <h1>
                     {sub?.contenido[0]?.nombre || sub?.contenido[1]?.nombre}
                   </h1>
-                </div>
+                </Link>
               ))}
           </div>
 

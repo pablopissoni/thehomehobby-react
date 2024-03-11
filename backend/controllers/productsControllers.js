@@ -524,7 +524,7 @@ const getProdBySubCategoryPage = (req, res, connection) => {
   const page = req.query.page || 1;
   const pageSize = 30;
   const offset = (page - 1) * pageSize;
-  const searchTerm = req.query.name || "";
+  const searchTerm = req.query.id || "";
   const subCategoryFilter = req.query.subcategory || ""; // Nuevo filtro por categoría
 
   let countQuery =

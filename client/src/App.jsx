@@ -18,6 +18,7 @@ import { SearchProducts } from "./components/page/SearchProducts";
 import { Footer } from "./components/Footer";
 import { AdminDashboard } from "./components/page/AdminDashboard";
 import { SubCategories } from "./components/page/SubCatecories";
+import { ProdByCards } from "./components/page/ProdByCards";
 
 const App = () => {
   // Obtengo las ubicaciones y guardo en una variable las que quiero ignorar después
@@ -47,6 +48,7 @@ const App = () => {
         <Route path="/UserProfile" element={<UserProfile />} />
         <Route path="/adminDashboard" element={<AdminDashboard />} />
         <Route path="/category/:id" element={<SubCategories />} />
+        <Route path="/prodbycategory/:id" element={<ProdByCards />} />
         {/* <Route path="/detail/:id" element={<Login/>} /> */}
       </Routes>
       {!isIgnoredFooter && <Footer />}
