@@ -31,8 +31,29 @@ async function getToken(req, res) {
     const params = {
       AccessToken: token,
     };
-    const data = await cognitoIdentityServiceProvider.getUser(params).promise();
-    res.status(200).json({ data });
+    const cognitoUserData = await cognitoIdentityServiceProvider
+      .getUser(params)
+      .promise();
+    const userEmail = cognitoUserData.UserAttributes.find(
+      (attr) => attr.Name === "email"
+    )?.Value;
+
+    // Obtener usuarios de MySQL que coinciden con el correo electrónico del usuario de Cognito
+    dbConnection.query(
+      "SELECT * FROM newschema.users WHERE email = ?",
+      [userEmail],
+      async (error, results, fields) => {
+        if (error) {
+          throw error;
+        }
+
+        // Agregar los usuarios de MySQL que coinciden con el correo electrónico del usuario de Cognito
+        cognitoUserData.mysqlUsers = results;
+
+        // Enviar la respuesta con los datos combinados
+        res.status(200).json({ data: cognitoUserData });
+      }
+    );
   } catch (error) {
     res.status(401).json({
       error: "Error al verificar y decodificar el token JWT: " + error.message,
