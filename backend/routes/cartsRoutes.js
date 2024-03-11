@@ -4,7 +4,7 @@ const cartController = require("../controllers/cartsController");
 
 router.post("/carrito", (req, res, next) => {
   try {
-    productsController.addToCart(req, res, req.dbConnection);
+    cartController.addToCart(req, res, req.dbConnection);
   } catch (error) {
     next(error);
   }
