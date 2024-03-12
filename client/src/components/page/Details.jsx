@@ -244,6 +244,9 @@ export const Details = () => {
         "Producto agregado al carrito exitosamente:",
         responseCart.data
       );
+
+      // Mostrar un alert informando al usuario que el producto se agregó al carrito exitosamente
+      alert("¡El producto se ha agregado al carrito exitosamente!");
     } catch (error) {
       // Manejar cualquier error que ocurra durante la solicitud
       console.error("Error al agregar el producto al carrito:", error);
