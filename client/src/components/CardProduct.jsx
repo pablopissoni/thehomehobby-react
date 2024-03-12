@@ -3,6 +3,7 @@ import sliderDesktop1 from "../assets/test_product2.png";
 import { Link } from "react-router-dom";
 import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css"; // optional for styling
+import { frontUrl } from "../utils/config";
 
 export const CardProduct = ({
   id,
@@ -15,6 +16,9 @@ export const CardProduct = ({
   price,
   priceOff,
 }) => {
+  // URL deploy o localhost
+  const urlDetail = `${frontUrl}/details${id}`
+
   return (
     <div className="card-container  my-8  transition-all-300 translateY-2 relative flex h-[500px] flex-col overflow-hidden rounded-lg bg-white p-5 shadow-md hover:z-[2] hover:shadow-xl">
       <div className="absolute top-[10px] right-[10px]">
@@ -94,7 +98,7 @@ export const CardProduct = ({
       <div className="mt-auto">
         <Link
           className="btn-effect transition-all-300 flex w-full items-center justify-center rounded-lg bg-primary p-2"
-          to={`http://localhost:5173/details/${id}`}
+          to={urlDetail}
         >
           <span className="font-bold uppercase text-white">View details</span>
         </Link>

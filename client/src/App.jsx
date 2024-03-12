@@ -17,7 +17,7 @@ import { UserProfile } from "./components/page/UserProfile";
 import { SearchProducts } from "./components/page/SearchProducts";
 import { Footer } from "./components/Footer";
 import { AdminDashboard } from "./components/page/AdminDashboard";
-import { SubCategories } from "./components/page/SubCatecories";
+import { SubCategories } from "./components/page/SubCategories";
 import { ProdByCards } from "./components/page/ProdByCards";
 
 const App = () => {

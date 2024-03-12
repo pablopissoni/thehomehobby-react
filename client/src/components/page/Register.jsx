@@ -4,21 +4,12 @@ import axios from "axios";
 import logoHomeHobby from "../../assets/logo The Home Hobby.svg";
 import { Link } from "react-router-dom";
 import { validateRegistration } from "../../utils/validationRegister";
+import { apiUrl } from "../../utils/config";
 
 export const Register = () => {
-  // Direcciones URL
-  const isLocalhost = window.location.href.includes("localhost");
-  const urlHome = isLocalhost
-    ? "http://localhost:5173/"
-    : "https://thehomehobby.com";
-
-  const urlLogin = isLocalhost
-    ? "http://localhost:5173/login"
-    : "https://thehomehobby.com/login";
-
-  const urlUserRegister = isLocalhost
-    ? "http://localhost:3001/users/register"
-    : "https://thehomehobby-react.onrender.com/users/register";
+  // Direcciones Deploy o Local
+  const urlHome = apiUrl
+  const urlLogin = `${apiUrl}/login`
 
   // Hooks de estado
   const [errors, setErrors] = useState({});
@@ -65,7 +56,7 @@ export const Register = () => {
     }
 
     try {
-      const response = await axios.post(urlUserRegister, userRegister);
+      const response = await axios.post(`${apiUrl}/users/register`, userRegister);
       console.log("Server response:", response.data);
       setRegistrationError("");
       setUserRegister({

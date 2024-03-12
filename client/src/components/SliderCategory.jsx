@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { SliderProducts } from "./SliderProducts";
+import { apiUrl } from "../utils/config";
 
 export const SliderCategory = ({ categories }) => {
   //* -- USE STATE --------
   const [productsByCateg, setProductsByCateg] = useState([]); // Get Product by Category
   const [selectedCategory, setSelectedCategory] = useState(null);
+  
   //* ----- GET Product by Category ----------
   const fetchProductsByCategory = async (prodCategoryId) => {
     try {
       const response = await fetch(
-        `https://thehomehobby-react.onrender.com/productos?category=${prodCategoryId}`
+        `${apiUrl}/productos?category=${prodCategoryId}`
       );
       if (response.ok) {
         const data = await response.json();

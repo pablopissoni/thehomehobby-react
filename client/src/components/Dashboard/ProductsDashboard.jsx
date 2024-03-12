@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { FormEdirProd } from "./FormEdirProd";
+import { apiUrl } from "../../utils/config";
 
 export const ProductsDashboard = () => {
   //* --- HOOKS ---
@@ -21,14 +22,11 @@ export const ProductsDashboard = () => {
 
   //* ---- Get Products by search ----
   async function getProducts(name, page = 1) {
-    const isLocal = window.location.href.includes("localhost");
-    const urlGetProductsId = isLocal
-      ? `http://localhost:3001/productos?name=${name}&page=${page}`
-      : `https://thehomehobby-react.onrender.com/productos?name=${name}&page=${page}`;
     try {
-      const response = await axios(urlGetProductsId);
+      const response = await axios(`${apiUrl}/productos?name=${name}&page=${page}`);
       setProducSearchs(response.data.data);
       setPaginationData(response.data.info);
+      
     } catch (error) {
       setProducSearchs({ message: "no products found" });
       console.error("Error en getProduct ID >>> ", error);

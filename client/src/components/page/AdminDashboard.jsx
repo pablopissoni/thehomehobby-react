@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { ProductsDashboard } from "../Dashboard/ProductsDashboard";
 import axios from "axios";
 import { EditUsers } from "../Dashboard/EditUsers";
+import { apiUrl } from "../../utils/config";
 
 export const AdminDashboard = () => {
   // Estado para controlar la visibilidad del menú lateral
@@ -21,13 +22,8 @@ export const AdminDashboard = () => {
   //* ----------- GETs ------------
   async function getCategories() {
     try {
-      // peticion desde localhost o deploy
-      const isLocalhost = window.location.href.includes("localhost");
-      const urlCategories = isLocalhost
-        ? "http://localhost:3001/categories"
-        : "https://thehomehobby-react.onrender.com/categories";
 
-      const response = await axios.get(urlCategories);
+      const response = await axios.get(`${apiUrl}/categories`);
       setCategories(response.data);
     } catch (error) {
       console.error("Error al obtener las categorías:", error);
@@ -36,14 +32,8 @@ export const AdminDashboard = () => {
 
   async function getSubCategories() {
     try {
-      // peticion desde localhost o deploy
-      const isLocalhost = window.location.href.includes("localhost");
-      const urlSubCategories = isLocalhost
-        ? "http://localhost:3001/subcategories"
-        : "https://thehomehobby-react.onrender.com/subcategories";
-      // const urlSubCategories = "https://thehomehobby-react.onrender.com/subcategories";
 
-      const response = await axios.get(urlSubCategories);
+      const response = await axios.get(`${apiUrl}/subcategories`);
       // console.log("🚀 ~ getSubCategories ~ response:", response)
       setSubCategories(response.data);
     } catch (error) {
@@ -53,14 +43,8 @@ export const AdminDashboard = () => {
 
   async function getMarcas() {
     try {
-      // peticion desde localhost o deploy
-      const isLocalhost = window.location.href.includes("localhost");
-      const urlMarcas = isLocalhost
-        ? "http://localhost:3001/marcas"
-        : "https://thehomehobby-react.onrender.com/marcas";
-      // const urlSubCategories = "https://thehomehobby-react.onrender.com/subcategories";
 
-      const response = await axios.get(urlMarcas);
+      const response = await axios.get(`${apiUrl}/marcas`);
       // console.log("🚀 ~ getSubCategories ~ response:", response)
       setMarcas(response.data);
     } catch (error) {
@@ -70,13 +54,8 @@ export const AdminDashboard = () => {
 
   async function getOfertas() {
     try {
-      // peticion desde localhost o deploy
-      const isLocalhost = window.location.href.includes("localhost");
-      const urlOfertas = isLocalhost
-        ? "http://localhost:3001/ofertas"
-        : "https://thehomehobby-react.onrender.com/ofertas";
 
-      const response = await axios.get(urlOfertas);
+      const response = await axios.get(`${apiUrl}/ofertas`);
       // console.log("🚀 ~ getSubCategories ~ response:", response)
       setOfertas(response.data);
     } catch (error) {

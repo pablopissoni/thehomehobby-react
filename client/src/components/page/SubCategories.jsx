@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import demoPublicidad from "../../assets/pub_demo001Desktop_1420x150.png";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import { apiUrl } from "../../utils/config";
 
 export const SubCategories = () => {
   //* ------- HOOKs ------------
@@ -25,13 +26,8 @@ export const SubCategories = () => {
   //* ----- GET SubCategory by ID Category -------
   async function fetchProductsByCategory(id) {
     try {
-      // peticion desde localhost o deploy
-      const isLocalhost = window.location.href.includes("localhost");
-      const urlCategories = isLocalhost
-        ? `http://localhost:3001/categories/${id}`
-        : `https://thehomehobby-react.onrender.com/categories/${id}`;
 
-      const response = await axios.get(urlCategories);
+      const response = await axios.get(`${apiUrl}/categories/${id}`);
       setSubCategory(response.data.subcategories);
       setCategory(response.data);
     } catch (error) {
@@ -43,13 +39,8 @@ export const SubCategories = () => {
   //* ----- GET Marcas -------
   async function fetchMarcas() {
     try {
-      // peticion desde localhost o deploy
-      const isLocalhost = window.location.href.includes("localhost");
-      const urlMarcas = isLocalhost
-        ? `http://localhost:3001/marcas`
-        : `https://thehomehobby-react.onrender.com/marcas`;
 
-      const response = await axios.get(urlMarcas);
+      const response = await axios.get(`${apiUrl}/marcas`);
       setMarcas(response.data);
     } catch (error) {
       console.error("Error al obtener las categorías:", error);
@@ -113,7 +104,7 @@ export const SubCategories = () => {
             {subCategory &&
               subCategory.map((sub) => (
                 <Link
-                to={`/prodbycategory/${sub.id}`}
+                to={`/prodbycategory/${sub.id}?cate=${sub?.contenido[0]?.nombre || sub?.contenido[1]?.nombre}`}
                   key={sub.id}
                   className="border p-4 cursor-pointer hover:shadow-xl"
                 >
