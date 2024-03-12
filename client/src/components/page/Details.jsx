@@ -257,7 +257,6 @@ export const Details = () => {
     <div className="flex min-h-full flex-col bg-body font-poppins text-txt bg-gray-100">
       <div className="product-details container mx-auto my-5 px-2 sm:px-8">
         {/* Mostrar el email del usuario logeado */}
-        <p>Email del usuario logeado: {userEmail}</p>
 
         <div className="grid grid-cols-12 gap-5 rounded-lg bg-white p-2 xs:p-8">
           {/* SWIPER */}
