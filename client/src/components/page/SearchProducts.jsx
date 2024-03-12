@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import TestProdObj from "../TestProdObj";
 import axios from "axios";
 import { Paginado } from "../Paginado";
+import { apiUrl } from "../../utils/config";
 
 export const SearchProducts = () => {
   //* ---- HOOKs ----
@@ -26,14 +27,11 @@ export const SearchProducts = () => {
 
   //* ---- Get Products by search ----
   async function getProducts(id, page = 1) {
-    const isLocal = window.location.href.includes("localhost");
-    const urlGetProductsId = isLocal
-      ? `http://localhost:3001/productos?name=${id}&page=${page}`
-      : `https://thehomehobby-react.onrender.com/productos?name=${id}&page=${page}`;
     try {
-      const response = await axios(urlGetProductsId);
+      const response = await axios(`${apiUrl}/productos?name=${id}&page=${page}`);
       setProducSearchs(response.data);
       setPaginationData(response.data.info);
+      
     } catch (error) {
       setProducSearchs({ message: "no products found" });
       console.error("Error en getProduct ID >>> ", error);

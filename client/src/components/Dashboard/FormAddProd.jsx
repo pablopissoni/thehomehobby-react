@@ -4,6 +4,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 import axios from "axios";
+import { apiUrl } from "../../utils/config";
 
 export const FormAddProd = ({
   setCloseModal,
@@ -12,10 +13,10 @@ export const FormAddProd = ({
   marcas,
   ofertas,
 }) => {
-  console.log("🚀 ~ FormAddProd ~ ofertas:", ofertas);
-  console.log("🚀 ~ FormAddProd ~ marcas:", marcas);
-  console.log("🚀 ~ FormAddProd ~ subCategories:", subCategories);
-  console.log("🚀 ~ FormAddProd ~ categories:", categories);
+  // console.log("🚀 ~ FormAddProd ~ ofertas:", ofertas);
+  // console.log("🚀 ~ FormAddProd ~ marcas:", marcas);
+  // console.log("🚀 ~ FormAddProd ~ subCategories:", subCategories);
+  // console.log("🚀 ~ FormAddProd ~ categories:", categories);
   //* --- HOOKs ---
   const [tags, setTags] = useState("");
   const [isEnglish, setIsEnglish] = useState(true);
@@ -265,12 +266,7 @@ export const FormAddProd = ({
 
       console.log("🚀 ~ FormAddProd ~ formData:", formData.keys("video"));
 
-      const isLocalhost = window.location.href.includes("localhost");
-      const urlPostProduct = isLocalhost
-        ? `http://localhost:3001/productos`
-        : `https://thehomehobby-react.onrender.com/productos`;
-
-      const response = await axios.post(urlPostProduct, formData, {
+      const response = await axios.post(`${apiUrl}/productos`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -282,20 +278,6 @@ export const FormAddProd = ({
       console.error("Error creating product:", error.message);
     }
   };
-  // const postProduct = async () => {
-  //   try {
-  //     const isLocalhost = window.location.href.includes("localhost");
-  //     const urlPostProduct = isLocalhost
-  //       ? `http://localhost:3001/productos`
-  //       : `https://thehomehobby-react.onrender.com/productos`;
-
-  //     const response = await axios.post(urlPostProduct, product);
-  //     console.log("🚀 ~ POST ~ response:", response.data);
-  //     alert(JSON.stringify(response.data));
-  //   } catch (error) {
-  //     console.log("ERROR POST: ", error);
-  //   }
-  // };
   // --- POST ---
 
   //* --- REACT QUILL ---

@@ -4,6 +4,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 import axios from "axios";
+import { apiUrl } from "../../utils/config";
 
 export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
   //* --- HOOKs ---
@@ -291,12 +292,7 @@ export const FormEdirProd = ({ prodEdit, setCloseModal }) => {
 
       console.log("🚀 ~ FormAddProd ~ formData:", formData.keys("video"));
 
-      const isLocalhost = window.location.href.includes("localhost");
-      const urlPutProduct = isLocalhost
-        ? `http://localhost:3001/productos/${id}`
-        : `https://thehomehobby-react.onrender.com/productos/${id}`;
-
-      const response = await axios.put(urlPutProduct, formData, {
+      const response = await axios.put(`${apiUrl}/productos/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

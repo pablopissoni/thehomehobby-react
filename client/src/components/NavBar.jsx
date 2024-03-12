@@ -13,6 +13,7 @@ import axios from "axios";
 
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { apiUrl } from "../utils/config";
 
 export const NavBar = () => {
   // headless Lenguaje
@@ -45,18 +46,11 @@ export const NavBar = () => {
   //Mostrar ShoppingCart
   const [showShoppingCart, setShowShoppingCart] = useState(false);
 
-  // Direciones URL LocalHost y Produccion
-  const isLocalhost = window.location.href.includes("localhost");
-  const urlLogin = isLocalhost
-    ? "http://localhost:5173/login"
-    : "http://thehomehobby.com.s3-website.us-east-2.amazonaws.com/login";
-  const urlRegister = isLocalhost
-    ? "http://localhost:5173/register"
-    : "http://thehomehobby.com.s3-website.us-east-2.amazonaws.com/register";
-
-  const home = isLocalhost
-    ? "http://localhost:5173"
-    : "http://thehomehobby.com.s3-website.us-east-2.amazonaws.com";
+  //* Direciones URL LocalHost y Produccion
+  const urlLogin = `${apiUrl}/login`;
+  const urlRegister = `${apiUrl}/register`;
+  const urlGetToken = `${apiUrl}/users/get-token`;
+  const home = `${apiUrl}`;
 
   //--------------------
 
@@ -83,7 +77,7 @@ export const NavBar = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:3001/users/get-token",
+          urlGetToken,
           {},
           {
             headers: {

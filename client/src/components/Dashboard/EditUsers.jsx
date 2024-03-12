@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { apiUrl } from "../../utils/config";
 
 export const EditUsers = () => {
   //* ----- USE STATE -----
@@ -13,34 +14,21 @@ export const EditUsers = () => {
         try{
         const newRole = userRole === "user" ? "admin" : "user";
 
-        // peticion desde localhost o deploy
-        const isLocalhost = window.location.href.includes("localhost");
-        const urlCategories = isLocalhost
-          ? `http://localhost:3001/users/${id}`
-          : `https://thehomehobby-react.onrender.com/users/${id}`;
-
-        const response = await axios.put(urlCategories, { role: newRole });
+        const response = await axios.put(`${apiUrl}/users/${id}`, { role: newRole });
         console.log("🚀 ~ handleRoleUser ~ response: ", response);
         getUsers();
       } catch (error) {
         console.error("Error al Editar el Rol del Usuario: ", error);
       }
     }
-
-    
   // ----------- PUT ------------
   
   //* ----------- GETs ------------
   async function getUsers() {
     try {
-      // peticion desde localhost o deploy
-      const isLocalhost = window.location.href.includes("localhost");
-      const urlCategories = isLocalhost
-        ? "http://localhost:3001/users/getusers"
-        : "https://thehomehobby-react.onrender.com/users/getusers";
-
-      const response = await axios.get(urlCategories);
+      const response = await axios.get(`${apiUrl}/users/getusers`);
       setUsers(response.data);
+
     } catch (error) {
       console.error("Error al obtener USERS:", error);
     }

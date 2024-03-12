@@ -18,6 +18,7 @@ import hogarBanner from "../assets/Hogar-Banner.jpg";
 import BoxE from "../assets/BoxE.jpg";
 import { SliderCategory } from "./SliderCategory";
 import { Link } from "react-router-dom";
+import { apiUrl } from "../utils/config";
 
 // import { useDispatch, useSelector } from 'react-redux';
 // import { fetchProducts } from '../actions/productActions';
@@ -29,66 +30,19 @@ export const HomePage = () => {
   const [categories, setCategories] = useState([]); // Get Categories
   const [productsByCateg, setProductsByCateg] = useState([]); // Get Product by Category
   //* -- USE STATE --------
-  // const dispatch = useDispatch();
-  // const products = useSelector((state) => state.products);
-
-  // useEffect(() => {
-  //   dispatch(fetchProducts());
-  // }, [dispatch]);
-
-  //* ----- GET Productos -------------
-  function getProducts() {
-    // peticion desde localhost o deploy
-    const isLocalhost = window.location.href.includes("localhost");
-    const url = "https://thehomehobby-react.onrender.com/productos";
-
-    axios
-      .get(url)
-      .then((res) => {
-        // console.log(res.data);
-        setProducts(res.data);
-        products.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-  // ----- GET Productos -------------
 
   //* ----- GET Categories -------------
   async function getCategories() {
     try {
-      // peticion desde localhost o deploy
-      const isLocalhost = window.location.href.includes("localhost");
-      const urlCategories =
-        "https://thehomehobby-react.onrender.com/categories";
-
-      const response = await axios.get(urlCategories);
+      const response = await axios.get(`${apiUrl}/categories`);
       setCategories(response.data);
+      
     } catch (error) {
       console.log(error);
     }
   }
   console.log("🚀 ~ .then ~ categories.data:", categories);
   // ----- GET Categories -------------
-
-  //* ----- GET Product by Category ----------
-  const fetchProductsByCategory = async (prodCategoryId) => {
-    try {
-      const response = await fetch(
-        `https://thehomehobby-react.onrender.com/productos?category=${prodCategoryId}`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setProductsByCateg(data.data);
-      } else {
-        throw new Error("Error al obtener los productos");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  // ------ GET Product by Category ----------
 
   //* ----- USE EFFECT -------------
   useEffect(() => {

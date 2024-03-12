@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import LogoGrande from "../../assets/logo The Home Hobby.svg";
 import { Link } from "react-router-dom";
+import { apiUrl } from "../../utils/config";
 
 export const PasswordReset = () => {
   const [formData, setFormData] = useState({
@@ -29,7 +30,7 @@ export const PasswordReset = () => {
     e.preventDefault();
     try {
       // Envía la solicitud para verificar si el correo existe y enviar el código
-      const response = await axios.post("http://localhost:3001/users/recover", {
+      const response = await axios.post(`${apiUrl}/users/recover`, {
         email: formData.email,
       });
       if (response.status === 200) {
@@ -59,7 +60,7 @@ export const PasswordReset = () => {
     try {
       // Envía la solicitud para restablecer la contraseña al backend
       const response = await axios.post(
-        "http://localhost:3001/users/reset-password",
+        `${apiUrl}/users/reset-password`,
         { email: formData.email, newPassword, code }
       );
       setResetSuccess(true);

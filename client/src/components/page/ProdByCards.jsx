@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import TestProdObj from "../TestProdObj";
 import axios from "axios";
 import { Paginado } from "../Paginado";
+import { apiUrl } from "../../utils/config";
 
 export const ProdByCards = () => {
   //* ---- HOOKs ----
   const { id } = useParams();
+  const location = useLocation()
+  console.log("🚀 ~ ProdByCards ~ location:", location)
   const [prodBySubCate, setProdBySubCate] = useState({});
   const [paginationData, setPaginationData] = useState({
     currentPage: 1,
@@ -26,14 +29,12 @@ export const ProdByCards = () => {
 
   //* ---- Get Products by search ----
   async function getProdBySubCategory(id, page = 1) {
-    const isLocal = window.location.href.includes("localhost");
-    const urlGetProdBySubCate = isLocal
-      ? `http://localhost:3001/prodbysubcategory?id=${id}&page=${page}`
-      : `https://thehomehobby-react.onrender.com/prodbysubcategory?id=${id}&page=${page}`;
     try {
-      const response = await axios(urlGetProdBySubCate);
+      const response = await axios(`${apiUrl}/prodbysubcategory?id=${id}&page=${page}`);
+      // const response = await axios(urlGetProdBySubCate);
       setProdBySubCate(response.data);
       setPaginationData(response.data.info);
+      
     } catch (error) {
       setProdBySubCate({ message: "no products found" });
       console.error("Error en getProduct ID >>> ", error);

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import UserDefault from "../../assets/DefaultUser.jpg";
+import { apiUrl } from "../../utils/config";
 
 export const UserProfile = () => {
   const [userData, setUserData] = useState(null);
@@ -16,7 +17,7 @@ export const UserProfile = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:3001/users/get-token",
+          `${apiUrl}/users/get-token`,
           {}, // Enviar un cuerpo vacío, si es necesario
           {
             headers: {

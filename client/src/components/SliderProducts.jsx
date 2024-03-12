@@ -5,6 +5,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
+import { apiUrl } from "../utils/config";
 
 export const SliderProducts = ({ products, prodCategoryId, productsByCategProp}) => {
   const [slidesPerView, setSlidesPerView] = useState(4); // Valor predeterminado para dispositivos no móviles
@@ -20,7 +21,7 @@ export const SliderProducts = ({ products, prodCategoryId, productsByCategProp})
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          `https://thehomehobby-react.onrender.com/productos?category=${prodCategoryId}`
+          `${apiUrl}/productos?category=${prodCategoryId}`
         );
         if (response.ok) {
           const data = await response.json();

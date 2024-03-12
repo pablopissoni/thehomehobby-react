@@ -33,6 +33,7 @@ import axios from "axios";
 import test_product1 from "../../assets/test_product1.png";
 import test_product2 from "../../assets/test_product2.png";
 import test_product3 from "../../assets/test_product3.png";
+import { apiUrl } from "../../utils/config";
 
 export const Details = () => {
   //* ---- HOOKS ----
@@ -70,7 +71,7 @@ export const Details = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:3001/users/get-token",
+          `${apiUrl}/users/get-token`,
           {},
           {
             headers: {
@@ -96,12 +97,7 @@ export const Details = () => {
   //* ----- GET Producto -------------
   async function getProductId() {
     try {
-      const isLocalhost = window.location.href.includes("localhost");
-      const urlDetailsId = isLocalhost
-        ? `http://localhost:3001/productos/${id}`
-        : `https://thehomehobby-react.onrender.com/productos/${id}`;
-
-      const response = await axios.get(urlDetailsId);
+      const response = await axios.get(`${apiUrl}/productos/${id}`);
       setProduct(response.data[0]); // Solo el primer objeto encontrado
       {
         /*console.log("response.data[0]", response.data[0]);*/
@@ -180,26 +176,6 @@ export const Details = () => {
     { USE_PROFILES: { html: true } }
   );
 
-  //* ---- QUILL REACT ----
-
-  // ---- QUILL REACT ----
-
-  //* ---- QUILL HTML ----
-  // Quill.register({
-  //   "modules/toolbar": Toolbar,
-  //   "themes/snow": Snow,
-  //   "formats/bold": Bold,
-  //   "formats/italic": Italic,
-  //   "formats/header": Header,
-  // });
-
-  // var quill = new Quill("#editor", {
-  //   theme: "snow",
-  // });
-
-  // Pasar el contenido HTML al editor Quill
-  // quill.root.innerHTML = product?.contenido[0]?.ficha; //! al agregar se rompe porque parece leerlo antes de cargar la peticion
-  // ---- QUILL HTML ----
 
   const addToCart = async () => {
     try {
@@ -213,7 +189,7 @@ export const Details = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:3001/users/get-token",
+        `${apiUrl}/users/get-token`,
         {},
         {
           headers: {
@@ -232,7 +208,7 @@ export const Details = () => {
 
       // Enviar la solicitud al servidor
       const responseCart = await axios.post(
-        "http://localhost:3001/carrito/carrito",
+        `${apiUrl}/carrito/carrito`,
         {
           userId: userId,
           productId: id,
