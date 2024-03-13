@@ -65,7 +65,32 @@ const removeFromCart = (req, res, connection) => {
   });
 };
 
+const getCartByUserId = (req, res, connection) => {
+  const userId = req.params.userId;
+
+  // Consultar todos los productos en el carrito para el userId especificado
+  const query = "SELECT * FROM carrito WHERE userId = ?";
+  connection.query(query, [userId], (error, results) => {
+    if (error) {
+      console.error("Error al consultar el carrito:", error);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+
+    // Si no se encontraron productos en el carrito para el userId proporcionado, devolver un mensaje
+    if (results.length === 0) {
+      return res.status(404).json({
+        message:
+          "No se encontraron productos en el carrito para el usuario especificado",
+      });
+    }
+
+    // Devolver los productos encontrados en el carrito
+    res.status(200).json(results);
+  });
+};
+
 module.exports = {
   addToCart: addToCart,
   removeFromCart: removeFromCart,
+  getCartByUserId: getCartByUserId,
 };
