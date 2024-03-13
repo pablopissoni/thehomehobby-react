@@ -4,12 +4,12 @@ import axios from "axios";
 import logoHomeHobby from "../../assets/logo The Home Hobby.svg";
 import { Link } from "react-router-dom";
 import { validateRegistration } from "../../utils/validationRegister";
-import { apiUrl } from "../../utils/config";
+import { apiUrl, frontUrl } from "../../utils/config";
 
 export const Register = () => {
   // Direcciones Deploy o Local
-  const urlHome = apiUrl
-  const urlLogin = `${apiUrl}/login`
+  const urlHome = frontUrl
+  const urlLogin = `${frontUrl}/login`
 
   // Hooks de estado
   const [errors, setErrors] = useState({});

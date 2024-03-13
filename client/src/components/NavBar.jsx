@@ -13,7 +13,7 @@ import axios from "axios";
 
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import { apiUrl } from "../utils/config";
+import { apiUrl, frontUrl } from "../utils/config";
 
 export const NavBar = () => {
   // headless Lenguaje
@@ -47,10 +47,10 @@ export const NavBar = () => {
   const [showShoppingCart, setShowShoppingCart] = useState(false);
 
   //* Direciones URL LocalHost y Produccion
-  const urlLogin = `${apiUrl}/login`;
-  const urlRegister = `${apiUrl}/register`;
-  const urlGetToken = `${apiUrl}/users/get-token`;
-  const home = `${apiUrl}`;
+  const urlLogin = `${frontUrl}/login`;
+  const urlRegister = `${frontUrl}/register`;
+  const urlGetToken = `${frontUrl}/users/get-token`;
+  const home = `${frontUrl}`;
 
   //--------------------
 

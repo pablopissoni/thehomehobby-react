@@ -17,7 +17,7 @@ export const CardProduct = ({
   priceOff,
 }) => {
   // URL deploy o localhost
-  const urlDetail = `${frontUrl}/details${id}`
+  const urlDetail = `${frontUrl}/details/${id}`
 
   return (
     <div className="card-container  my-8  transition-all-300 translateY-2 relative flex h-[500px] flex-col overflow-hidden rounded-lg bg-white p-5 shadow-md hover:z-[2] hover:shadow-xl">
