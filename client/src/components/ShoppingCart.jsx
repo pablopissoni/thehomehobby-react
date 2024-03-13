@@ -31,19 +31,7 @@ export const ShoppingCart = ({ setShow }) => {
         const cartResponse = await axios.get(
           `http://localhost:3001/carrito/carrito/${userId}`
         );
-        const productIds = cartResponse.data.map((item) => item.productId);
-
-        // Obtener la información de cada producto
-        const productsData = await Promise.all(
-          productIds.map(async (productId) => {
-            const productResponse = await axios.get(
-              `http://localhost:3001/productos/${productId}`
-            );
-            return productResponse.data[0];
-          })
-        );
-
-        setProducts(productsData);
+        setProducts(cartResponse.data);
       } catch (error) {
         // Manejar el error al obtener los datos
         console.error("Error al obtener los datos:", error);
@@ -52,6 +40,15 @@ export const ShoppingCart = ({ setShow }) => {
 
     fetchUserData();
   }, []);
+
+  const removeFromCart = async (cartItemId) => {
+    try {
+      await axios.delete(`http://localhost:3001/carrito/carrito/${cartItemId}`);
+      setProducts(products.filter((item) => item.id !== cartItemId));
+    } catch (error) {
+      console.error("Error al eliminar producto del carrito:", error);
+    }
+  };
 
   return (
     <>
@@ -90,21 +87,21 @@ export const ShoppingCart = ({ setShow }) => {
                       </a>
                     </div>
                   ) : (
-                    products.map((product) => (
+                    products.map((item) => (
                       <div
-                        key={product.id}
+                        key={item.id}
                         className="transition-all-300 flex h-[100px] w-full items-center justify-between gap-5 bg-white p-2 hover:bg-gray-100"
                       >
                         <div className="h-[80px] w-[80px] min-w-[80px] overflow-hidden rounded-lg border">
                           <img
                             className="h-full w-full object-cover"
-                            src={product.imagen}
-                            alt={product.nombre}
+                            src={item.imagen}
+                            alt={item.nombre}
                           />
                         </div>
                         <div className="flex w-full flex-col">
                           <h6 className="clamp-2 break-all text-lg font-semibold">
-                            {product.nombre}
+                            {item.nombre}
                           </h6>
                           <div className="flex gap-2">
                             {/* Aquí puedes mostrar más información del producto si lo deseas */}
@@ -122,7 +119,10 @@ export const ShoppingCart = ({ setShow }) => {
                             </div>
                           </div>
                         </div>
-                        <div className="transition-all-300 flex text-slate-400 hover:text-primary">
+                        <div
+                          className="transition-all-300 flex text-slate-400 hover:text-primary"
+                          onClick={() => removeFromCart(item.id)}
+                        >
                           <i className="bi bi-trash-fill pointer-events-none text-2xl"></i>
                         </div>
                       </div>
