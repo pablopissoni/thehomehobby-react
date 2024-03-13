@@ -49,7 +49,7 @@ export const NavBar = () => {
   //* Direciones URL LocalHost y Produccion
   const urlLogin = `${frontUrl}/login`;
   const urlRegister = `${frontUrl}/register`;
-  const urlGetToken = `${frontUrl}/users/get-token`;
+  const urlGetToken = `${apiUrl}/users/get-token`;
   const home = `${frontUrl}`;
 
   //--------------------
