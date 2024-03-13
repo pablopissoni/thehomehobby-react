@@ -74,7 +74,8 @@ router.get("/ofertas", (req, res, next) => {
   }
 });
 
-router.put("/productos/:id", (req, res, next) => { //! getAllMarcas ?
+router.put("/productos/:id", (req, res, next) => {
+  //! getAllMarcas ?
   try {
     productsController.getAllMarcas(req, res, req.dbConnection);
   } catch (error) {
