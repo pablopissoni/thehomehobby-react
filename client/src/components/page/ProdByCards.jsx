@@ -8,9 +8,9 @@ import { apiUrl } from "../../utils/config";
 export const ProdByCards = () => {
   //* ---- HOOKs ----
   const { id } = useParams();
-  const {search} = useLocation()
+  const { search } = useLocation();
   const query = new URLSearchParams(search);
-  const nameSubCategory = query.get("subcate") // obtengo el valor de la query "subcate"
+  const nameSubCategory = query.get("subcate"); // obtengo el valor de la query "subcate"
 
   const [prodBySubCate, setProdBySubCate] = useState({});
   const [paginationData, setPaginationData] = useState({
@@ -25,28 +25,28 @@ export const ProdByCards = () => {
 
   //* ---- USE EFFECTs ----
   useEffect(() => {
-    getProdBySubCategory(id)
+    getProdBySubCategory(id);
   }, [id]);
   // ----- USE EFFECTs ----
 
   //* ---- Get Products by search ----
   async function getProdBySubCategory(id, page = 1) {
     try {
-      const response = await axios(`${apiUrl}/prodbysubcategory?id=${id}&page=${page}`);
+      const response = await axios(
+        `${apiUrl}/prodbysubcategory?id=${id}&page=${page}`
+      );
       // const response = await axios(urlGetProdBySubCate);
       setProdBySubCate(response.data);
       setPaginationData(response.data.info);
-      
     } catch (error) {
       setProdBySubCate({ message: "no products found" });
       console.error("Error en getProduct ID >>> ", error);
     }
   }
   // ---- Get Products by search ----
-  
+
   // console.log("🚀 ~ paginationData:", paginationData);
   // console.log("🚀 ~ ProdByCards ~ prodBySubCate:", prodBySubCate)
-
 
   return (
     <div className="m-20 max-w-[1500px]">
@@ -65,7 +65,7 @@ export const ProdByCards = () => {
           {!prodBySubCate.message &&
             prodBySubCate?.data?.map((product, index) => (
               <div
-                className=" py-4 border border-gray-200 transition-transform duration-300 hover:scale-[1.02]"
+                className="py-4 border border-gray-200 transition-transform duration-300 hover:scale-[1.02] flex flex-col justify-between"
                 key={index}
               >
                 <div className="w-[160px] h-[160px] mx-auto">
@@ -77,27 +77,22 @@ export const ProdByCards = () => {
                     />
                   </Link>
                 </div>
-                
+
                 <div className="px-2 flex flex-col w-full">
                   <Link to={`/details/${product.id}`}>
                     <h3 className="lg:text-lg font-light text-center">
                       {product?.nombre_ingles || product?.nombre_es}
                     </h3>
                   </Link>
-                  <span className="text-center lg:text-lg font-semibold mt-3">
+                  <span className="text-center lg:text-xl font-semibold mt-3">
                     $ {product?.precio_base}
                   </span>
-                  <button className="border-2 border-orange-500 h-10 uppercase hover:bg-orange-700 transition-colors duration-300 hover:border-0 hover:text-white">
-                    add to cart
-                    <i className="bi bi-cart4 ml-2"></i>
-                  </button>
-                  {/* <span className="bg-green-200 text-green-800 w-[100px] mt-3 text-center rounded-md">
-                    Envio gratis
-                  </span> */}
-                  {/* <span className="text-sm font-extralight flex justify-end mr-8">
-                    stock: 999
-                  </span> */}
                 </div>
+
+                <button className="mt-2 border-2 mx-6 border-orange-500 h-10 uppercase hover:bg-orange-700 transition-colors duration-300 hover:border-0 hover:text-white ">
+                  add to cart
+                  <i className="bi bi-cart4 ml-2"></i>
+                </button>
               </div>
             ))}
 
