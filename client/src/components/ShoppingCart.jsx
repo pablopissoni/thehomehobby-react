@@ -1,94 +1,154 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 export const ShoppingCart = ({ setShow }) => {
   const [show, setLocalShow] = useState(true);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      // Obtener el token del localStorage
+      const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        // Manejar el caso en que no se disponga de un token de acceso
+        return;
+      }
+
+      try {
+        // Obtener los datos del usuario
+        const response = await axios.post(
+          "http://localhost:3001/users/get-token",
+          {}, // Enviar un cuerpo vacío, si es necesario
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const userId = response.data.data.mysqlUsers[0].id;
+
+        // Obtener los productos del carrito del usuario
+        const cartResponse = await axios.get(
+          `http://localhost:3001/carrito/carrito/${userId}`
+        );
+        const productIds = cartResponse.data.map((item) => item.productId);
+
+        // Obtener la información de cada producto
+        const productsData = await Promise.all(
+          productIds.map(async (productId) => {
+            const productResponse = await axios.get(
+              `http://localhost:3001/productos/${productId}`
+            );
+            return productResponse.data[0];
+          })
+        );
+
+        setProducts(productsData);
+      } catch (error) {
+        // Manejar el error al obtener los datos
+        console.error("Error al obtener los datos:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   return (
     <>
       <div>
         {show && (
-          <div class="shopping-cart-modal modal transition-all-300 visible fixed inset-0 z-50 h-full w-full bg-overlay opacity-100">
-            <div class="flex h-full w-full">
-              <div class="modal-content transition-all-300 relative right-0 ml-auto flex h-full w-[400px] min-w-[250px] flex-col bg-white">
-                <div class="w-full">
-                  <div class="border-b-2 border-gray-200 p-5">
-                    <h3 class="text-xl font-bold uppercase">Shopping Cart</h3>
+          <div className="shopping-cart-modal modal transition-all-300 visible fixed inset-0 z-50 h-full w-full bg-overlay opacity-100">
+            <div className="flex h-full w-full">
+              <div className="modal-content transition-all-300 relative right-0 ml-auto flex h-full w-[400px] min-w-[250px] flex-col bg-white">
+                <div className="w-full">
+                  <div className="border-b-2 border-gray-200 p-5">
+                    <h3 className="text-xl font-bold uppercase">
+                      Shopping Cart
+                    </h3>
                   </div>
                   <button
-                    class="btn-close-modal transition-all-300 absolute top-5 right-5 p-[3px] hover:text-slate-400 "
+                    className="btn-close-modal transition-all-300 absolute top-5 right-5 p-[3px] hover:text-slate-400 "
                     onClick={() => setShow(!show)}
                   >
-                    <i class="bi bi-x-lg text-stroke-medium pointer-events-none flex text-xl"></i>
+                    <i className="bi bi-x-lg text-stroke-medium pointer-events-none flex text-xl"></i>
                   </button>
                 </div>
-                <div class="h-full overflow-auto">
-                  <div class="hidden flex-col items-center justify-center gap-4 p-5">
-                    <i class="bi bi-cart-x text-8xl text-gray-200"></i>
-                    <p class="font-semibold">
-                      There are no products in the cart.
-                    </p>
-                    <a
-                      class="btn-effect transition-all-300 flex items-center justify-center gap-2 rounded-lg bg-primary p-2"
-                      href="#"
-                    >
-                      <span class="font-bold uppercase text-white">
-                        Go to the store
-                      </span>
-                    </a>
-                  </div>
-
-                  <a
-                    class="transition-all-300 flex h-[100px] w-full items-center justify-between gap-5 bg-white p-2 hover:bg-gray-100"
-                    href="#"
-                  >
-                    <div class="h-[80px] w-[80px] min-w-[80px] overflow-hidden rounded-lg border">
-                      <img
-                        class="h-full w-full object-cover"
-                        src="images/product/prod-1.jpg"
-                        alt="product"
-                      />
+                <div className="h-full overflow-auto">
+                  {products.length === 0 ? (
+                    <div className="hidden flex-col items-center justify-center gap-4 p-5">
+                      <i className="bi bi-cart-x text-8xl text-gray-200"></i>
+                      <p className="font-semibold">
+                        There are no products in the cart.
+                      </p>
+                      <a
+                        className="btn-effect transition-all-300 flex items-center justify-center gap-2 rounded-lg bg-primary p-2"
+                        href="#"
+                      >
+                        <span className="font-bold uppercase text-white">
+                          Go to the store
+                        </span>
+                      </a>
                     </div>
-                    <div class="flex w-full flex-col">
-                      <h6 class="clamp-2 break-all text-lg font-semibold">
-                        Ryzen 5 3600x
-                      </h6>
-                      <div class="flex gap-2">
-                        <div class="flex gap-1 leading-7 text-gray-400">
-                          <span>1</span>
-                          <span>X</span>
+                  ) : (
+                    products.map((product) => (
+                      <div
+                        key={product.id}
+                        className="transition-all-300 flex h-[100px] w-full items-center justify-between gap-5 bg-white p-2 hover:bg-gray-100"
+                      >
+                        <div className="h-[80px] w-[80px] min-w-[80px] overflow-hidden rounded-lg border">
+                          <img
+                            className="h-full w-full object-cover"
+                            src={product.imagen}
+                            alt={product.nombre}
+                          />
                         </div>
-                        <div class="flex items-center gap-2">
-                          <span class="font-bold text-primary">$37.00</span>
-                          <small class="text-xs text-primary line-through">
-                            $50.00
-                          </small>
+                        <div className="flex w-full flex-col">
+                          <h6 className="clamp-2 break-all text-lg font-semibold">
+                            {product.nombre}
+                          </h6>
+                          <div className="flex gap-2">
+                            {/* Aquí puedes mostrar más información del producto si lo deseas */}
+                            <div className="flex gap-1 leading-7 text-gray-400">
+                              <span>1</span>
+                              <span>X</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-primary">
+                                $37.00
+                              </span>
+                              <small className="text-xs text-primary line-through">
+                                $50.00
+                              </small>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="transition-all-300 flex text-slate-400 hover:text-primary">
+                          <i className="bi bi-trash-fill pointer-events-none text-2xl"></i>
                         </div>
                       </div>
-                    </div>
-                    <div class="transition-all-300 flex text-slate-400 hover:text-primary">
-                      <i class="bi bi-trash-fill pointer-events-none text-2xl"></i>
-                    </div>
-                  </a>
+                    ))
+                  )}
                 </div>
-                <div class="mt-auto border-t-2 border-gray-200 bg-white px-1 pt-5 xs:px-5">
-                  <div class="flex justify-between">
-                    <span class="text-lg uppercase">Subtotal:</span>
-                    <span class="text-lg font-semibold text-primary">
+                <div className="mt-auto border-t-2 border-gray-200 bg-white px-1 pt-5 xs:px-5">
+                  <div className="flex justify-between">
+                    <span className="text-lg uppercase">Subtotal:</span>
+                    <span className="text-lg font-semibold text-primary">
                       $37.00
                     </span>
                   </div>
                   <a
-                    class="btn-effect transition-all-300 my-5 flex w-full items-center justify-center rounded-lg bg-primary p-2"
+                    className="btn-effect transition-all-300 my-5 flex w-full items-center justify-center rounded-lg bg-primary p-2"
                     href="shopping-cart.html"
                   >
-                    <span class="font-bold uppercase text-white">
+                    <span className="font-bold uppercase text-white">
                       View Shopping Cart
                     </span>
                   </a>
                   <a
-                    class="btn-effect transition-all-300 my-5 flex w-full items-center justify-center rounded-lg bg-primary p-2"
+                    className="btn-effect transition-all-300 my-5 flex w-full items-center justify-center rounded-lg bg-primary p-2"
                     href="checkout.html"
                   >
-                    <span class="font-bold uppercase text-white">
+                    <span className="font-bold uppercase text-white">
                       Checkout now
                     </span>
                   </a>
