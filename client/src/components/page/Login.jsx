@@ -5,21 +5,12 @@ import React, { useState } from "react";
 import LogoGrande from "../../assets/logo The Home Hobby.svg";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { apiUrl } from "../../utils/config";
+import { apiUrl, frontUrl } from "../../utils/config";
 
 export const Login = () => {
-  const isLocal = window.location.href.includes("localhost");
-  const urlLogin = isLocal
-    ? "http://localhost:3001/users/login"
-    : "https://thehomehobby-react.onrender.com/users/login"; //! COLOCAR RUTA DEPLOY
-
-  const url = isLocal
-    ? "http://localhost:5173/"
-    : "http://thehomehobby.com.s3-website.us-east-2.amazonaws.com"; //! COLOCAR RUTA DEPLOY
-  // URL local o deploy
-  // // URL local o deploy
-  // const urlLogin = `${apiUrl}/users/login` //! COLOCAR RUTA DEPLOY
-  // const url = `${apiUrl}`
+  //* URL local o deploy
+  const urlLogin = `${apiUrl}/users/login` //! COLOCAR RUTA DEPLOY
+  const url = `${frontUrl}`
 
   //* ---- HOOKs --------
   const [loginData, setLoginData] = useState({
@@ -74,7 +65,7 @@ export const Login = () => {
   const handleResendConfirmation = async () => {
     try {
       await axios.post(
-        "http://localhost:3001/users/resend_confirmation_email",
+        `${apiUrl}/users/resend_confirmation_email`,
         {
           email: loginData.email,
         }
