@@ -18,4 +18,12 @@ router.delete("/carrito/:id", (req, res, next) => {
   }
 });
 
+router.get("/carrito/:userId", (req, res, next) => {
+  try {
+    cartController.getCartByUserId(req, res, req.dbConnection);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
