@@ -26,6 +26,14 @@ router.get("/productos/:id", (req, res, next) => {
   }
 });
 
+router.get("/prodbymarca", (req, res, next) => {
+  try {
+    productsController.getProductByBrand(req, res, req.dbConnection);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post("/productos", (req, res, next) => {
   try {
     productsController.createProduct(req, res, req.dbConnection);

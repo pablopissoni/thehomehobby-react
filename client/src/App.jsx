@@ -48,7 +48,8 @@ const App = () => {
         <Route path="/UserProfile" element={<UserProfile />} />
         <Route path="/adminDashboard" element={<AdminDashboard />} />
         <Route path="/category/:id" element={<SubCategories />} />
-        <Route path="/prodbycategory/:id" element={<ProdByCards />} />
+        <Route path="/prodbycategory/:id" element={<ProdByCards resourceType="category"/>} />
+        <Route path="/prodbybrand/:id" element={<ProdByCards resourceType="brand"/>} />
         {/* <Route path="/detail/:id" element={<Login/>} /> */}
       </Routes>
       {!isIgnoredFooter && <Footer />}

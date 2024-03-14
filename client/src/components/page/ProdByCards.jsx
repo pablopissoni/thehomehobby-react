@@ -5,14 +5,17 @@ import axios from "axios";
 import { Paginado } from "../Paginado";
 import { apiUrl } from "../../utils/config";
 
-export const ProdByCards = () => {
+export const ProdByCards = ({resourceType}) => {
+  console.log("🚀 ~ ProdByCards ~ resourceType:", resourceType)
   //* ---- HOOKs ----
   const { id } = useParams();
   const { search } = useLocation();
   const query = new URLSearchParams(search);
   const nameSubCategory = query.get("subcate"); // obtengo el valor de la query "subcate"
+  const nameBrand = query.get("brand"); // obtengo el valor de la query "brand"
+  console.log("🚀 ~ ProdByCards ~ nameBrand:", nameBrand)
 
-  const [prodBySubCate, setProdBySubCate] = useState({});
+  const [products, setProducts] = useState({});
   const [paginationData, setPaginationData] = useState({
     currentPage: 1,
     nextPage: null,
@@ -25,34 +28,53 @@ export const ProdByCards = () => {
 
   //* ---- USE EFFECTs ----
   useEffect(() => {
-    getProdBySubCategory(id);
+    if (resourceType === "brand") {
+      getProdByMarca(id);
+    } else if (resourceType === "category") {
+      getProdBySubCategory(id);
+    }
   }, [id]);
   // ----- USE EFFECTs ----
 
-  //* ---- Get Products by search ----
+  //* ----------- GETs ------------
+  async function getProdByMarca(id, page = 1) {
+    try {
+      const response = await axios(
+        `${apiUrl}/prodbymarca?id=${id}&page=${page}`
+        );
+        setProducts(response.data); // Se comporta como productos de una Marca
+        setPaginationData(response.data.info);
+
+    } catch (error) {
+      setProducts({ message: "no products found" });
+      console.error("Error en getProduct ID >>> ", error);
+    }
+  }
+  //* Get Products by SubCategory
   async function getProdBySubCategory(id, page = 1) {
     try {
       const response = await axios(
         `${apiUrl}/prodbysubcategory?id=${id}&page=${page}`
-      );
-      // const response = await axios(urlGetProdBySubCate);
-      setProdBySubCate(response.data);
-      setPaginationData(response.data.info);
+        );
+        // const response = await axios(urlGetProdBySubCate);
+        setProducts(response.data);
+        setPaginationData(response.data.info);
     } catch (error) {
-      setProdBySubCate({ message: "no products found" });
+      setProducts({ message: "no products found" });
       console.error("Error en getProduct ID >>> ", error);
     }
   }
-  // ---- Get Products by search ----
+  // Get Products by SubCategory
+  //* ----------- GETs ------------
 
   // console.log("🚀 ~ paginationData:", paginationData);
-  // console.log("🚀 ~ ProdByCards ~ prodBySubCate:", prodBySubCate)
+  // console.log("🚀 ~ ProdByCards ~ products:", products)
 
   return (
     <div className="m-20 max-w-[1500px]">
       {/* encabezado */}
       <div className=" ml-2">
-        <h3 className="text-4xl font-medium">{nameSubCategory}</h3>
+        <h3 className="text-4xl my-4 font-medium">{nameSubCategory || nameBrand}</h3>
       </div>
       {/* Container Filtro y productos */}
       <div className="flex">
@@ -62,8 +84,8 @@ export const ProdByCards = () => {
         </div>
         {/* Productos */}
         <div className=" h-auto w-full curs mt-2 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
-          {!prodBySubCate.message &&
-            prodBySubCate?.data?.map((product, index) => (
+          {!products.message &&
+            products?.data?.map((product, index) => (
               <div
                 className="py-4 border border-gray-200 transition-transform duration-300 hover:scale-[1.02] flex flex-col justify-between"
                 key={index}
@@ -97,7 +119,7 @@ export const ProdByCards = () => {
             ))}
 
           {/* No hay productos */}
-          {prodBySubCate.message && (
+          {products.message && (
             <div className="flex border-b py-4 pl-4 border-gray-200 justify-center  xl:text-xl">
               No products found
             </div>
@@ -106,7 +128,7 @@ export const ProdByCards = () => {
       </div>
       <div>
         <Paginado
-          getProducts={getProdBySubCategory}
+          getProducts={resourceType === "brand" ? getProdByMarca : getProdBySubCategory}
           id={id}
           paginationData={paginationData}
         />

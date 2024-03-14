@@ -90,6 +90,95 @@ const getAllProducts = (req, res, connection) => {
   });
 };
 
+// Lógica para obtener los productos de una marca
+const getProductByBrand = (req, res, connection) => {
+  const page = req.query.page || 1;
+  const pageSize = 30;
+  const offset = (page - 1) * pageSize;
+  const searchTerm = req.query.id || "";
+  const brandFilter = req.query.brand || ""; // Nuevo filtro por categoría
+
+  let countQuery =
+    "SELECT COUNT(*) as total FROM productos WHERE marca_id = ?";
+  let countParams = [`${searchTerm}`];
+
+  if (brandFilter) {
+    countQuery += " AND marca_id = ?"; //! Revisar
+    countParams.push(brandFilter);
+  }
+
+  connection.query(countQuery, countParams, (error, countResult) => {
+    if (error) {
+      console.error("Error al realizar la consulta:", error);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+
+    const total = countResult[0].total;
+    const totalPages = Math.ceil(total / pageSize);
+    const nextPage = page < totalPages ? parseInt(page) + 1 : null;
+    const previousPage = page > 1 ? parseInt(page) - 1 : null;
+
+    if (page < 1 || page > totalPages) {
+      return res.status(404).json({ error: "Página no encontrada" });
+    }
+
+    let query =
+      "SELECT * FROM productos WHERE marca_id = ?";
+    let queryParams = [`${searchTerm}`];
+
+    if (brandFilter) {
+      query += " AND marca_id = ?";
+      queryParams.push(brandFilter);
+    }
+
+    query += " LIMIT ? OFFSET ?";
+
+    connection.query(
+      query,
+      [...queryParams, pageSize, offset],
+      (error, results) => {
+        if (error) {
+          console.error("Error al realizar la consulta:", error);
+          return res.status(500).json({ error: "Error en el servidor" });
+        }
+
+        if (results.length === 0) {
+          return res.status(404).json({
+            error: "No se encontraron productos en esta página",
+          });
+        }
+        const formattedResults = results.map((product) => {
+          const formattedProduct = {
+            ...product,
+            contenido: parsers.parseContent(product.contenido),
+            tags: parsers.parseTags(product.tags),
+            imagen: formatURL(product.imagen),
+            galeria: JSON.parse(product.galeria).map((item) => ({
+              url: formatURL(item.url),
+            })),
+            video: formatURL(product.video),
+            filtros: parsers.parseFilters(product.filtros),
+          };
+
+          return formattedProduct;
+        });
+
+        const response = {
+          info: {
+            totalItems: total,
+            totalPages: totalPages,
+            currentPage: page,
+            nextPage: nextPage,
+            previousPage: previousPage,
+          },
+          data: formattedResults,
+        };
+
+        res.json(response);
+      }
+    );
+  });
+};
 // Lógica para obtener un producto por ID
 const getProductById = (req, res, connection) => {
   const productId = req.params.id;
@@ -804,4 +893,5 @@ module.exports = {
   getAllOfertas: getAllOfertas,
   getProdBySubCategory:getProdBySubCategory,
   getProdBySubCategoryPage:getProdBySubCategoryPage,
+  getProductByBrand:getProductByBrand,
 };

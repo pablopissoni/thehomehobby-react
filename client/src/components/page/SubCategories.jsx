@@ -26,7 +26,6 @@ export const SubCategories = () => {
   //* ----- GET SubCategory by ID Category -------
   async function fetchProductsByCategory(id) {
     try {
-
       const response = await axios.get(`${apiUrl}/categories/${id}`);
       setSubCategory(response.data.subcategories);
       setCategory(response.data);
@@ -39,7 +38,6 @@ export const SubCategories = () => {
   //* ----- GET Marcas -------
   async function fetchMarcas() {
     try {
-
       const response = await axios.get(`${apiUrl}/marcas`);
       setMarcas(response.data);
     } catch (error) {
@@ -104,7 +102,9 @@ export const SubCategories = () => {
             {subCategory &&
               subCategory.map((sub) => (
                 <Link
-                to={`/prodbycategory/${sub.id}?subcate=${encodeURIComponent(sub?.contenido[0]?.nombre || sub?.contenido[1]?.nombre)}`}
+                  to={`/prodbycategory/${sub.id}?subcate=${encodeURIComponent(
+                    sub?.contenido[0]?.nombre || sub?.contenido[1]?.nombre
+                  )}`}
                   key={sub.id}
                   className="border p-4 cursor-pointer hover:shadow-xl  flex flex-col "
                 >
@@ -130,7 +130,10 @@ export const SubCategories = () => {
               marcas.map(
                 (marca) =>
                   marca.status === 1 && (
-                    <div
+                    <Link
+                      to={`/prodbybrand/${marca.id}?brand=${encodeURIComponent(
+                        marca?.nombre
+                      )}`}
                       key={marca.id}
                       className="border p-2 cursor-pointer hover:shadow-xl flex flex-col justify-center text-center"
                     >
@@ -140,7 +143,7 @@ export const SubCategories = () => {
                         className="max-h-20 mx-auto"
                       />
                       {/* <h1 className="font-medium mt-2">{marca?.nombre}</h1> */}
-                    </div>
+                    </Link>
                   )
               )}
           </div>
