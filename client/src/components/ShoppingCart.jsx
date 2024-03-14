@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -67,7 +69,7 @@ export const ShoppingCart = ({ setShow }) => {
                     className="btn-close-modal transition-all-300 absolute top-5 right-5 p-[3px] hover:text-slate-400 "
                     onClick={() => setShow(!show)}
                   >
-                    <i className="bi bi-x-lg text-stroke-medium pointer-events-none flex text-xl"></i>
+                    <i className="bi bi-x-lg text-stroke-medium pointer- events-none flex text-xl"></i>
                   </button>
                 </div>
                 <div className="h-full overflow-auto">
