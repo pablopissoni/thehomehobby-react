@@ -543,11 +543,14 @@ export const Details = () => {
                 <div className="see-more-container gradient-bottom h-auto ">
                   <div className="h-auto ">
                     {/* VARIABLE DESCRIPCION AQUI CON dangerouslySetInnerHTML */}
-                    <div
+                    {product.id?<div
                       dangerouslySetInnerHTML={{
                         __html: fichaEnHTML || fichaEsHTML,
                       }}
                     />
+                    :
+                    <LoaderFicha className='w-[200px] h-auto sm:w-1/3'/>
+                    }
                   </div>
                 </div>
               )}
