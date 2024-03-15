@@ -51,7 +51,7 @@ export const Details = () => {
   const [product, setProduct] = useState({
     contenido: [{ ficha: "Cargando" }],
   });
-  console.log("🚀 ~ Details ~ product:", product)
+  console.log("🚀 ~ Details ~ product:", product);
   // ---- HOOKS ----
 
   const [token, setToken] = useState("");
@@ -204,7 +204,7 @@ export const Details = () => {
 
   //? --- Loader ---
   const LoaderFicha = (props) => (
-    <ContentLoader 
+    <ContentLoader
       speed={2}
       width={500}
       height={350}
@@ -213,56 +213,56 @@ export const Details = () => {
       foregroundColor="#919191"
       {...props}
     >
-      <rect x="16" y="34" rx="3" ry="3" width="98" height="11" /> 
-      <rect x="17" y="7" rx="3" ry="3" width="161" height="11" /> 
-      <rect x="200" y="7" rx="3" ry="3" width="298" height="11" /> 
-      <rect x="17" y="59" rx="3" ry="3" width="161" height="11" /> 
-      <rect x="19" y="86" rx="3" ry="3" width="98" height="11" /> 
-      <rect x="197" y="34" rx="3" ry="3" width="298" height="11" /> 
-      <rect x="197" y="59" rx="3" ry="3" width="298" height="11" /> 
-      <rect x="195" y="86" rx="3" ry="3" width="298" height="11" /> 
-      <rect x="19" y="153" rx="3" ry="3" width="98" height="11" /> 
-      <rect x="20" y="126" rx="3" ry="3" width="161" height="11" /> 
-      <rect x="203" y="126" rx="3" ry="3" width="298" height="11" /> 
-      <rect x="20" y="178" rx="3" ry="3" width="161" height="11" /> 
-      <rect x="22" y="205" rx="3" ry="3" width="98" height="11" /> 
-      <rect x="200" y="153" rx="3" ry="3" width="298" height="11" /> 
-      <rect x="200" y="178" rx="3" ry="3" width="298" height="11" /> 
-      <rect x="198" y="205" rx="3" ry="3" width="298" height="11" /> 
-      <rect x="22" y="267" rx="3" ry="3" width="98" height="11" /> 
-      <rect x="23" y="240" rx="3" ry="3" width="161" height="11" /> 
-      <rect x="206" y="240" rx="3" ry="3" width="298" height="11" /> 
-      <rect x="23" y="292" rx="3" ry="3" width="161" height="11" /> 
-      <rect x="25" y="319" rx="3" ry="3" width="98" height="11" /> 
-      <rect x="203" y="267" rx="3" ry="3" width="298" height="11" /> 
-      <rect x="203" y="292" rx="3" ry="3" width="298" height="11" /> 
+      <rect x="16" y="34" rx="3" ry="3" width="98" height="11" />
+      <rect x="17" y="7" rx="3" ry="3" width="161" height="11" />
+      <rect x="200" y="7" rx="3" ry="3" width="298" height="11" />
+      <rect x="17" y="59" rx="3" ry="3" width="161" height="11" />
+      <rect x="19" y="86" rx="3" ry="3" width="98" height="11" />
+      <rect x="197" y="34" rx="3" ry="3" width="298" height="11" />
+      <rect x="197" y="59" rx="3" ry="3" width="298" height="11" />
+      <rect x="195" y="86" rx="3" ry="3" width="298" height="11" />
+      <rect x="19" y="153" rx="3" ry="3" width="98" height="11" />
+      <rect x="20" y="126" rx="3" ry="3" width="161" height="11" />
+      <rect x="203" y="126" rx="3" ry="3" width="298" height="11" />
+      <rect x="20" y="178" rx="3" ry="3" width="161" height="11" />
+      <rect x="22" y="205" rx="3" ry="3" width="98" height="11" />
+      <rect x="200" y="153" rx="3" ry="3" width="298" height="11" />
+      <rect x="200" y="178" rx="3" ry="3" width="298" height="11" />
+      <rect x="198" y="205" rx="3" ry="3" width="298" height="11" />
+      <rect x="22" y="267" rx="3" ry="3" width="98" height="11" />
+      <rect x="23" y="240" rx="3" ry="3" width="161" height="11" />
+      <rect x="206" y="240" rx="3" ry="3" width="298" height="11" />
+      <rect x="23" y="292" rx="3" ry="3" width="161" height="11" />
+      <rect x="25" y="319" rx="3" ry="3" width="98" height="11" />
+      <rect x="203" y="267" rx="3" ry="3" width="298" height="11" />
+      <rect x="203" y="292" rx="3" ry="3" width="298" height="11" />
       <rect x="201" y="319" rx="3" ry="3" width="298" height="11" />
     </ContentLoader>
-  )
+  );
 
   const LoaderDescription = (props) => (
-    <ContentLoader 
-    speed={2}
-    width={500}
-    height={100}
-    viewBox="0 0 500 100"
-    backgroundColor="#dedede"
-    foregroundColor="#919191"
-    {...props}
-  >
-    <rect x="16" y="34" rx="3" ry="3" width="98" height="11" /> 
-    <rect x="17" y="7" rx="3" ry="3" width="161" height="11" /> 
-    <rect x="200" y="7" rx="3" ry="3" width="298" height="11" /> 
-    <rect x="17" y="59" rx="3" ry="3" width="161" height="11" /> 
-    <rect x="19" y="86" rx="3" ry="3" width="98" height="11" /> 
-    <rect x="197" y="34" rx="3" ry="3" width="298" height="11" /> 
-    <rect x="197" y="59" rx="3" ry="3" width="298" height="11" /> 
-    <rect x="195" y="86" rx="3" ry="3" width="298" height="11" />
-  </ContentLoader>
-  )
+    <ContentLoader
+      speed={2}
+      width={500}
+      height={100}
+      viewBox="0 0 500 100"
+      backgroundColor="#dedede"
+      foregroundColor="#919191"
+      {...props}
+    >
+      <rect x="16" y="34" rx="3" ry="3" width="98" height="11" />
+      <rect x="17" y="7" rx="3" ry="3" width="161" height="11" />
+      <rect x="200" y="7" rx="3" ry="3" width="298" height="11" />
+      <rect x="17" y="59" rx="3" ry="3" width="161" height="11" />
+      <rect x="19" y="86" rx="3" ry="3" width="98" height="11" />
+      <rect x="197" y="34" rx="3" ry="3" width="298" height="11" />
+      <rect x="197" y="59" rx="3" ry="3" width="298" height="11" />
+      <rect x="195" y="86" rx="3" ry="3" width="298" height="11" />
+    </ContentLoader>
+  );
 
   const LoaderTitle = (props) => (
-    <ContentLoader 
+    <ContentLoader
       speed={2}
       width={400}
       height={30}
@@ -271,14 +271,14 @@ export const Details = () => {
       foregroundColor="#919191"
       {...props}
     >
-      <rect x="163" y="6" rx="3" ry="3" width="67" height="21" /> 
-      <rect x="15" y="6" rx="3" ry="3" width="140" height="21" /> 
+      <rect x="163" y="6" rx="3" ry="3" width="67" height="21" />
+      <rect x="15" y="6" rx="3" ry="3" width="140" height="21" />
       <rect x="241" y="6" rx="3" ry="3" width="140" height="21" />
     </ContentLoader>
-  )
+  );
 
   const LoaderImages = (props) => (
-    <ContentLoader 
+    <ContentLoader
       speed={2}
       width={400}
       height={460}
@@ -287,12 +287,12 @@ export const Details = () => {
       foregroundColor="#919191"
       {...props}
     >
-      <rect x="43" y="50" rx="2" ry="2" width="305" height="238" /> 
-      <rect x="12" y="310" rx="0" ry="0" width="111" height="100" /> 
-      <rect x="267" y="310" rx="0" ry="0" width="111" height="100" /> 
+      <rect x="43" y="50" rx="2" ry="2" width="305" height="238" />
+      <rect x="12" y="310" rx="0" ry="0" width="111" height="100" />
+      <rect x="267" y="310" rx="0" ry="0" width="111" height="100" />
       <rect x="138" y="310" rx="0" ry="0" width="111" height="100" />
     </ContentLoader>
-  )
+  );
   //  --- Loader ---
 
   return (
@@ -302,84 +302,86 @@ export const Details = () => {
 
         <div className="grid grid-cols-12 gap-5 rounded-lg bg-white p-2 xs:p-8">
           {/* SWIPER */}
-          {product.id?<div className="col-span-12 h-auto md:col-span-6">
-            {/* Swiper Grande */}
-            <Swiper
-              style={{
-                "--swiper-navigation-color": "#fff",
-                "--swiper-pagination-color": "#fff",
-              }}
-              spaceBetween={10}
-              navigation={true}
-              thumbs={{ swiper: thumbsSwiper }}
-              modules={[FreeMode, Navigation, Thumbs]}
-              className="mySwiper2 w-auto h-72 mb-2"
-            >
-              {/* img principal */}
-              <SwiperSlide>
-                <img
-                  className=" w-full h-full object-contain  "
-                  src={product?.imagen}
-                />
-              </SwiperSlide>
-              {/* video */}
-              {product?.video && (
+          {product.id ? (
+            <div className="col-span-12 h-auto md:col-span-6">
+              {/* Swiper Grande */}
+              <Swiper
+                style={{
+                  "--swiper-navigation-color": "#fff",
+                  "--swiper-pagination-color": "#fff",
+                }}
+                spaceBetween={10}
+                navigation={true}
+                thumbs={{ swiper: thumbsSwiper }}
+                modules={[FreeMode, Navigation, Thumbs]}
+                className="mySwiper2 w-auto h-72 mb-2"
+              >
+                {/* img principal */}
                 <SwiperSlide>
-                  <video className="w-full h-full object-cover" controls>
-                    <source src={product?.video} type="video/mp4" />
-                    Tu navegador no admite el elemento de video.
-                  </video>
-                </SwiperSlide>
-              )}
-              {/* galeria img */}
-              {product?.galeria?.map((img, index) => (
-                <SwiperSlide key={index}>
                   <img
-                    className="w-full h-full object-contain "
-                    src={img.url}
+                    className=" w-full h-full object-contain  "
+                    src={product?.imagen}
                   />
                 </SwiperSlide>
-              ))}
-            </Swiper>
-            {/* Swiper Miniaturas */}
-            <Swiper
-              onSwiper={setThumbsSwiper}
-              spaceBetween={10}
-              // navigation={true}
-              slidesPerView={4}
-              freeMode={true}
-              watchSlidesProgress={true}
-              modules={[FreeMode, Navigation, Thumbs]}
-              className="mySwiper max-w-[400px]"
-            >
-              <SwiperSlide>
-                <img src={product?.imagen} />
-              </SwiperSlide>
-              {/* video */}
-              {product?.video && (
+                {/* video */}
+                {product?.video && (
+                  <SwiperSlide>
+                    <video className="w-full h-full object-cover" controls>
+                      <source src={product?.video} type="video/mp4" />
+                      Tu navegador no admite el elemento de video.
+                    </video>
+                  </SwiperSlide>
+                )}
+                {/* galeria img */}
+                {product?.galeria?.map((img, index) => (
+                  <SwiperSlide key={index}>
+                    <img
+                      className="w-full h-full object-contain "
+                      src={img.url}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+              {/* Swiper Miniaturas */}
+              <Swiper
+                onSwiper={setThumbsSwiper}
+                spaceBetween={10}
+                // navigation={true}
+                slidesPerView={4}
+                freeMode={true}
+                watchSlidesProgress={true}
+                modules={[FreeMode, Navigation, Thumbs]}
+                className="mySwiper max-w-[400px]"
+              >
                 <SwiperSlide>
-                  <video
-                    className="w-full h-full object-contain "
-                    controls={false}
-                  >
-                    <source src={product?.video} type="video/mp4" />
-                    Tu navegador no admite el elemento de video.
-                  </video>
+                  <img src={product?.imagen} />
                 </SwiperSlide>
-              )}
-              {product?.galeria?.map((img, index) => (
-                <SwiperSlide key={index}>
-                  <img src={img.url} />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-          :
-          //? Loader Images
-          <div className="col-span-12 h-auto md:col-span-6 ">
-            <LoaderImages className='flex justify-center m-auto h-auto w-3/6 '/>
-          </div>}
-          
+                {/* video */}
+                {product?.video && (
+                  <SwiperSlide>
+                    <video
+                      className="w-full h-full object-contain "
+                      controls={false}
+                    >
+                      <source src={product?.video} type="video/mp4" />
+                      Tu navegador no admite el elemento de video.
+                    </video>
+                  </SwiperSlide>
+                )}
+                {product?.galeria?.map((img, index) => (
+                  <SwiperSlide key={index}>
+                    <img src={img.url} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          ) : (
+            //? Loader Images
+            <div className="col-span-12 h-auto md:col-span-6 ">
+              <LoaderImages className="flex justify-center m-auto h-auto w-3/6 " />
+            </div>
+          )}
+
           <div className="col-span-12 md:col-span-6 ">
             {/* Titulo Producto */}
             <div className="my-1">
@@ -387,7 +389,9 @@ export const Details = () => {
                 className="clamp-2 transition-all-300 break-all text-2xl font-medium hover:text-primary"
                 href="#"
               >
-                {product?.nombre_ingles || product?.nombre_es || <LoaderTitle className='w-4/6'/>}
+                {product?.nombre_ingles || product?.nombre_es || (
+                  <LoaderTitle className="w-4/6" />
+                )}
               </a>
             </div>
             <div className="product-val-stock my-2 flex justify-between">
@@ -422,7 +426,7 @@ export const Details = () => {
               </div>
             </div>
             {/* --- Mini Descripcion --- */}
-            {product.id? (
+            {product.id ? (
               <div className="my-4">
                 <p
                   // dangerouslySetInnerHTML={{ __html: product?.contenido[0]?.descripcion }}
@@ -435,9 +439,41 @@ export const Details = () => {
                   />
                 </p>
               </div>
-            ):
-                    <LoaderDescription className='w-2/3 '/>
-            }
+            ) : (
+              <LoaderDescription className="w-2/3 " />
+            )}
+
+            <div className="my-5">
+              <h2 className="text-xl font-bold">Filtros</h2>
+              <ul className="divide-y divide-gray-200">
+                {product?.filtros?.map((filtroObj, index) => {
+                  const filtroName = Object.keys(filtroObj)[0];
+                  const filtrosValues = filtroObj[filtroName];
+                  const filtros = [];
+
+                  for (let i = 0; i < filtrosValues.length; i += 2) {
+                    filtros.push({
+                      name: filtrosValues[i],
+                      stock: filtrosValues[i + 1],
+                    });
+                  }
+
+                  return (
+                    <li key={index} className="py-2">
+                      {filtros.map((filtro, idx) => (
+                        <div key={idx} className="flex justify-between">
+                          <h3 className="font-semibold">
+                            {filtroName}: {filtro.name}
+                          </h3>
+                          <span className="text-gray-500">{filtro.stock}</span>
+                        </div>
+                      ))}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
             <div className="flex gap-1">
               <form action="#" onClick={handleFormSubmit}>
                 <div className="flex flex-wrap justify-start gap-5">
@@ -543,14 +579,15 @@ export const Details = () => {
                 <div className="see-more-container gradient-bottom h-auto ">
                   <div className="h-auto ">
                     {/* VARIABLE DESCRIPCION AQUI CON dangerouslySetInnerHTML */}
-                    {product.id?<div
-                      dangerouslySetInnerHTML={{
-                        __html: fichaEnHTML || fichaEsHTML,
-                      }}
-                    />
-                    :
-                    <LoaderFicha className='w-[200px] h-auto sm:w-1/3'/>
-                    }
+                    {product.id ? (
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: fichaEnHTML || fichaEsHTML,
+                        }}
+                      />
+                    ) : (
+                      <LoaderFicha className="w-[200px] h-auto sm:w-1/3" />
+                    )}
                   </div>
                 </div>
               )}
