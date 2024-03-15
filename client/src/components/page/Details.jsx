@@ -443,37 +443,6 @@ export const Details = () => {
               <LoaderDescription className="w-2/3 " />
             )}
 
-            <div className="my-5">
-              <h2 className="text-xl font-bold">Filtros</h2>
-              <ul className="divide-y divide-gray-200">
-                {product?.filtros?.map((filtroObj, index) => {
-                  const filtroName = Object.keys(filtroObj)[0];
-                  const filtrosValues = filtroObj[filtroName];
-                  const filtros = [];
-
-                  for (let i = 0; i < filtrosValues.length; i += 2) {
-                    filtros.push({
-                      name: filtrosValues[i],
-                      stock: filtrosValues[i + 1],
-                    });
-                  }
-
-                  return (
-                    <li key={index} className="py-2">
-                      {filtros.map((filtro, idx) => (
-                        <div key={idx} className="flex justify-between">
-                          <h3 className="font-semibold">
-                            {filtroName}: {filtro.name}
-                          </h3>
-                          <span className="text-gray-500">{filtro.stock}</span>
-                        </div>
-                      ))}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-
             <div className="flex gap-1">
               <form action="#" onClick={handleFormSubmit}>
                 <div className="flex flex-wrap justify-start gap-5">
