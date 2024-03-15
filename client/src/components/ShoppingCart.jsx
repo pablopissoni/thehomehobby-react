@@ -33,7 +33,15 @@ export const ShoppingCart = ({ setShow }) => {
         const cartResponse = await axios.get(
           `http://localhost:3001/carrito/carrito/${userId}`
         );
-        setProducts(cartResponse.data);
+        setProducts(
+          cartResponse.data.map((item) => ({
+            ...item,
+            product: {
+              ...item.product,
+              imagen: item.product.imagen,
+            },
+          }))
+        );
       } catch (error) {
         // Manejar el error al obtener los datos
         console.error("Error al obtener los datos:", error);
@@ -51,6 +59,10 @@ export const ShoppingCart = ({ setShow }) => {
       console.error("Error al eliminar producto del carrito:", error);
     }
   };
+
+  const subtotal = products
+    .reduce((total, item) => total + item.product.precio_base, 0)
+    .toFixed(2);
 
   return (
     <>
@@ -95,16 +107,23 @@ export const ShoppingCart = ({ setShow }) => {
                         className="transition-all-300 flex h-[100px] w-full items-center justify-between gap-5 bg-white p-2 hover:bg-gray-100"
                       >
                         <div className="h-[80px] w-[80px] min-w-[80px] overflow-hidden rounded-lg border">
+                          {console.log("Imagen URL:", item.product.imagen)}
                           <img
                             className="h-full w-full object-cover"
-                            src={item.imagen}
-                            alt={item.nombre}
+                            src={item.product.imagen}
                           />
                         </div>
+
                         <div className="flex w-full flex-col">
                           <h6 className="clamp-2 break-all text-lg font-semibold">
-                            {item.nombre}
+                            {item.product.nombre_ingles.length > 30
+                              ? `${item.product.nombre_ingles.substring(
+                                  0,
+                                  30
+                                )}...`
+                              : item.product.nombre_ingles}
                           </h6>
+
                           <div className="flex gap-2">
                             {/* Aquí puedes mostrar más información del producto si lo deseas */}
                             <div className="flex gap-1 leading-7 text-gray-400">
@@ -113,11 +132,13 @@ export const ShoppingCart = ({ setShow }) => {
                             </div>
                             <div className="flex items-center gap-2">
                               <span className="font-bold text-primary">
-                                $37.00
+                                ${item.product.precio_base}
                               </span>
-                              <small className="text-xs text-primary line-through">
-                                $50.00
-                              </small>
+                              {item.product.oferta_id && (
+                                <small className="text-xs text-primary line-through">
+                                  ${item.product.oferta_id}
+                                </small>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -135,7 +156,7 @@ export const ShoppingCart = ({ setShow }) => {
                   <div className="flex justify-between">
                     <span className="text-lg uppercase">Subtotal:</span>
                     <span className="text-lg font-semibold text-primary">
-                      $37.00
+                      ${subtotal}
                     </span>
                   </div>
                   <a
