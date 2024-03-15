@@ -283,25 +283,41 @@ export const NavBar = () => {
                 <div className="arrow relative">
                   <ul className="overflow-hidden rounded-md bg-white p-[6px] shadow-custom1">
                     {isUserLoggedIn ? (
-                      <li className="hover:font-semibold">
-                        {/* Utilizar la función handleLogout para manejar el cierre de sesión */}
-                        <button
-                          onClick={handleLogout}
-                          className="btn-open-modal"
-                        >
-                          <div className="pointer-events-none flex flex-col items-center gap-2 p-1">
-                            <i className="bi bi-box-arrow-right flex  text-primary">
-                              <span>My profile</span>
-                            </i>
-                            <i className="bi bi-box-arrow-right flex  text-primary">
-                              <span>Dashboard</span>
-                            </i>
-                            <i className="bi bi-box-arrow-right flex  text-primary">
-                              <span>Sign out</span>
-                            </i>
-                          </div>
-                        </button>
-                      </li>
+                      <>
+                        <li className="hover:font-semibold">
+                          {/* Utilizar la función handleLogout para manejar el cierre de sesión */}
+                          <button className="btn-open-modal">
+                            <div className="pointer-events-none flex flex-col items-center gap-2 p-1">
+                              <i className="bi bi-person-circle flex  text-primary">
+                                <span>My profile</span>
+                              </i>
+                            </div>
+                          </button>
+                        </li>
+                        <li className="hover:font-semibold">
+                          {/* Utilizar la función handleLogout para manejar el cierre de sesión */}
+
+                          <button className="btn-open-modal">
+                            <div className="pointer-events-none flex flex-col items-center gap-2 p-1">
+                              <i className="bi bi-terminal-dash flex  text-primary">
+                                <span>Dashboard</span>
+                              </i>
+                            </div>
+                          </button>
+                        </li>
+                        <li className="hover:font-semibold">
+                          <button
+                            onClick={handleLogout}
+                            className="btn-open-modal"
+                          >
+                            <div className="pointer-events-none flex flex-col items-center gap-2 p-1">
+                              <i className="bi bi-box-arrow-right flex  text-primary">
+                                <span>Sign out</span>
+                              </i>
+                            </div>
+                          </button>
+                        </li>
+                      </>
                     ) : (
                       <Fragment>
                         <li className="hover:font-semibold">
