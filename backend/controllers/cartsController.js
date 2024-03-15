@@ -1,40 +1,66 @@
 const addToCart = (req, res, connection) => {
   const { userId, productId, quantity } = req.body;
 
-  // Verificar si el userId existe en la tabla de usuarios
-  const userQuery = "SELECT * FROM users WHERE id = ?";
-  connection.query(userQuery, [userId], (error, userResult) => {
-    if (error) {
-      console.error("Error al verificar el usuario:", error);
-      return res.status(500).json({ error: "Error en el servidor" });
-    }
-
-    // Si no se encontró ningún usuario con el userId proporcionado, devolver un error
-    if (userResult.length === 0) {
-      return res.status(404).json({ error: "El usuario no existe" });
-    }
-
-    // Generar un ID único de 12 caracteres aleatorios para el elemento del carrito
-    const cartItemId = generateUniqueId();
-
-    // Realizar la inserción en la base de datos
-    const query =
-      "INSERT INTO carrito (id, userId, productId, quantity) VALUES (?, ?, ?, ?)";
-    connection.query(
-      query,
-      [cartItemId, userId, productId, quantity],
-      (error, result) => {
-        if (error) {
-          console.error("Error al insertar en la base de datos:", error);
-          return res.status(500).json({ error: "Error en el servidor" });
-        }
-        res.status(201).json({
-          id: cartItemId,
-          message: "Producto agregado al carrito con éxito",
-        });
+  // Verificar si ya existe un elemento en el carrito para el mismo userId y productId
+  const existingCartItemQuery =
+    "SELECT * FROM carrito WHERE userId = ? AND productId = ?";
+  connection.query(
+    existingCartItemQuery,
+    [userId, productId],
+    (error, cartItemResult) => {
+      if (error) {
+        console.error("Error al verificar el elemento del carrito:", error);
+        return res.status(500).json({ error: "Error en el servidor" });
       }
-    );
-  });
+
+      if (cartItemResult.length > 0) {
+        // Si ya existe un elemento, obtener la cantidad existente y sumarla con la nueva cantidad
+        const existingQuantity = cartItemResult[0].quantity;
+        const updatedQuantity = existingQuantity + quantity;
+        const updateQuery =
+          "UPDATE carrito SET quantity = quantity + ? WHERE userId = ? AND productId = ?";
+        connection.query(
+          updateQuery,
+          [quantity, userId, productId],
+          (error, updateResult) => {
+            if (error) {
+              console.error(
+                "Error al actualizar la cantidad en el carrito:",
+                error
+              );
+              return res.status(500).json({ error: "Error en el servidor" });
+            }
+            res
+              .status(200)
+              .json({
+                message: "Cantidad actualizada en el carrito con éxito",
+              });
+          }
+        );
+      } else {
+        // Si no existe un elemento, agregar uno nuevo al carrito
+        const cartItemId = generateUniqueId();
+        const insertQuery =
+          "INSERT INTO carrito (id, userId, productId, quantity) VALUES (?, ?, ?, ?)";
+        connection.query(
+          insertQuery,
+          [cartItemId, userId, productId, quantity],
+          (error, insertResult) => {
+            if (error) {
+              console.error("Error al insertar en el carrito:", error);
+              return res.status(500).json({ error: "Error en el servidor" });
+            }
+            res
+              .status(201)
+              .json({
+                id: cartItemId,
+                message: "Producto agregado al carrito con éxito",
+              });
+          }
+        );
+      }
+    }
+  );
 };
 
 // Función para generar un ID único de 12 caracteres alfanuméricos
