@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SliderProducts } from "./SliderProducts";
 import { apiUrl } from "../utils/config";
+import ContentLoader from "react-content-loader";
 
 export const SliderCategory = ({ categories }) => {
   //* -- USE STATE --------
@@ -38,12 +39,34 @@ export const SliderCategory = ({ categories }) => {
   };
   //   ------ Handle Category ----------
 
+  //? --- Loader ---
+const MyLoader = (props) => (        
+  <div className="bg-white py-2 max-w-32 max-h-14 border border-gray-300 hover:shadow-lg cursor-pointer hover:text-red-500 font-medium">
+    {
+      <ContentLoader
+      className=""
+        speed={2}
+        width={400}
+        height={160}
+        viewBox="0 0 400 160"
+        backgroundColor="#dedede"
+        foregroundColor="#919191"
+        {...props}
+      >
+        <rect x="20" y="7" rx="3" ry="3" width="88" height="6" />
+        <rect x="26" y="21" rx="3" ry="3" width="52" height="6" />
+      </ContentLoader>
+    }
+</div>
+);
+  // --- Loader ---
+
   console.log("🚀 productsByCateg:", productsByCateg);
 
   return (
     <div className="shadow-lg min-h-[300px]">
       <div className="flex ">
-        {categories &&
+        {categories.length > 0?
           categories?.map(
             (category) =>
               category.status === 1 && (
@@ -60,7 +83,9 @@ export const SliderCategory = ({ categories }) => {
                     category?.contenido[1]?.nombre}
                 </button>
               )
-          )}
+          ):
+          Array.from({ length: 8 }, (_, index) => <MyLoader key={index} />)
+          }
       </div>
 
       <div className="h-full">

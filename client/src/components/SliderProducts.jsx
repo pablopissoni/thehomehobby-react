@@ -7,37 +7,46 @@ import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
 import { apiUrl } from "../utils/config";
 
-export const SliderProducts = ({ products, prodCategoryId, productsByCategProp}) => {
+export const SliderProducts = ({
+  products,
+  prodCategoryId,
+  productsByCategProp,
+}) => {
   const [slidesPerView, setSlidesPerView] = useState(4); // Valor predeterminado para dispositivos no móviles
   const [productsByCateg, setProductsByCateg] = useState([]);
+  const [loaderProducts, setLoaderProducts] = useState(true);
   // console.log("🚀 ~ SliderProducts ~ productsByCateg:", productsByCateg.data);
 
   //* ---- USE EFFECTs ----
   useEffect(() => {
-    if(productsByCategProp){
-      setProductsByCateg(productsByCategProp)
+    if (productsByCategProp) {
+      setProductsByCateg(productsByCategProp);
     } else {
-
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(
-          `${apiUrl}/productos?category=${prodCategoryId}`
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setProductsByCateg(data);
-        } else {
-          throw new Error("Error al obtener los productos");
+      const fetchProducts = async () => {
+        try {
+          const response = await fetch(
+            `${apiUrl}/productos?category=${prodCategoryId}`
+            );
+            
+          if (response.ok) {
+            const data = await response.json();
+            setProductsByCateg(data);
+          } else {
+            throw new Error("Error al obtener los productos");
+          }
+        } catch (error) {
+          console.error(error);
         }
-      } catch (error) {
-        console.error(error);
-      }
-    };
+      };
 
-    fetchProducts();
-  }
+      fetchProducts();
+    }
   }, [prodCategoryId, productsByCategProp]);
   // }, []);
+
+  // if(productsByCateg.data.length > 0){
+  //   setLoaderProducts(false)
+  // }
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,41 +70,50 @@ export const SliderProducts = ({ products, prodCategoryId, productsByCategProp})
     };
   }, []); // Se ejecuta solo una vez al montar el componente
   //  ---- USE EFFECTs ----
+  console.log("🚀 ~ loaderProducts:", loaderProducts)
 
   return (
-    <Swiper
-      spaceBetween={30}
-      centeredSlides={false}
-      autoplay={{
-        delay: 2500,
-        disableOnInteraction: false,
-      }}
-      pagination={{
-        clickable: true,
-      }}
-      slidesPerView={slidesPerView} // Usa el estado slidesPerView
-      navigation={true}
-      modules={[Pagination, Navigation]}
-      className="mySwiper px-10"
-    >
-      {productsByCateg.data &&
-        productsByCateg.data?.map((prod, index) => (
-          <SwiperSlide key={index}>
-            <CardProduct
-              id={prod?.id}
-              off={prod?.oferta_id}
-              img={prod?.imagen}
-              stars={prod?.stars}
-              stock={prod?.stock}
-              title={
-                prod?.nombre_ingles ? prod?.nombre_ingles : prod?.nombre_es
-              }
-              description={prod?.description}
-              price={prod?.precio_base}
-              priceOff={prod?.priceOff}
-            />
-          </SwiperSlide>
-        ))}
-    </Swiper>
+        <Swiper
+          spaceBetween={30}
+          centeredSlides={false}
+          autoplay={{
+            delay: 2500,
+            disableOnInteraction: false,
+          }}
+          pagination={{
+            clickable: true,
+          }}
+          slidesPerView={slidesPerView} // Usa el estado slidesPerView
+          navigation={true}
+          modules={[Pagination, Navigation]}
+          className="mySwiper px-10"
+        >
+          {productsByCateg.data ?
+            productsByCateg.data?.map((prod, index) => (
+              <SwiperSlide key={index}>
+                <CardProduct
+                  id={prod?.id}
+                  off={prod?.oferta_id}
+                  img={prod?.imagen}
+                  stars={prod?.stars}
+                  stock={prod?.stock}
+                  title={
+                    prod?.nombre_ingles ? prod?.nombre_ingles : prod?.nombre_es
+                  }
+                  description={prod?.description}
+                  price={prod?.precio_base}
+                  priceOff={prod?.priceOff}
+                />
+              </SwiperSlide>
+            ))
+          :
+          (Array.from({ length: 6 }, (_, index) => (
+            <SwiperSlide key={index}>
+              <CardProduct />
+            </SwiperSlide>
+          )))
+          }
+        </Swiper>
+      
   );
 };

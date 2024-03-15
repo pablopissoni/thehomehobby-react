@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import TestProdObj from "../TestProdObj";
 import axios from "axios";
