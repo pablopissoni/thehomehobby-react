@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 
 import Quill from "quill/core"; // Quill JS
@@ -99,6 +100,7 @@ export const Details = () => {
     try {
       const response = await axios.get(`${apiUrl}/productos/${id}`);
       setProduct(response.data[0]); // Solo el primer objeto encontrado
+
       {
         /*console.log("response.data[0]", response.data[0]);*/
       }
@@ -176,7 +178,6 @@ export const Details = () => {
     { USE_PROFILES: { html: true } }
   );
 
-
   const addToCart = async () => {
     try {
       // Obtener el userId del usuario logeado
@@ -207,13 +208,11 @@ export const Details = () => {
       }
 
       // Enviar la solicitud al servidor
-      const responseCart = await axios.post(
-        `${apiUrl}/carrito/carrito`,
-        {
-          userId: userId,
-          productId: id,
-        }
-      );
+      const responseCart = await axios.post(`${apiUrl}/carrito/carrito`, {
+        userId: userId,
+        productId: id,
+        quantity: count,
+      });
 
       // Mostrar mensaje en la consola indicando si el producto se agregó correctamente al carrito
       console.log(
@@ -512,9 +511,14 @@ export const Details = () => {
                   </div>
                   <div className="flex gap-2">
                     <button
-                      className="btn-effect transition-all-300 flex h-full w-full items-center justify-center gap-2 rounded-lg bg-primary p-2"
+                      className={`btn-effect transition-all-300 flex h-full w-full items-center justify-center gap-2 rounded-lg p-2 ${
+                        count === 0
+                          ? "bg-gray-300 cursor-not-allowed"
+                          : "bg-primary"
+                      }`}
                       type="button"
                       onClick={addToCart}
+                      disabled={count === 0}
                     >
                       <i className="bi bi-cart-fill flex text-xl text-white"></i>
                       <span className="font-bold uppercase text-white">
