@@ -34,6 +34,7 @@ export const SliderCategory = ({ categories }) => {
 
   //*  ------ Handle Category ----------
   const handleCategoryClick = (categoryId) => {
+    setProductsByCateg([]) // en cada click vacio el array para que cargue el Loader en <SliderProducts>
     fetchProductsByCategory(categoryId); // Fetch products when category is clicked
     setSelectedCategory(categoryId); // Update selected category
   };

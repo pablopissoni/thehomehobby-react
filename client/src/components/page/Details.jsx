@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React from "react";
 
 import Quill from "quill/core"; // Quill JS
@@ -25,8 +24,7 @@ import "swiper/css/thumbs";
 // import required modules
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 
-// Importa react-modal
-// import Modal from "react-modal";
+import ContentLoader from "react-content-loader"; // Loader
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -35,6 +33,7 @@ import test_product1 from "../../assets/test_product1.png";
 import test_product2 from "../../assets/test_product2.png";
 import test_product3 from "../../assets/test_product3.png";
 import { apiUrl } from "../../utils/config";
+//----------------------------------------
 
 export const Details = () => {
   //* ---- HOOKS ----
@@ -47,53 +46,47 @@ export const Details = () => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null); //Swiper
 
   // Define el estado para controlar la apertura/cierre de los modales
-  const [commentModalIsOpen, setCommentModalIsOpen] = useState(false);
-  const [reviewModalIsOpen, setReviewModalIsOpen] = useState(false);
-  const [charactModalIsOpen, setCharactModalIsOpen] = useState(false);
+  const [charactModalIsOpen, setCharactModalIsOpen] = useState(true);
 
   const [product, setProduct] = useState({
     contenido: [{ ficha: "Cargando" }],
   });
-  // product?.contenido[0]?.ficha
+  console.log("🚀 ~ Details ~ product:", product)
   // ---- HOOKS ----
 
   const [token, setToken] = useState("");
   const [userEmail, setUserEmail] = useState("");
 
-  useEffect(() => {
-    const fetchToken = async () => {
-      const accessToken = localStorage.getItem("accessToken");
-      if (!accessToken) {
-        console.log(
-          "No se encontró un token de acceso en el almacenamiento local."
-        );
-        return;
-      }
+  const fetchToken = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      console.log(
+        "No se encontró un token de acceso en el almacenamiento local."
+      );
+      return;
+    }
 
-      try {
-        const response = await axios.post(
-          `${apiUrl}/users/get-token`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        // Extraer el email del usuario de la respuesta
-        const userEmail = response.data?.data?.UserAttributes.find(
-          (attr) => attr.Name === "email"
-        )?.Value;
-        console.log("Email del usuario logeado:", userEmail);
-        // Actualizar el estado con el email del usuario
-        setUserEmail(userEmail);
-      } catch (error) {
-        console.error("Error al obtener el token del servidor:", error);
-      }
-    };
-
-    fetchToken();
-  }, []);
+    try {
+      const response = await axios.post(
+        `${apiUrl}/users/get-token`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      // Extraer el email del usuario de la respuesta
+      const userEmail = response.data?.data?.UserAttributes.find(
+        (attr) => attr.Name === "email"
+      )?.Value;
+      console.log("Email del usuario logeado:", userEmail);
+      // Actualizar el estado con el email del usuario
+      setUserEmail(userEmail);
+    } catch (error) {
+      console.error("Error al obtener el token del servidor:", error);
+    }
+  };
 
   //* ----- GET Producto -------------
   async function getProductId() {
@@ -125,35 +118,16 @@ export const Details = () => {
       console.log(error);
     }
   }
-  // console.log("🚀 ~ PRODUCT: >>", product);
-
   // ----- GET Productos -------------
 
   //* ------- USE EFFECTS ------
   useEffect(() => {
+    fetchToken();
     getProductId();
-    // console.log("🚀 ~ Details ~ product:", product);
   }, []);
   // -------- USE EFFECTS ------
 
-  {
-    /*console.log("🚀 valueHTML:>> ", valueHTML); */
-  }
-
   //* ---- HANDLES ----
-  const handleCommentClick = () => {
-    setCommentModalIsOpen(true);
-    setReviewModalIsOpen(false);
-    //console.log("🚀 ~ Details ~ commentModalIsOpen:", commentModalIsOpen);
-  };
-
-  const handleReviewClick = () => {
-    setCommentModalIsOpen(false);
-    setReviewModalIsOpen(true);
-    //console.log("🚀 ~ Details ~ reviewModalIsOpen:", reviewModalIsOpen);
-  };
-  //? test array img
-  // const test_img = [test_product1, test_product2, test_product3];
 
   // handleSubmit Form
   const handleFormSubmit = (e) => {
@@ -228,6 +202,99 @@ export const Details = () => {
     }
   };
 
+  //? --- Loader ---
+  const LoaderFicha = (props) => (
+    <ContentLoader 
+      speed={2}
+      width={500}
+      height={350}
+      viewBox="0 0 500 350"
+      backgroundColor="#dedede"
+      foregroundColor="#919191"
+      {...props}
+    >
+      <rect x="16" y="34" rx="3" ry="3" width="98" height="11" /> 
+      <rect x="17" y="7" rx="3" ry="3" width="161" height="11" /> 
+      <rect x="200" y="7" rx="3" ry="3" width="298" height="11" /> 
+      <rect x="17" y="59" rx="3" ry="3" width="161" height="11" /> 
+      <rect x="19" y="86" rx="3" ry="3" width="98" height="11" /> 
+      <rect x="197" y="34" rx="3" ry="3" width="298" height="11" /> 
+      <rect x="197" y="59" rx="3" ry="3" width="298" height="11" /> 
+      <rect x="195" y="86" rx="3" ry="3" width="298" height="11" /> 
+      <rect x="19" y="153" rx="3" ry="3" width="98" height="11" /> 
+      <rect x="20" y="126" rx="3" ry="3" width="161" height="11" /> 
+      <rect x="203" y="126" rx="3" ry="3" width="298" height="11" /> 
+      <rect x="20" y="178" rx="3" ry="3" width="161" height="11" /> 
+      <rect x="22" y="205" rx="3" ry="3" width="98" height="11" /> 
+      <rect x="200" y="153" rx="3" ry="3" width="298" height="11" /> 
+      <rect x="200" y="178" rx="3" ry="3" width="298" height="11" /> 
+      <rect x="198" y="205" rx="3" ry="3" width="298" height="11" /> 
+      <rect x="22" y="267" rx="3" ry="3" width="98" height="11" /> 
+      <rect x="23" y="240" rx="3" ry="3" width="161" height="11" /> 
+      <rect x="206" y="240" rx="3" ry="3" width="298" height="11" /> 
+      <rect x="23" y="292" rx="3" ry="3" width="161" height="11" /> 
+      <rect x="25" y="319" rx="3" ry="3" width="98" height="11" /> 
+      <rect x="203" y="267" rx="3" ry="3" width="298" height="11" /> 
+      <rect x="203" y="292" rx="3" ry="3" width="298" height="11" /> 
+      <rect x="201" y="319" rx="3" ry="3" width="298" height="11" />
+    </ContentLoader>
+  )
+
+  const LoaderDescription = (props) => (
+    <ContentLoader 
+    speed={2}
+    width={500}
+    height={100}
+    viewBox="0 0 500 100"
+    backgroundColor="#dedede"
+    foregroundColor="#919191"
+    {...props}
+  >
+    <rect x="16" y="34" rx="3" ry="3" width="98" height="11" /> 
+    <rect x="17" y="7" rx="3" ry="3" width="161" height="11" /> 
+    <rect x="200" y="7" rx="3" ry="3" width="298" height="11" /> 
+    <rect x="17" y="59" rx="3" ry="3" width="161" height="11" /> 
+    <rect x="19" y="86" rx="3" ry="3" width="98" height="11" /> 
+    <rect x="197" y="34" rx="3" ry="3" width="298" height="11" /> 
+    <rect x="197" y="59" rx="3" ry="3" width="298" height="11" /> 
+    <rect x="195" y="86" rx="3" ry="3" width="298" height="11" />
+  </ContentLoader>
+  )
+
+  const LoaderTitle = (props) => (
+    <ContentLoader 
+      speed={2}
+      width={400}
+      height={30}
+      viewBox="0 0 400 30"
+      backgroundColor="#dedede"
+      foregroundColor="#919191"
+      {...props}
+    >
+      <rect x="163" y="6" rx="3" ry="3" width="67" height="21" /> 
+      <rect x="15" y="6" rx="3" ry="3" width="140" height="21" /> 
+      <rect x="241" y="6" rx="3" ry="3" width="140" height="21" />
+    </ContentLoader>
+  )
+
+  const LoaderImages = (props) => (
+    <ContentLoader 
+      speed={2}
+      width={400}
+      height={460}
+      viewBox="0 0 400 460"
+      backgroundColor="#dedede"
+      foregroundColor="#919191"
+      {...props}
+    >
+      <rect x="43" y="50" rx="2" ry="2" width="305" height="238" /> 
+      <rect x="12" y="310" rx="0" ry="0" width="111" height="100" /> 
+      <rect x="267" y="310" rx="0" ry="0" width="111" height="100" /> 
+      <rect x="138" y="310" rx="0" ry="0" width="111" height="100" />
+    </ContentLoader>
+  )
+  //  --- Loader ---
+
   return (
     <div className="flex min-h-full flex-col bg-body font-poppins text-txt bg-gray-100">
       <div className="product-details container mx-auto my-5 px-2 sm:px-8">
@@ -235,7 +302,7 @@ export const Details = () => {
 
         <div className="grid grid-cols-12 gap-5 rounded-lg bg-white p-2 xs:p-8">
           {/* SWIPER */}
-          <div className="col-span-12 h-auto md:col-span-6">
+          {product.id?<div className="col-span-12 h-auto md:col-span-6">
             {/* Swiper Grande */}
             <Swiper
               style={{
@@ -307,14 +374,20 @@ export const Details = () => {
               ))}
             </Swiper>
           </div>
-          <div className="col-span-12 md:col-span-6">
+          :
+          //? Loader Images
+          <div className="col-span-12 h-auto md:col-span-6 ">
+            <LoaderImages className='flex justify-center m-auto h-auto w-3/6 '/>
+          </div>}
+          
+          <div className="col-span-12 md:col-span-6 ">
             {/* Titulo Producto */}
             <div className="my-1">
               <a
                 className="clamp-2 transition-all-300 break-all text-2xl font-medium hover:text-primary"
                 href="#"
               >
-                {product?.nombre_ingles || product?.nombre_es}
+                {product?.nombre_ingles || product?.nombre_es || <LoaderTitle className='w-4/6'/>}
               </a>
             </div>
             <div className="product-val-stock my-2 flex justify-between">
@@ -349,7 +422,7 @@ export const Details = () => {
               </div>
             </div>
             {/* --- Mini Descripcion --- */}
-            {product && (
+            {product.id? (
               <div className="my-4">
                 <p
                   // dangerouslySetInnerHTML={{ __html: product?.contenido[0]?.descripcion }}
@@ -360,131 +433,13 @@ export const Details = () => {
                       __html: descripcionEnHTML || descripcionEsHTML,
                     }}
                   />
-                  {/* Mini Descripcion aqui con dangerouslySetInnerHTML */}
-                  {/* <ReactQuill
-                    theme="bubble"
-                    value={valueHTML?.english?.descripcion || valueHTML?.espanish?.descripcion}
-                    placeholder="loading description..."
-                    readOnly={true}
-                    // onChange={setValueHTML}
-                    className="h-full"
-                  /> */}
                 </p>
               </div>
-            )}
+            ):
+                    <LoaderDescription className='w-2/3 '/>
+            }
             <div className="flex gap-1">
               <form action="#" onClick={handleFormSubmit}>
-                <div className="block">
-                  {/* <div className="my-3 flex flex-col gap-1">
-                    <span className="font-bold">Size:</span>
-                    <ul className="flex flex-wrap gap-3">
-                      <li className="relative">
-                        <input
-                          className="peer sr-only"
-                          type="radio"
-                          // value=""
-                          name="size"
-                          id="size1"
-                          checked=""
-                        />
-                        <label
-                          className="flex h-8 w-10 cursor-pointer items-center justify-center rounded-lg border border-gray-300 bg-white hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-primary"
-                          htmlFor="size1"
-                        >
-                          S
-                        </label>
-                      </li>
-                      <li className="relative">
-                        <input
-                          className="peer sr-only"
-                          type="radio"
-                          // value=""
-                          name="size"
-                          id="size2"
-                        />
-                        <label
-                          className="flex h-8 w-10 cursor-pointer items-center justify-center rounded-lg border border-gray-300 bg-white hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-primary"
-                          htmlFor="size2"
-                        >
-                          M
-                        </label>
-                      </li>
-                      <li className="relative">
-                        <input
-                          className="peer sr-only"
-                          type="radio"
-                          // value=""
-                          name="size"
-                          id="size3"
-                        />
-                        <label
-                          className="flex h-8 w-10 cursor-pointer items-center justify-center rounded-lg border border-gray-300 bg-white hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-primary"
-                          htmlFor="size3"
-                        >
-                          L
-                        </label>
-                      </li>
-                      <li className="relative">
-                        <input
-                          className="peer sr-only"
-                          type="radio"
-                          // value=""
-                          name="size"
-                          id="size4"
-                        />
-                        <label
-                          className="flex h-8 w-10 cursor-pointer items-center justify-center rounded-lg border border-gray-300 bg-white hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-primary"
-                          htmlFor="size4"
-                        >
-                          XL
-                        </label>
-                      </li>
-                    </ul>
-                  </div> */}
-                  {/* <div className="my-3 flex gap-2">
-                    <div>
-                      <label className="inline-flex items-center">
-                        <input
-                          type="radio"
-                          className="radio bg-blue-600 text-blue-600 checked:ring-blue-300 focus:ring-blue-300"
-                          name="radio"
-                          value="0"
-                          checked=""
-                        />
-                      </label>
-                    </div>
-                    <div>
-                      <label className="inline-flex items-center">
-                        <input
-                          type="radio"
-                          className="radio bg-red-600 text-red-600 checked:ring-red-300 focus:ring-red-300"
-                          name="radio"
-                          value="1"
-                        />
-                      </label>
-                    </div>
-                    <div>
-                      <label className="inline-flex items-center">
-                        <input
-                          type="radio"
-                          className="radio bg-yellow-600 text-yellow-600 checked:ring-yellow-300 focus:ring-yellow-300"
-                          name="radio"
-                          value="2"
-                        />
-                      </label>
-                    </div>
-                    <div>
-                      <label className="inline-flex items-center">
-                        <input
-                          type="radio"
-                          className="radio bg-black text-black checked:ring-gray-400 focus:ring-gray-400"
-                          name="radio"
-                          value="3"
-                        />
-                      </label>
-                    </div>
-                  </div> */}
-                </div>
                 <div className="flex flex-wrap justify-start gap-5">
                   <div className="quantity inline-flex rounded-lg bg-white shadow">
                     <input
@@ -525,13 +480,6 @@ export const Details = () => {
                         Add to cart
                       </span>
                     </button>
-
-                    <a
-                      className="tippy tippy-wishlist btn-wishlist transition-all-300 flex min-h-[40px] min-w-[40px] cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary p-2 hover:bg-primary-hover"
-                      // href="javascript:void(0)"
-                    >
-                      <i className="bi bi-heart pointer-events-none flex text-white"></i>
-                    </a>
                   </div>
                 </div>
               </form>

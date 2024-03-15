@@ -15,7 +15,7 @@ export const SliderProducts = ({
   const [slidesPerView, setSlidesPerView] = useState(4); // Valor predeterminado para dispositivos no móviles
   const [productsByCateg, setProductsByCateg] = useState([]);
   const [loaderProducts, setLoaderProducts] = useState(true);
-  // console.log("🚀 ~ SliderProducts ~ productsByCateg:", productsByCateg.data);
+  console.log("🚀 ~ SliderProducts ~ productsByCateg:", productsByCateg);
 
   //* ---- USE EFFECTs ----
   useEffect(() => {
@@ -42,11 +42,6 @@ export const SliderProducts = ({
       fetchProducts();
     }
   }, [prodCategoryId, productsByCategProp]);
-  // }, []);
-
-  // if(productsByCateg.data.length > 0){
-  //   setLoaderProducts(false)
-  // }
 
   useEffect(() => {
     const handleResize = () => {
@@ -70,7 +65,6 @@ export const SliderProducts = ({
     };
   }, []); // Se ejecuta solo una vez al montar el componente
   //  ---- USE EFFECTs ----
-  console.log("🚀 ~ loaderProducts:", loaderProducts)
 
   return (
         <Swiper
