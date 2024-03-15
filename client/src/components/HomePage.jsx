@@ -93,30 +93,30 @@ export const HomePage = () => {
   ];
 
   //? ----- Loader ------
-  const MyLoader = (props) => (        
-        <div className="bg-white py-2 max-w-48 max-h-14 border border-gray-300 hover:shadow-lg cursor-pointer hover:text-red-500 font-medium">
-          {
-            <ContentLoader
-            className="ml-4"
-              speed={2}
-              width={400}
-              height={160}
-              viewBox="0 0 400 160"
-              backgroundColor="#dedede"
-              foregroundColor="#919191"
-              {...props}
-            >
-              <rect x="30" y="7" rx="3" ry="3" width="88" height="6" />
-              <rect x="46" y="21" rx="3" ry="3" width="52" height="6" />
-            </ContentLoader>
-          }
-      </div>
+  const MyLoader = (props) => (
+    <div className="bg-white py-2 max-w-48 max-h-14 border border-gray-300 hover:shadow-lg cursor-pointer hover:text-red-500 font-medium">
+      {
+        <ContentLoader
+          className="ml-4"
+          speed={2}
+          width={400}
+          height={160}
+          viewBox="0 0 400 160"
+          backgroundColor="#dedede"
+          foregroundColor="#919191"
+          {...props}
+        >
+          <rect x="30" y="7" rx="3" ry="3" width="88" height="6" />
+          <rect x="46" y="21" rx="3" ry="3" width="52" height="6" />
+        </ContentLoader>
+      }
+    </div>
   );
   //? ----- Loader ------
 
   console.log("categories>> ", categories);
   return (
-    <div className="bg-fondo">
+    <div className="">
       {/* <ProductList products={products} /> */}
       {/* Sección de banners */}
       <section className="banners-section container mx-auto my-5 px-2 sm:px-8">
@@ -331,26 +331,25 @@ export const HomePage = () => {
           </div>
           <div className="swiper-container col-span-12 overflow-hidden rounded-lg md:col-span-8">
             <div className="grid lg:grid-cols-6 md:grid-cols-3 sm:grid-cols-2 gap-4 mb-10">
-              {categories.length > 0 ? (
-                categories.map(
-                  (category, index) =>
-                    category.status == 1 && (
-                      <Link
-                        to={`/category/${category.id}`}
-                        key={index}
-                        className="bg-white p-4 max-w-60 border border-gray-300 hover:shadow-lg cursor-pointer hover:text-red-500 font-medium"
-                      >
-                        {category?.contenido[0]?.nombre ||
-                          category?.contenido[1]?.nombre}
-                      </Link>
-                    )
-                )
-              ) : (
-                // Loader de Carga de SubCategorias
-                Array.from({ length: 8 }, (_, index) => <MyLoader key={index} />)
-              )}
+              {categories.length > 0
+                ? categories.map(
+                    (category, index) =>
+                      category.status == 1 && (
+                        <Link
+                          to={`/category/${category.id}`}
+                          key={index}
+                          className="bg-white p-4 max-w-60 border border-gray-300 hover:shadow-lg cursor-pointer hover:text-red-500 font-medium"
+                        >
+                          {category?.contenido[0]?.nombre ||
+                            category?.contenido[1]?.nombre}
+                        </Link>
+                      )
+                  )
+                : // Loader de Carga de SubCategorias
+                  Array.from({ length: 8 }, (_, index) => (
+                    <MyLoader key={index} />
+                  ))}
             </div>
-
           </div>
         </div>
       </section>

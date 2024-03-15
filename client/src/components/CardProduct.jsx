@@ -46,8 +46,7 @@ export const CardProduct = ({
     <>
       {id ? (
         <div className="card-container  my-8  transition-all-300 translateY-2 relative flex h-[500px] flex-col overflow-hidden rounded-lg bg-white p-5 shadow-md hover:z-[2] hover:shadow-xl">
-          <div className="absolute top-[10px] right-[10px]">
-          </div>
+          <div className="absolute top-[10px] right-[10px]"></div>
           {off && (
             <div className="absolute top-0 left-0 flex h-[35px] w-[90px] items-center justify-center rounded-br-lg bg-primary">
               <span className="text-md text-center font-semibold uppercase text-white">
@@ -104,12 +103,17 @@ export const CardProduct = ({
         </ul>
       </div> */}
           <div className="my-1 mt-auto">
-            <span className="text-3xl  font-bold">${price}</span>
+            <span className="text-3xl  font-bold flex">
+              ${price}
+              <div className="text-sm">00</div>
+            </span>
             {/* <span className="text-sm text-primary line-through">${price}</span> */}
           </div>
           <div className="mt-auto">
             <Link
-              className="btn-effect transition-all-300 flex w-full items-center justify-center rounded-lg bg-primary p-2"
+              className="btn-effect transition-all-300 flex w-full items-center justify-center rounded-lg bg-primary p-2
+              before:ease relative h-12 overflow-hidden border border-primary  text-white shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-primary hover:before:-translate-x-64
+              "
               to={urlDetail}
             >
               <span className="font-bold uppercase text-white">

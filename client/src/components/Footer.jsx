@@ -100,16 +100,16 @@ export const Footer = () => {
                   <li className="group relative flex items-center hover:text-primary">
                     <i className="bi bi-circle-fill invisible absolute -left-4 flex text-[6px] text-primary group-hover:visible"></i>
                     <a
-                      href="#"
+                      href="FAQs"
                       className="transition-all-300 group-hover:text-white"
                     >
-                      About us
+                      FAQs
                     </a>
                   </li>
                   <li className="group relative flex items-center hover:text-primary">
                     <i className="bi bi-circle-fill invisible absolute -left-4 flex text-[6px] text-primary group-hover:visible"></i>
                     <a
-                      href="#"
+                      href="/ContactUs"
                       className="transition-all-300 group-hover:text-white"
                     >
                       Contact us

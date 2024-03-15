@@ -367,12 +367,12 @@ export const ShoppingCartPage = () => {
                 <span>Total:</span>
                 <span>$59.72</span>
               </div>
-              <button
+              <a
                 class="btn-view-shopping-cart btn-effect transition-all-300 flex w-full items-center justify-center rounded-lg bg-primary p-2"
-                type="submit"
+                href="/Checkout"
               >
                 <span class="font-bold uppercase text-white">Continue</span>
-              </button>
+              </a>
             </div>
             <a
               class="transition-all-300 my-5 flex items-center justify-center gap-2 hover:text-primary"

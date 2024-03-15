@@ -19,7 +19,7 @@ import { Footer } from "./components/Footer";
 import { AdminDashboard } from "./components/page/AdminDashboard";
 import { SubCategories } from "./components/page/SubCategories";
 import { ProdByCards } from "./components/page/ProdByCards";
-
+import { ShoppingCartPage } from "./components/ShoppingCartPage";
 const App = () => {
   // Obtengo las ubicaciones y guardo en una variable las que quiero ignorar después
   const { pathname } = useLocation();
@@ -45,11 +45,18 @@ const App = () => {
         <Route path="/ContactUs" element={<ContactUs />} />
         <Route path="/FAQs" element={<FAQs />} />
         <Route path="/Checkout" element={<Checkout />} />
+        <Route path="/ShoppingCartPage" element={<ShoppingCartPage />} />
         <Route path="/UserProfile" element={<UserProfile />} />
         <Route path="/adminDashboard" element={<AdminDashboard />} />
         <Route path="/category/:id" element={<SubCategories />} />
-        <Route path="/prodbycategory/:id" element={<ProdByCards resourceType="category"/>} />
-        <Route path="/prodbybrand/:id" element={<ProdByCards resourceType="brand"/>} />
+        <Route
+          path="/prodbycategory/:id"
+          element={<ProdByCards resourceType="category" />}
+        />
+        <Route
+          path="/prodbybrand/:id"
+          element={<ProdByCards resourceType="brand" />}
+        />
         {/* <Route path="/detail/:id" element={<Login/>} /> */}
       </Routes>
       {!isIgnoredFooter && <Footer />}

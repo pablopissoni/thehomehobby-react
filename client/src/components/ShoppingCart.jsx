@@ -161,7 +161,7 @@ export const ShoppingCart = ({ setShow }) => {
                   </div>
                   <a
                     className="btn-effect transition-all-300 my-5 flex w-full items-center justify-center rounded-lg bg-primary p-2"
-                    href="shopping-cart.html"
+                    href="Shoppingcartpage"
                   >
                     <span className="font-bold uppercase text-white">
                       View Shopping Cart
@@ -169,7 +169,7 @@ export const ShoppingCart = ({ setShow }) => {
                   </a>
                   <a
                     className="btn-effect transition-all-300 my-5 flex w-full items-center justify-center rounded-lg bg-primary p-2"
-                    href="checkout.html"
+                    href="checkout"
                   >
                     <span className="font-bold uppercase text-white">
                       Checkout now

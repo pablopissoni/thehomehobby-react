@@ -153,7 +153,7 @@ export const NavBar = () => {
           </div>
         </div>
       </div> */}
-      <div className="bg-secondary h-16">
+      <div className="bg-secondary  py-3">
         <div className="container mx-auto grid  grid-cols-4   sm:px-8 lg:grid-cols-12 lg:gap-0">
           <div className="order-1 col-span-2 self-center lg:order-1 lg:col-span-3">
             <a href={home}>
@@ -172,68 +172,6 @@ export const NavBar = () => {
           >
             <form className="search" onSubmit={handleSearch}>
               <div className="flex h-[40px]   bg-white">
-                <Listbox
-                  value={selectedCategories}
-                  onChange={setSelectedCategories}
-                >
-                  <div className="relative bg-gray-300">
-                    <Listbox.Button className="relative w-full cursor-default rounded-lg bg-gray-300 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm ">
-                      <span className="block truncate">
-                        {selectedCategories.name}
-                      </span>
-                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                        <ChevronUpDownIcon
-                          className="h-5 w-5 text-gray-400"
-                          aria-hidden="true"
-                        />
-                      </span>
-                    </Listbox.Button>
-                    <Transition
-                      as={Fragment}
-                      leave="transition ease-in duration-100"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                    >
-                      <Listbox.Options className="absolute mt-1  overflow-auto  bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-                        {people.map((categories, categoriesIdx) => (
-                          <Listbox.Option
-                            key={categoriesIdx}
-                            className={({ active }) =>
-                              `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                                active
-                                  ? "bg-amber-100 text-amber-900"
-                                  : "text-gray-900"
-                              }`
-                            }
-                            value={categories}
-                          >
-                            {({ selectedCategories }) => (
-                              <>
-                                <span
-                                  className={`block truncate ${
-                                    selectedCategories
-                                      ? "font-medium"
-                                      : "font-normal"
-                                  }`}
-                                >
-                                  {categories.name}
-                                </span>
-                                {selectedCategories ? (
-                                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                    <CheckIcon
-                                      className="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                ) : null}
-                              </>
-                            )}
-                          </Listbox.Option>
-                        ))}
-                      </Listbox.Options>
-                    </Transition>
-                  </div>
-                </Listbox>
                 <input
                   className="search w-full border-2 border-red-100 rounded-sm pl-2 outline-none focus:border-2 focus:border-b-cyan-500"
                   type="search"
@@ -351,9 +289,16 @@ export const NavBar = () => {
                           onClick={handleLogout}
                           className="btn-open-modal"
                         >
-                          <div className="pointer-events-none flex items-center gap-2 p-1">
-                            <i className="bi bi-box-arrow-right flex text-xl text-primary"></i>
-                            <span>Sign out</span>
+                          <div className="pointer-events-none flex flex-col items-center gap-2 p-1">
+                            <i className="bi bi-box-arrow-right flex  text-primary">
+                              <span>My profile</span>
+                            </i>
+                            <i className="bi bi-box-arrow-right flex  text-primary">
+                              <span>Dashboard</span>
+                            </i>
+                            <i className="bi bi-box-arrow-right flex  text-primary">
+                              <span>Sign out</span>
+                            </i>
                           </div>
                         </button>
                       </li>
@@ -394,7 +339,7 @@ export const NavBar = () => {
           </div>
         </div>
       </div>
-      <div className="hidden bg-white lg:block h-10">
+      {/* <div className=" bg-white lg:block h-10">
         <nav className="container mx-auto px-2 sm:px-8">
           <ul className="menu flex flex-wrap items-center justify-between py-[10px] text-lg">
             {/* <li className="underlined-animated group relative">
@@ -864,7 +809,9 @@ export const NavBar = () => {
                 </ul>
               </div>
             </li> */}
-            <li className="underlined-animated">
+
+      {/* PARTE IMPORTANTE DE LA NAVBAR DESACTIVADA */}
+      {/* <li className="underlined-animated">
               <a href="/">Home</a>
             </li>
             <li className="underlined-animated">
@@ -875,12 +822,9 @@ export const NavBar = () => {
             </li>
             <li className="underlined-animated">
               <a href="/UserProfile">UserProfile</a>
-            </li>
-            <li className="underlined-animated">
-              <a href="#">Smartphones</a>
-            </li>
+            </li> */}
 
-            {/* <li className="underlined-animated group relative">
+      {/* <li className="underlined-animated group relative">
               <a
                 href="#"
                 className="btn-open flex items-center gap-1 font-semibold"
@@ -1347,15 +1291,17 @@ export const NavBar = () => {
                 </ul>
               </div>
             </li> */}
-            <li className="underlined-animated">
+
+      {/* PARTE IMPORTANTE DE LA NAVBAR DESACTIVADA */}
+      {/* <li className="underlined-animated">
               <a href="FAQs">FAQ's</a>
             </li>
             <li className="underlined-animated">
               <a href="/ContactUs">Contact Us</a>
-            </li>
-          </ul>
+            </li> */}
+      {/* </ul>
         </nav>
-      </div>
+      </div> */}
 
       {showNavBarMobile && <NavBarMobile setShow={setShowNavBarMobile} />}
       {showWishlist && <Wishlist setShow={setShowWishlist} />}
