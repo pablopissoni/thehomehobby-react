@@ -10,7 +10,6 @@ import { ShoppingCart } from "./ShoppingCart";
 import { Wishlist } from "./Wishlist";
 import { NavBarMobile } from "./NavBarMobile";
 import axios from "axios";
-
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { apiUrl, frontUrl } from "../utils/config";
@@ -285,31 +284,25 @@ export const NavBar = () => {
                     {isUserLoggedIn ? (
                       <>
                         <li className="hover:font-semibold">
-                          {/* Utilizar la función handleLogout para manejar el cierre de sesión */}
-                          <button className="btn-open-modal">
+                          <a href="/userprofile">
                             <div className="pointer-events-none flex flex-col items-center gap-2 p-1">
                               <i className="bi bi-person-circle flex  text-primary">
                                 <span>My profile</span>
                               </i>
                             </div>
-                          </button>
+                          </a>
                         </li>
                         <li className="hover:font-semibold">
-                          {/* Utilizar la función handleLogout para manejar el cierre de sesión */}
-
-                          <button className="btn-open-modal">
+                          <a href="/adminDashboard">
                             <div className="pointer-events-none flex flex-col items-center gap-2 p-1">
                               <i className="bi bi-terminal-dash flex  text-primary">
                                 <span>Dashboard</span>
                               </i>
                             </div>
-                          </button>
+                          </a>
                         </li>
                         <li className="hover:font-semibold">
-                          <button
-                            onClick={handleLogout}
-                            className="btn-open-modal"
-                          >
+                          <button onClick={handleLogout}>
                             <div className="pointer-events-none flex flex-col items-center gap-2 p-1">
                               <i className="bi bi-box-arrow-right flex  text-primary">
                                 <span>Sign out</span>

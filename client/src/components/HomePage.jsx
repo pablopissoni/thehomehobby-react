@@ -187,7 +187,7 @@ export const HomePage = () => {
       </section>
       {/* Slider categorias */}
       <section>
-        <div className="container mx-auto my-10 px-2 sm:px-8">
+        {/* <div className="container mx-auto my-10 px-2 sm:px-8">
           {" "}
           <div class="-mx-4 flex flex-wrap p-8 ">
             {Boxes.map((box, index) => (
@@ -208,7 +208,7 @@ export const HomePage = () => {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
 
         <div className="container mx-auto my-10 px-2 sm:px-8 bg-white">
           <div className=" mt-5 flex justify-center border-b-2 border-[rgba(119,119,119,.17)]">
