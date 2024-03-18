@@ -4,6 +4,7 @@ import TestProdObj from "../TestProdObj";
 import axios from "axios";
 import { Paginado } from "../Paginado";
 import { apiUrl } from "../../utils/config";
+import ContentLoader from "react-content-loader";
 
 export const ProdByCards = ({resourceType}) => {
   console.log("🚀 ~ ProdByCards ~ resourceType:", resourceType)
@@ -31,7 +32,7 @@ export const ProdByCards = ({resourceType}) => {
     if (resourceType === "brand") {
       getProdByMarca(id);
     } else if (resourceType === "category") {
-      getProdBySubCategory(id);
+      // getProdBySubCategory(id);
     }
   }, [id]);
   // ----- USE EFFECTs ----
@@ -70,6 +71,27 @@ export const ProdByCards = ({resourceType}) => {
   // console.log("🚀 ~ paginationData:", paginationData);
   // console.log("🚀 ~ ProdByCards ~ products:", products)
 
+  //? --- Loader ---
+  const LoaderCard = (props) => (
+    <ContentLoader 
+      speed={2}
+      width={300}
+      height={400}
+      viewBox="0 0 300 400"
+      backgroundColor="#dedede"
+      foregroundColor="#919191"
+      {...props}
+    >
+      <rect x="134" y="295" rx="3" ry="3" width="52" height="20" /> 
+      <rect x="54" y="35" rx="2" ry="2" width="188" height="165" /> 
+      <rect x="108" y="295" rx="3" ry="3" width="22" height="20" /> 
+      <rect x="13" y="218" rx="4" ry="4" width="274" height="18" /> 
+      <rect x="13" y="246" rx="4" ry="4" width="159" height="14" /> 
+      <rect x="16" y="352" rx="3" ry="3" width="267" height="32" />
+    </ContentLoader>
+  )
+  //  --- Loader ---
+
   return (
     <div className="m-20 max-w-[1500px]">
       {/* encabezado */}
@@ -84,7 +106,7 @@ export const ProdByCards = ({resourceType}) => {
         </div>
         {/* Productos */}
         <div className=" h-auto w-full curs mt-2 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
-          {!products.message &&
+          {!products.message && products.data?
             products?.data?.map((product, index) => (
               <div
                 className="py-4 border border-gray-200 transition-transform duration-300 hover:scale-[1.02] flex flex-col justify-between"
@@ -116,6 +138,12 @@ export const ProdByCards = ({resourceType}) => {
                   <i className="bi bi-cart4 ml-2"></i>
                 </button>
               </div>
+            )): !products.data && !products.message && 
+            Array.from({ length: 5 }).map((_, index) => (
+              <LoaderCard
+                key={index}
+                className="border border-gray-200 "
+              />
             ))}
 
           {/* No hay productos */}
