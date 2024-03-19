@@ -30,11 +30,9 @@ const addToCart = (req, res, connection) => {
               );
               return res.status(500).json({ error: "Error en el servidor" });
             }
-            res
-              .status(200)
-              .json({
-                message: "Cantidad actualizada en el carrito con éxito",
-              });
+            res.status(200).json({
+              message: "Cantidad actualizada en el carrito con éxito",
+            });
           }
         );
       } else {
@@ -50,12 +48,10 @@ const addToCart = (req, res, connection) => {
               console.error("Error al insertar en el carrito:", error);
               return res.status(500).json({ error: "Error en el servidor" });
             }
-            res
-              .status(201)
-              .json({
-                id: cartItemId,
-                message: "Producto agregado al carrito con éxito",
-              });
+            res.status(201).json({
+              id: cartItemId,
+              message: "Producto agregado al carrito con éxito",
+            });
           }
         );
       }
@@ -154,8 +150,31 @@ const getCartByUserId = (req, res, connection) => {
   });
 };
 
+const editCartItem = (req, res, connection) => {
+  const cartItemId = req.params.id; // Obtener el ID del elemento del carrito a editar
+  const { quantity } = req.body; // Obtener la nueva cantidad del producto
+
+  // Realizar la actualización en la base de datos
+  const query = "UPDATE carrito SET quantity = ? WHERE id = ?";
+  connection.query(query, [quantity, cartItemId], (error, result) => {
+    if (error) {
+      console.error("Error al editar elemento del carrito:", error);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+
+    if (result.affectedRows === 0) {
+      return res
+        .status(404)
+        .json({ error: "Elemento del carrito no encontrado" });
+    }
+
+    res.json({ message: "Elemento del carrito editado con éxito" });
+  });
+};
+
 module.exports = {
   addToCart: addToCart,
   removeFromCart: removeFromCart,
   getCartByUserId: getCartByUserId,
+  editCartItem: editCartItem,
 };
