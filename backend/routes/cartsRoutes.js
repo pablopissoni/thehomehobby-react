@@ -26,4 +26,12 @@ router.get("/carrito/:userId", (req, res, next) => {
   }
 });
 
+router.put("/carrito/:id", (req, res, next) => {
+  try {
+    cartController.editCartItem(req, res, req.dbConnection);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
