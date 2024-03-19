@@ -127,7 +127,7 @@ export const ShoppingCart = ({ setShow }) => {
                           <div className="flex gap-2">
                             {/* Aquí puedes mostrar más información del producto si lo deseas */}
                             <div className="flex gap-1 leading-7 text-gray-400">
-                              <span>1</span>
+                              <span>{item.quantity}</span>
                               <span>X</span>
                             </div>
                             <div className="flex items-center gap-2">
