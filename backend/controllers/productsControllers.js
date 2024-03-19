@@ -6,7 +6,10 @@ const getAllProducts = (req, res, connection) => {
   const pageSize = 10;
   const offset = (page - 1) * pageSize;
   const searchTerm = req.query.name || "";
-  const categoryFilter = req.query.category || ""; // Nuevo filtro por categoría
+  const categoryFilter = req.query.category || "";
+  const subCategoryFilter = req.query.subCategory || "";
+  const sortBy = req.query.sortBy || ""; // Nuevo parámetro para ordenar
+  const sortOrder = req.query.sortOrder || "ASC"; // Nuevo parámetro para especificar el orden de clasificación
 
   let countQuery =
     "SELECT COUNT(*) as total FROM productos WHERE (nombre_es LIKE ? OR nombre_ingles LIKE ?)";
@@ -16,6 +19,32 @@ const getAllProducts = (req, res, connection) => {
     countQuery += " AND categoria_id = ?";
     countParams.push(categoryFilter);
   }
+
+  if (subCategoryFilter) {
+    countQuery += " AND sub_categoria_id = ?";
+    countParams.push(subCategoryFilter);
+  }
+
+  let query =
+    "SELECT * FROM productos WHERE (nombre_es LIKE ? OR nombre_ingles LIKE ?)";
+  let queryParams = [`%${searchTerm}%`, `%${searchTerm}%`];
+
+  if (categoryFilter) {
+    query += " AND categoria_id = ?";
+    queryParams.push(categoryFilter);
+  }
+
+  if (subCategoryFilter) {
+    query += " AND sub_categoria_id = ?";
+    queryParams.push(subCategoryFilter);
+  }
+
+  // Aplicar ordenamiento si se especifica
+  if (sortBy && sortOrder) {
+    query += ` ORDER BY ${sortBy} ${sortOrder}`;
+  }
+
+  query += " LIMIT ? OFFSET ?";
 
   connection.query(countQuery, countParams, (error, countResult) => {
     if (error) {
@@ -32,20 +61,11 @@ const getAllProducts = (req, res, connection) => {
       return res.status(404).json({ error: "Página no encontrada" });
     }
 
-    let query =
-      "SELECT * FROM productos WHERE (nombre_es LIKE ? OR nombre_ingles LIKE ?)";
-    let queryParams = [`%${searchTerm}%`, `%${searchTerm}%`];
-
-    if (categoryFilter) {
-      query += " AND categoria_id = ?";
-      queryParams.push(categoryFilter);
-    }
-
-    query += " LIMIT ? OFFSET ?";
+    queryParams.push(pageSize, offset);
 
     connection.query(
       query,
-      [...queryParams, pageSize, offset],
+      queryParams,
       (error, results) => {
         if (error) {
           console.error("Error al realizar la consulta:", error);
@@ -89,6 +109,7 @@ const getAllProducts = (req, res, connection) => {
     );
   });
 };
+
 
 // Lógica para obtener los productos de una marca
 const getProductByBrand = (req, res, connection) => {
