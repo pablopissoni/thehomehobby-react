@@ -10,6 +10,14 @@ export const SearchProducts = () => {
   //* ---- HOOKs ----
   const { id } = useParams();
   const [producSearchs, setProducSearchs] = useState({});
+  const [filteredProducts, setFilteredProducts] = useState({});
+  const [categoria_id, setCategoryId] = useState("");
+  const [sub_categoria_id, setSubCategoryId] = useState("");
+  const [precio_base, setPriceBase] = useState("");
+  const [order, setOrder] = useState("");
+
+  // console.log("🚀 ~ SearchProducts ~ filteredProducts:", filteredProducts)
+  // console.log("🚀 ~ SearchProducts ~ producSearchs:", producSearchs)
   const [paginationData, setPaginationData] = useState({
     currentPage: 1,
     nextPage: null,
@@ -18,22 +26,36 @@ export const SearchProducts = () => {
     totalPages: null,
   });
 
+  // Estado para controlar la visibilidad de los filtros de categorías y subcategorías
+  // const [showCategories, setShowCategories] = useState(false);
+  // const [showSubcategories, setShowSubcategories] = useState(false);
+  const [isCategoryOpen, setCategoryOpen] = useState(true);
+  const [isSubcategoryOpen, setSubcategoryOpen] = useState(true);
+  const [isSortOpen, setSortOpen] = useState(true);
   // ---- HOOKs ----
 
   //* ---- USE EFFECTs ----
   useEffect(() => {
-    setProducSearchs({})
+    setProducSearchs({});
     getProducts(id);
   }, [id]);
   // ----- USE EFFECTs ----
 
   //* ---- Get Products by search ----
-  async function getProducts(id, page = 1) {
+  async function getProducts(
+    id,
+    page = 1,
+    categoria_id = "",
+    sub_categoria_id = "",
+    precio_base = "",
+    order = ""
+  ) {
     try {
       const response = await axios(
-        `${apiUrl}/productos?name=${id}&page=${page}`
+        `${apiUrl}/productos?name=${id}&page=${page}&category=${categoria_id}&subCategory=${sub_categoria_id}&sortBy=${precio_base}&sortOrder=${order}`
       );
       setProducSearchs(response.data);
+      setFilteredProducts(response.data);
       setPaginationData(response.data.info);
     } catch (error) {
       setProducSearchs({ message: "no products found" });
@@ -41,7 +63,32 @@ export const SearchProducts = () => {
     }
   }
   // ---- Get Products by search ----
-  console.log("🚀 ~ SearchProducts ~ paginationData:", paginationData);
+
+  //* --- Sort y Filtros ---
+  const toggleCategory = () => setCategoryOpen(!isCategoryOpen);
+  const toggleSubcategory = () => setSubcategoryOpen(!isSubcategoryOpen);
+  const toggleSort = () => setSortOpen(!isSortOpen);
+
+  // Función para manejar el clic en el botón de ordenar por precio
+  const handleSortPrice = (sortOrder) => {
+    setFilteredProducts({}); // Limpio la lista de productos
+
+    const precioBase = !sortOrder ? "" : "precio_base";
+
+    getProducts(id, 1, categoria_id, sub_categoria_id, precioBase, sortOrder);
+  };
+
+  // // Función para manejar el clic en el botón de filtrar por categoría
+  // const handleFilterCategory = (category) => {
+  //   // Aquí puedes realizar la lógica para filtrar los productos por categoría
+  // };
+
+  // // Función para manejar el clic en el botón de filtrar por subcategoría
+  // const handleFilterSubcategory = (subcategory) => {
+  //   // Aquí puedes realizar la lógica para filtrar los productos por subcategoría
+  // };
+
+  //  --- Sort y Filtros ---
 
   //? --- Loader ---
   const LoaderProduct = (props) => (
@@ -73,13 +120,71 @@ export const SearchProducts = () => {
       <div className="flex">
         {/* Filtros */}
         <div className="bg-gray-300 h-[800px] m-2 lg:w-[300px] rounded-sm">
-          Filtros
+          {/* Categorías */}
+          <div
+            className="border-b border-gray-400 p-2 cursor-pointer"
+            onClick={toggleCategory}
+          >
+            Categorías
+            {isCategoryOpen ? <span>&#9660;</span> : <span>&#9654;</span>}
+          </div>
+          {isCategoryOpen && (
+            <ul className="pl-4">
+              <li>Categoría 1</li>
+              <li>Categoría 2</li>
+              {/* Agregar más categorías según corresponda */}
+            </ul>
+          )}
+
+          {/* Subcategorías */}
+          <div
+            className="border-b border-gray-400 p-2 cursor-pointer"
+            onClick={toggleSubcategory}
+          >
+            Subcategorías
+            {isSubcategoryOpen ? <span>&#9660;</span> : <span>&#9654;</span>}
+          </div>
+          {isSubcategoryOpen && (
+            <ul className="pl-4">
+              <li>Subcategoría 1</li>
+              <li>Subcategoría 2</li>
+              {/* Agregar más subcategorías según corresponda */}
+            </ul>
+          )}
+
+          {/* Ordenar por */}
+          <div
+            className="border-b border-gray-400 p-2 cursor-pointer"
+            onClick={toggleSort}
+          >
+            Ordenar por precio
+            {isSortOpen ? <span>&#9660;</span> : <span>&#9654;</span>}
+          </div>
+          {isSortOpen && (
+            <ul className="pl-4">
+              <li
+                className="cursor-pointer"
+                onClick={() => handleSortPrice("DESC")}
+              >
+                mayor a menor
+              </li>
+              <li
+                className="cursor-pointer"
+                onClick={() => handleSortPrice("ASC")}
+              >
+                menor a mayor
+              </li>
+              <li className="cursor-pointer" onClick={() => handleSortPrice()}>
+                Mas Relevante
+              </li>
+            </ul>
+          )}
         </div>
 
         {/* Productos */}
         <div className=" h-auto w-full curs mt-2">
-          {!producSearchs.message && producSearchs.data
-            ? producSearchs?.data?.map((product, index) => (
+          {!filteredProducts.message && filteredProducts.data
+            ? filteredProducts?.data?.map((product, index) => (
                 <div
                   className="flex py-4 pl-4 border-b-2 border-gray-200 transition-transform duration-300 hover:scale-[1.02]"
                   key={index}
@@ -111,7 +216,8 @@ export const SearchProducts = () => {
                   </div>
                 </div>
               ))
-            : !producSearchs.data && !producSearchs.message && 
+            : !filteredProducts.data &&
+              !filteredProducts.message &&
               Array.from({ length: 5 }).map((_, index) => (
                 <LoaderProduct
                   key={index}
@@ -120,7 +226,7 @@ export const SearchProducts = () => {
               ))}
 
           {/* No hay productos */}
-          {producSearchs.message && (
+          {filteredProducts.message && (
             <div className="flex border-b py-4 pl-4 border-gray-200 justify-center  xl:text-xl">
               No products found
             </div>
@@ -131,6 +237,10 @@ export const SearchProducts = () => {
         <Paginado
           getProducts={getProducts}
           id={id}
+          categoria_id={categoria_id}
+          sub_categoria_id={sub_categoria_id}
+          precio_base={precio_base}
+          order={order}
           paginationData={paginationData}
         />
       </div>

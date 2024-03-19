@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export const Paginado = ({ getProducts, id, paginationData }) => {
+export const Paginado = ({ getProducts, id, categoria_id, sub_categoria_id, precio_base, order, paginationData }) => {
   // Extraer los datos de paginación necesarios
   const { currentPage, totalPages } = paginationData;
 
@@ -35,7 +35,7 @@ export const Paginado = ({ getProducts, id, paginationData }) => {
       <Link
         key={i}
         to="#"
-        onClick={() => getProducts(id, i)}
+        onClick={() => getProducts(id, i, categoria_id, sub_categoria_id, precio_base, order)}
         className={`relative inline-flex items-center px-4 py-2 text-sm ${
           i == currentPage
             ? "bg-blue-600 text-white"
