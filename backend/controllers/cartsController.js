@@ -151,25 +151,41 @@ const getCartByUserId = (req, res, connection) => {
 };
 
 const editCartItem = (req, res, connection) => {
-  const cartItemId = req.params.id; // Obtener el ID del elemento del carrito a editar
-  const { quantity } = req.body; // Obtener la nueva cantidad del producto
+  const userId = req.params.userId;
+  const itemsToUpdate = req.body; // Arreglo de objetos JSON con los IDs y las nuevas cantidades
 
-  // Realizar la actualización en la base de datos
-  const query = "UPDATE carrito SET quantity = ? WHERE id = ?";
-  connection.query(query, [quantity, cartItemId], (error, result) => {
-    if (error) {
-      console.error("Error al editar elemento del carrito:", error);
-      return res.status(500).json({ error: "Error en el servidor" });
-    }
-
-    if (result.affectedRows === 0) {
-      return res
-        .status(404)
-        .json({ error: "Elemento del carrito no encontrado" });
-    }
-
-    res.json({ message: "Elemento del carrito editado con éxito" });
+  const updateQueries = itemsToUpdate.map((item) => {
+    const updateQuery =
+      "UPDATE carrito SET quantity = ? WHERE id = ? AND userId = ?";
+    return new Promise((resolve, reject) => {
+      connection.query(
+        updateQuery,
+        [item.quantity, item.id, userId],
+        (error, result) => {
+          if (error) {
+            console.error(
+              "Error al actualizar la cantidad del elemento:",
+              error
+            );
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    });
   });
+
+  Promise.all(updateQueries)
+    .then(() => {
+      res
+        .status(200)
+        .json({ message: "Cantidad de productos actualizada con éxito" });
+    })
+    .catch((error) => {
+      console.error("Error al actualizar la cantidad de productos:", error);
+      res.status(500).json({ error: "Error en el servidor" });
+    });
 };
 
 module.exports = {
