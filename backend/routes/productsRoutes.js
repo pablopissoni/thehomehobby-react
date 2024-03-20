@@ -74,6 +74,14 @@ router.get("/marcas", (req, res, next) => {
   }
 });
 
+router.get("/categoriesbysearchproduct", (req, res, next) => {
+  try {
+    productsController.getCategAvailableFilters(req, res, req.dbConnection);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/ofertas", (req, res, next) => {
   try {
     productsController.getAllOfertas(req, res, req.dbConnection);
@@ -85,7 +93,7 @@ router.get("/ofertas", (req, res, next) => {
 router.put("/productos/:id", (req, res, next) => {
   //! getAllMarcas ?
   try {
-    productsController.getAllMarcas(req, res, req.dbConnection);
+    productsController.updateProduct(req, res, req.dbConnection);
   } catch (error) {
     next(error);
   }

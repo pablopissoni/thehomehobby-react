@@ -9,6 +9,8 @@ import ContentLoader from "react-content-loader";
 export const SearchProducts = () => {
   //* ---- HOOKs ----
   const { id } = useParams();
+  const [categories, setCategories] = useState([]);
+  console.log("🚀 ~ SearchProducts ~ categories:", categories);
   const [producSearchs, setProducSearchs] = useState({});
   const [filteredProducts, setFilteredProducts] = useState({});
   const [categoria_id, setCategoryId] = useState("");
@@ -38,10 +40,22 @@ export const SearchProducts = () => {
   useEffect(() => {
     setProducSearchs({});
     getProducts(id);
+    getCategoriesAvailable(id);
   }, [id]);
   // ----- USE EFFECTs ----
 
   //* ---- Get Products by search ----
+  async function getCategoriesAvailable(name) {
+    try {
+      const response = await axios(
+        `${apiUrl}/categoriesbysearchproduct?name=${name}`
+      );
+      setCategories(response.data); // Se comporta como productos de una Marca
+    } catch (error) {
+      console.error("Error en getProduct ID >>> ", error);
+    }
+  }
+
   async function getProducts(
     id,
     page = 1,
@@ -119,45 +133,47 @@ export const SearchProducts = () => {
       {/* Container Filtro y productos */}
       <div className="flex">
         {/* Filtros */}
-        <div className="bg-gray-300 h-[800px] m-2 lg:w-[300px] rounded-sm">
+        <div className="bg-slate-200 h-auto m-2 lg:w-[300px] rounded-sm">
           {/* Categorías */}
+          <div className="mb-6">
           <div
             className="border-b border-gray-400 p-2 cursor-pointer"
             onClick={toggleCategory}
           >
-            Categorías
+            <strong>Categorías</strong>
             {isCategoryOpen ? <span>&#9660;</span> : <span>&#9654;</span>}
           </div>
           {isCategoryOpen && (
             <ul className="pl-4">
-              <li>Categoría 1</li>
-              <li>Categoría 2</li>
+              {categories &&
+                categories?.categories?.map((cate, index) => (
+                  <div key={index}>
+                    <li className="cursor-pointer font-semibold" onClick={""}>
+                      {cate?.contenido[0]?.nombre || cate?.contenido[1]?.nombre}{" "}
+                    </li>
+                    {cate?.subcategories && (
+                      <ul className="pl-4 mb-2">
+                        {cate?.subcategories.map((sub, index) => (
+                          <li key={index} className="cursor-pointer font-light">
+                            {sub?.contenido[0]?.nombre ||
+                              sub?.contenido[1]?.nombre}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                ))}
               {/* Agregar más categorías según corresponda */}
             </ul>
           )}
-
-          {/* Subcategorías */}
-          <div
-            className="border-b border-gray-400 p-2 cursor-pointer"
-            onClick={toggleSubcategory}
-          >
-            Subcategorías
-            {isSubcategoryOpen ? <span>&#9660;</span> : <span>&#9654;</span>}
           </div>
-          {isSubcategoryOpen && (
-            <ul className="pl-4">
-              <li>Subcategoría 1</li>
-              <li>Subcategoría 2</li>
-              {/* Agregar más subcategorías según corresponda */}
-            </ul>
-          )}
 
-          {/* Ordenar por */}
+          {/* Ordenar por Precio*/}
           <div
             className="border-b border-gray-400 p-2 cursor-pointer"
             onClick={toggleSort}
           >
-            Ordenar por precio
+            <strong>Ordenar por precio</strong>
             {isSortOpen ? <span>&#9660;</span> : <span>&#9654;</span>}
           </div>
           {isSortOpen && (

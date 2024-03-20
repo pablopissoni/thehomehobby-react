@@ -63,53 +63,48 @@ const getAllProducts = (req, res, connection) => {
 
     queryParams.push(pageSize, offset);
 
-    connection.query(
-      query,
-      queryParams,
-      (error, results) => {
-        if (error) {
-          console.error("Error al realizar la consulta:", error);
-          return res.status(500).json({ error: "Error en el servidor" });
-        }
+    connection.query(query, queryParams, (error, results) => {
+      if (error) {
+        console.error("Error al realizar la consulta:", error);
+        return res.status(500).json({ error: "Error en el servidor" });
+      }
 
-        if (results.length === 0) {
-          return res.status(404).json({
-            error: "No se encontraron productos en esta página",
-          });
-        }
-        const formattedResults = results.map((product) => {
-          const formattedProduct = {
-            ...product,
-            contenido: parsers.parseContent(product.contenido),
-            tags: parsers.parseTags(product.tags),
-            imagen: formatURL(product.imagen),
-            galeria: JSON.parse(product.galeria).map((item) => ({
-              url: formatURL(item.url),
-            })),
-            video: formatURL(product.video),
-            filtros: parsers.parseFilters(product.filtros),
-          };
-
-          return formattedProduct;
+      if (results.length === 0) {
+        return res.status(404).json({
+          error: "No se encontraron productos en esta página",
         });
-
-        const response = {
-          info: {
-            totalItems: total,
-            totalPages: totalPages,
-            currentPage: page,
-            nextPage: nextPage,
-            previousPage: previousPage,
-          },
-          data: formattedResults,
+      }
+      const formattedResults = results.map((product) => {
+        const formattedProduct = {
+          ...product,
+          contenido: parsers.parseContent(product.contenido),
+          tags: parsers.parseTags(product.tags),
+          imagen: formatURL(product.imagen),
+          galeria: JSON.parse(product.galeria).map((item) => ({
+            url: formatURL(item.url),
+          })),
+          video: formatURL(product.video),
+          filtros: parsers.parseFilters(product.filtros),
         };
 
-        res.json(response);
-      }
-    );
+        return formattedProduct;
+      });
+
+      const response = {
+        info: {
+          totalItems: total,
+          totalPages: totalPages,
+          currentPage: page,
+          nextPage: nextPage,
+          previousPage: previousPage,
+        },
+        data: formattedResults,
+      };
+
+      res.json(response);
+    });
   });
 };
-
 
 // Lógica para obtener los productos de una marca
 const getProductByBrand = (req, res, connection) => {
@@ -119,8 +114,7 @@ const getProductByBrand = (req, res, connection) => {
   const searchTerm = req.query.id || "";
   const brandFilter = req.query.brand || ""; // Nuevo filtro por categoría
 
-  let countQuery =
-    "SELECT COUNT(*) as total FROM productos WHERE marca_id = ?";
+  let countQuery = "SELECT COUNT(*) as total FROM productos WHERE marca_id = ?";
   let countParams = [`${searchTerm}`];
 
   if (brandFilter) {
@@ -143,8 +137,7 @@ const getProductByBrand = (req, res, connection) => {
       return res.status(404).json({ error: "Página no encontrada" });
     }
 
-    let query =
-      "SELECT * FROM productos WHERE marca_id = ?";
+    let query = "SELECT * FROM productos WHERE marca_id = ?";
     let queryParams = [`${searchTerm}`];
 
     if (brandFilter) {
@@ -661,8 +654,7 @@ const getProdBySubCategoryPage = (req, res, connection) => {
       return res.status(404).json({ error: "Página no encontrada" });
     }
 
-    let query =
-      "SELECT * FROM productos WHERE sub_categoria_id = ?";
+    let query = "SELECT * FROM productos WHERE sub_categoria_id = ?";
     let queryParams = [`${searchTerm}`];
 
     if (subCategoryFilter) {
@@ -823,6 +815,60 @@ const getCategoryWithSubcategories = (req, res, connection) => {
   });
 };
 
+// Lógica para obtener todas las categorias y sub-categorías disponibles de una busqueda de producto
+const getCategAvailableFilters = (req, res, connection) => {
+  const searchTerm = req.query.name || "";
+  const categoryFilter = req.query.category || "";
+
+  let query = `
+    SELECT DISTINCT c.id as categoria_id, c.contenido as categoria_contenido, 
+                    s.id as sub_categoria_id, s.contenido as sub_categoria_contenido
+    FROM productos p
+    INNER JOIN sub_categorias s ON p.sub_categoria_id = s.id
+    INNER JOIN categorias c ON s.categoria_id = c.id
+    WHERE (p.nombre_es LIKE ? OR p.nombre_ingles LIKE ?)`;
+
+  let queryParams = [`%${searchTerm}%`, `%${searchTerm}%`];
+
+  if (categoryFilter) {
+    query += " AND c.id = ?";
+    queryParams.push(categoryFilter);
+  }
+
+  connection.query(query, queryParams, (error, results) => {
+    if (error) {
+      console.error("Error al obtener los filtros:", error);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+
+    const categories = {};
+
+    results.forEach(result => {
+      const categoryId = result.categoria_id;
+      if (!categories[categoryId]) {
+        categories[categoryId] = {
+          id: categoryId,
+          contenido: JSON.parse(result.categoria_contenido),
+          subcategories: []
+        };
+      }
+
+      categories[categoryId].subcategories.push({
+        id: result.sub_categoria_id,
+        contenido: JSON.parse(result.sub_categoria_contenido)
+      });
+    });
+
+    const response = {
+      categories: Object.values(categories)
+    };
+
+    res.json(response);
+  });
+};
+
+
+
 // Lógica para obtener todas las sub-categorías
 const getAllSubCategories = (req, res, connection) => {
   const query = "SELECT * FROM newschema.sub_categorias";
@@ -910,9 +956,10 @@ module.exports = {
   getAllCategories: getAllCategories,
   getAllSubCategories: getAllSubCategories,
   getCategoryWithSubcategories: getCategoryWithSubcategories,
+  getCategAvailableFilters: getCategAvailableFilters,
   getAllMarcas: getAllMarcas,
   getAllOfertas: getAllOfertas,
-  getProdBySubCategory:getProdBySubCategory,
-  getProdBySubCategoryPage:getProdBySubCategoryPage,
-  getProductByBrand:getProductByBrand,
+  getProdBySubCategory: getProdBySubCategory,
+  getProdBySubCategoryPage: getProdBySubCategoryPage,
+  getProductByBrand: getProductByBrand,
 };
