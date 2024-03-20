@@ -133,49 +133,65 @@ export const SearchProducts = () => {
       {/* Container Filtro y productos */}
       <div className="flex">
         {/* Filtros */}
-        <div className="bg-slate-200 h-auto m-2 lg:w-[300px] rounded-sm">
+        <div className=" bg-slate-200 h-auto m-2 lg:w-[300px] rounded-sm">
           {/* Categorías */}
-          <div className="mb-6">
-          <div
-            className="border-b border-gray-400 p-2 cursor-pointer"
-            onClick={toggleCategory}
-          >
-            <strong>Categorías</strong>
-            {isCategoryOpen ? <span>&#9660;</span> : <span>&#9654;</span>}
-          </div>
-          {isCategoryOpen && (
-            <ul className="pl-4">
-              {categories &&
-                categories?.categories?.map((cate, index) => (
-                  <div key={index}>
-                    <li className="cursor-pointer font-semibold" onClick={""}>
-                      {cate?.contenido[0]?.nombre || cate?.contenido[1]?.nombre}{" "}
-                    </li>
-                    {cate?.subcategories && (
-                      <ul className="pl-4 mb-2">
-                        {cate?.subcategories.map((sub, index) => (
-                          <li key={index} className="cursor-pointer font-light">
-                            {sub?.contenido[0]?.nombre ||
-                              sub?.contenido[1]?.nombre}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
-              {/* Agregar más categorías según corresponda */}
-            </ul>
-          )}
-          </div>
+          {categories &&
+            categories?.categories?.map((cate, index) => (
+              <details
+                key={index}
+                name="acordeon"
+                className="pl-2 py-1 transition duration-300 cursor-pointer hover:bg-slate-100"
+              >
+                <summary className="font-bold list-none">
+                  {cate?.contenido[0]?.nombre || cate?.contenido[1]?.nombre}
+                </summary>
+
+                {cate?.subcategories && (
+                  <ul className=" mb-2">
+                    {cate?.subcategories.map((sub, index) => (
+                      <li
+                        key={index}
+                        className="pl-6 py-1 cursor-pointer font-normal transition duration-300 hover:scale-105"
+                      >
+                        {sub?.contenido[0]?.nombre || sub?.contenido[1]?.nombre}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </details>
+            ))}
 
           {/* Ordenar por Precio*/}
-          <div
-            className="border-b border-gray-400 p-2 cursor-pointer"
-            onClick={toggleSort}
+          <details
+            name="acordeon"
+            className="pl-2 py-1 mt-4 transition duration-300 cursor-pointer hover:bg-slate-100"
+            open
           >
-            <strong>Ordenar por precio</strong>
-            {isSortOpen ? <span>&#9660;</span> : <span>&#9654;</span>}
-          </div>
+            <summary className="font-bold list-none cursor-pointer">
+              Ordenar por precio
+            </summary>
+            <ul>
+              <li
+                className="pl-6 cursor-pointer font-normal transition duration-300 hover:scale-105"
+                onClick={() => handleSortPrice("DESC")}
+              >
+                Mayor a Menor
+              </li>
+              <li
+                className="pl-6 cursor-pointer font-normal transition duration-300 hover:scale-105"
+                onClick={() => handleSortPrice("ASC")}
+              >
+                Menor a Mayor
+              </li>
+              <li
+                className="pl-6 cursor-pointer font-normal transition duration-300 hover:scale-105"
+                onClick={() => handleSortPrice("")}
+              >
+                Mas Relevante
+              </li>
+            </ul>
+          </details>
+
           {isSortOpen && (
             <ul className="pl-4">
               <li
