@@ -1,7 +1,19 @@
 import React from "react";
 import LogoGrande from "../../assets/logo The Home Hobby.svg";
-import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import {
+  CardElement,
+  useStripe,
+  useElements,
+  PaymentRequestButtonElement,
+} from "@stripe/react-stripe-js";
+import { Axios } from "axios";
+import { apiUrl, frontUrl } from "../../utils/config";
+
 export const Checkout = () => {
+  //* URL local o deploy
+  const urlLogin = `${apiUrl}/users/login`; //! COLOCAR RUTA DEPLOY
+  const url = `${frontUrl}`;
+
   const stripe = useStripe();
   const elements = useElements();
 
@@ -20,7 +32,7 @@ export const Checkout = () => {
     if (error) {
       console.error(error);
     } else {
-      console.log(paymentMethod);
+      await Axios.post("");
       // Aquí puedes enviar el ID del método de pago a tu servidor para completar la transacción
     }
   };
@@ -191,7 +203,10 @@ export const Checkout = () => {
             </div>
           </form>
         </div>
-        <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
+        <form
+          className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0"
+          onSubmit={handleSubmit}
+        >
           <p className="text-xl font-medium">Payment Details</p>
           <p className="text-gray-400">
             Complete your order by providing your payment details.
@@ -326,7 +341,7 @@ export const Checkout = () => {
           >
             Place Order
           </button>
-        </div>
+        </form>
       </div>
     </section>
   );

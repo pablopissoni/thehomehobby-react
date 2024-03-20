@@ -32,7 +32,7 @@ const App = () => {
   const isIgnored = ignorePaths.includes(pathname);
   //-------------------------------
   const stripePromise = loadStripe(
-    "pk_live_51Ovkt4Hf3yjhBctIQNBP2pp5KqvschIdpkztE3mtdl9xOYqJ90uL6GS3cVhNP7liwpx2f3eRd1ofXLh4VyOLyARt00cnWSGmaH"
+    "pk_test_51Ovkt4Hf3yjhBctIdVNUjHhRDJBc7ylHjDCL2k2vcCsU5OJLAbh9K46PPAPurCwbyXGyQTyC16e4CucrWABNCUw900U2Yb2V1r"
   );
 
   return (
