@@ -8,21 +8,19 @@ import Logo from "../assets/Logo miniatura.svg";
 
 export const ShoppingCartPage = () => {
   const [products, setProducts] = useState([]);
+  const [userId, setUserId] = useState(null); // Agregar estado para el ID del usuario
 
   useEffect(() => {
     const fetchUserData = async () => {
-      // Obtener el token del localStorage
       const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
-        // Manejar el caso en que no se disponga de un token de acceso
         return;
       }
 
       try {
-        // Obtener los datos del usuario
         const response = await axios.post(
           "http://localhost:3001/users/get-token",
-          {}, // Enviar un cuerpo vacío, si es necesario
+          {},
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -30,8 +28,8 @@ export const ShoppingCartPage = () => {
           }
         );
         const userId = response.data.data.mysqlUsers[0].id;
+        setUserId(userId); // Almacenar el ID del usuario
 
-        // Obtener los productos del carrito del usuario
         const cartResponse = await axios.get(
           `http://localhost:3001/carrito/carrito/${userId}`
         );
@@ -45,7 +43,6 @@ export const ShoppingCartPage = () => {
           }))
         );
       } catch (error) {
-        // Manejar el error al obtener los datos
         console.error("Error al obtener los datos:", error);
       }
     };
@@ -62,9 +59,7 @@ export const ShoppingCartPage = () => {
     }
   };
 
-  // Dentro de la función updateQuantity
   const updateQuantity = (productId, newQuantity) => {
-    // Asegúrate de que la nueva cantidad no sea menor que 0
     const quantity = Math.max(0, parseInt(newQuantity));
     setProducts(
       products.map((product) =>
@@ -79,6 +74,19 @@ export const ShoppingCartPage = () => {
       0
     )
     .toFixed(2);
+
+  const handleContinue = async () => {
+    try {
+      await axios.put(
+        `http://localhost:3001/carrito/carrito/${userId}`,
+        products
+      );
+      // Redirigir al usuario a la página de Checkout
+      window.location.href = "/Checkout";
+    } catch (error) {
+      console.error("Error al actualizar productos en el carrito:", error);
+    }
+  };
 
   return (
     <section>
@@ -289,10 +297,11 @@ export const ShoppingCartPage = () => {
                 <span>${subtotal}</span>
               </div>
               <a
-                class="btn-view-shopping-cart btn-effect transition-all-300 flex w-full items-center justify-center rounded-lg bg-primary p-2"
+                onClick={handleContinue}
+                className="btn-view-shopping-cart btn-effect transition-all-300 flex w-full items-center justify-center rounded-lg bg-primary p-2"
                 href="/Checkout"
               >
-                <span class="font-bold uppercase text-white">Continue</span>
+                <span className="font-bold uppercase text-white">Continue</span>
               </a>
             </div>
           </div>
