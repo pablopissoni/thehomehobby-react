@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unknown-property */
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -6,6 +7,12 @@ import { apiUrl } from "../../utils/config";
 
 export const UserProfile = () => {
   const [userData, setUserData] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleEditClick = () => {
+    // Aquí puedes implementar la lógica para abrir un modal o navegar a la página de edición de datos
+    console.log("Editar datos");
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -35,6 +42,11 @@ export const UserProfile = () => {
     fetchUserData();
   }, []);
 
+  const handleEditProfile = () => {
+    // Lógica para editar el perfil del usuario
+    console.log("Editar perfil del usuario");
+  };
+
   return (
     <section>
       <div className="bg-gray-100">
@@ -42,47 +54,59 @@ export const UserProfile = () => {
           <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
             <div className="col-span-4 sm:col-span-3">
               <div className="bg-white shadow rounded-lg p-6">
-                <div className="flex flex-col items-center">
-                  <img
-                    src={UserDefault}
-                    className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0" // Cambia 'class' a 'className'
-                    alt="User profile"
-                  />
-
-                  <div>
-                    <h2>User Profile</h2>
-                    <p>
-                      Name:{" "}
+                <div className="flex items-center justify-center">
+                  <div className="ml-6 text-left">
+                    <h2 className="text-xl font-bold mb-2">User Profile</h2>
+                    <p className="text-gray-700">
+                      <span className="font-bold">Name:</span>{" "}
                       {userData &&
                         userData.UserAttributes &&
                         userData.UserAttributes.find(
                           (attr) => attr.Name === "name"
                         ).Value}
                     </p>
-                    <p>
-                      Last Name:{" "}
+                    <p className="text-gray-700">
+                      <span className="font-bold">Last Name:</span>{" "}
                       {userData &&
                         userData.UserAttributes &&
                         userData.UserAttributes.find(
                           (attr) => attr.Name === "family_name"
                         ).Value}
                     </p>
-                    <p>
-                      Email:{" "}
+                    <p className="text-gray-700">
+                      <span className="font-bold">Email:</span>{" "}
                       {userData &&
                         userData.UserAttributes &&
                         userData.UserAttributes.find(
                           (attr) => attr.Name === "email"
                         ).Value}
                     </p>
-                    <p>
-                      Phone Number:{" "}
+                    <p className="text-gray-700">
+                      <span className="font-bold">Phone Number:</span>{" "}
                       {userData &&
                         userData.UserAttributes &&
                         userData.UserAttributes.find(
                           (attr) => attr.Name === "phone_number"
                         ).Value}
                     </p>
+                    {userData &&
+                      userData.mysqlUsers &&
+                      userData.mysqlUsers.length > 0 &&
+                      userData.mysqlUsers[0].role === "admin" && (
+                        <p className="text-gray-700">
+                          <span className="font-bold">Role:</span>{" "}
+                          {userData.mysqlUsers[0].role}
+                        </p>
+                      )}
+
+                    <div className="mt-6 flex justify-center">
+                      <button
+                        className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-slate-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                        onClick={handleEditProfile}
+                      >
+                        Edit Profile
+                      </button>
+                    </div>
                   </div>
                   <div className="mt-6 flex flex-wrap gap-4 justify-center"></div>
                 </div>
@@ -90,7 +114,7 @@ export const UserProfile = () => {
             </div>
             <div className="col-span-4 sm:col-span-9">
               <div className="bg-white shadow rounded-lg p-6">
-                <h2 className="text-xl font-bold mb-4">purchase history</h2>
+                <h2 className="text-xl font-bold mb-4">Purchase history</h2>
                 <div className="relative m-10 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
                   <a
                     className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl"
@@ -195,8 +219,6 @@ export const UserProfile = () => {
                     </a>
                   </div>
                 </div>
-
-                <h2 className="text-xl font-bold mt-6 mb-4">Mas apartados</h2>
               </div>
             </div>
           </div>
