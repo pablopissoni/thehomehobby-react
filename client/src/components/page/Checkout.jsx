@@ -36,7 +36,7 @@ export const Checkout = () => {
       console.error(error);
     } else {
       const { id } = paymentMethod;
-      const { data } = await axios.post("http://localhost:3001/api/checkout", {
+      const { data } = await axios.post(`${apiUrl}/api/checkout`, {
         id,
         amount: ((parseFloat(subtotal) + 8) * 100).toFixed(0),
       });
@@ -58,7 +58,7 @@ export const Checkout = () => {
       try {
         // Obtener los datos del usuario
         const response = await axios.post(
-          "http://localhost:3001/users/get-token",
+          `${apiUrl}/users/get-token`,
           {}, // Enviar un cuerpo vacío, si es necesario
           {
             headers: {
@@ -70,7 +70,7 @@ export const Checkout = () => {
 
         // Obtener los productos del carrito del usuario
         const cartResponse = await axios.get(
-          `http://localhost:3001/carrito/carrito/${userId}`
+          `${apiUrl}/carrito/carrito/${userId}`
         );
         setProducts(
           cartResponse.data.map((item) => ({
