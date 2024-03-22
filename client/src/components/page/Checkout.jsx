@@ -35,7 +35,13 @@ export const Checkout = () => {
     if (error) {
       console.error(error);
     } else {
-      await Axios.post("");
+      const { id } = paymentMethod;
+      const { data } = await axios.post("http://localhost:3001/api/checkout", {
+        id,
+        amount: ((parseFloat(subtotal) + 8) * 100).toFixed(0),
+      });
+      console.log(data);
+      elements.getElement(CardElement).clear();
       // Aquí puedes enviar el ID del método de pago a tu servidor para completar la transacción
     }
   };

@@ -6,7 +6,7 @@ const usersRouter = require("./routes/usersRoutes");
 const cartsRouter = require("./routes/cartsRoutes");
 const dbConnection = require("./dbConfig");
 const fs = require("fs");
-
+const Stripe = require("stripe");
 const app = express();
 const port = 3001;
 
@@ -56,6 +56,30 @@ dbConnection.connect((error) => {
     app.listen(port, () => {
       console.log(`Servidor iniciado en el puerto ${port}`);
     });
+  }
+});
+
+const stripe = new Stripe(
+  "sk_test_51Ovkt4Hf3yjhBctIofi15f9Pq3Qmu1SEIy8vo5RS0rf8xUkOAf1oAPB2bfOIlQpCX27u1KI9tp1dr148lPr8JCEw00mOJHRm0Y"
+);
+
+app.post("/api/checkout", async (req, res) => {
+  try {
+    const { id, amount } = req.body;
+
+    const payment = await stripe.paymentIntents.create({
+      amount,
+      currency: "USD",
+      description: "Test",
+      payment_method: id,
+      confirm: true,
+      return_url: "http://localhost:5173/",
+    });
+    console.log(payment);
+    res.send({ message: "Successful payment" });
+  } catch (error) {
+    console.log(error);
+    res.json({ message: error.raw.message });
   }
 });
 
