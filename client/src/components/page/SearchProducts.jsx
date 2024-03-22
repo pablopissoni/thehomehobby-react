@@ -10,9 +10,9 @@ export const SearchProducts = () => {
   //* ---- HOOKs ----
   const { id } = useParams();
   const [categories, setCategories] = useState([]);
-  console.log("🚀 ~ SearchProducts ~ categories:", categories);
   const [producSearchs, setProducSearchs] = useState({});
   const [filteredProducts, setFilteredProducts] = useState({});
+  // console.log("🚀 ~ SearchProducts ~ filteredProducts:", filteredProducts);
   const [categoria_id, setCategoryId] = useState("");
   const [sub_categoria_id, setSubCategoryId] = useState("");
   const [precio_base, setPriceBase] = useState("");
@@ -79,6 +79,7 @@ export const SearchProducts = () => {
   // ---- Get Products by search ----
 
   //* --- Sort y Filtros ---
+  const [selectedFilter, setSelectedFilter] = useState(null); // Marca la seleccion en los filtros
   const toggleCategory = () => setCategoryOpen(!isCategoryOpen);
   const toggleSubcategory = () => setSubcategoryOpen(!isSubcategoryOpen);
   const toggleSort = () => setSortOpen(!isSortOpen);
@@ -97,10 +98,24 @@ export const SearchProducts = () => {
   //   // Aquí puedes realizar la lógica para filtrar los productos por categoría
   // };
 
-  // // Función para manejar el clic en el botón de filtrar por subcategoría
-  // const handleFilterSubcategory = (subcategory) => {
-  //   // Aquí puedes realizar la lógica para filtrar los productos por subcategoría
-  // };
+  // Función para manejar el clic en el botón de filtrar por subcategoría
+  const handleFilterSubcategory = (categoriaId, subcategoryId) => {
+    setFilteredProducts({}); // Limpio la lista de productos
+
+    if (subcategoryId === selectedFilter) {
+      setSelectedFilter("");
+      setCategoryId("");
+      setSubCategoryId("");
+      getProducts(id, 1, "", "", precio_base, order);
+      
+    } else {
+
+    setSelectedFilter(subcategoryId); // Marca la seleccion en los filtros
+    setCategoryId(categoriaId);
+    setSubCategoryId(subcategoryId);
+    getProducts(id, 1, categoriaId, subcategoryId, precio_base, order);
+    }
+  };
 
   //  --- Sort y Filtros ---
 
@@ -128,19 +143,22 @@ export const SearchProducts = () => {
     <div className="m-20 max-w-[1500px] ">
       {/* encabezado */}
       <div className="bg-gray-100 transition-colors bg-gradient-to-r from-slate-100 to-white ml-2">
-        <span className="text-3xl ml-4 font-semibold ">{id}</span>
+        <span className="ml-4">
+          {filteredProducts?.info?.totalItems} resultados para:
+        </span>
+        <span className="text-2xl ml-2 font-semibold ">{id}</span>
       </div>
       {/* Container Filtro y productos */}
       <div className="flex">
         {/* Filtros */}
-        <div className=" bg-slate-200 h-auto m-2 lg:w-[300px] rounded-sm">
+        <div className=" bg-slate-100 h-auto m-2 lg:w-[300px] rounded-sm">
           {/* Categorías */}
           {categories &&
             categories?.categories?.map((cate, index) => (
               <details
                 key={index}
                 name="acordeon"
-                className="pl-2 py-1 transition duration-300 cursor-pointer hover:bg-slate-100"
+                className="pl-2 py-1 transition duration-300 cursor-pointer hover:bg-slate-200"
               >
                 <summary className="font-bold list-none">
                   {cate?.contenido[0]?.nombre || cate?.contenido[1]?.nombre}
@@ -151,7 +169,10 @@ export const SearchProducts = () => {
                     {cate?.subcategories.map((sub, index) => (
                       <li
                         key={index}
-                        className="pl-6 py-1 cursor-pointer font-normal transition duration-300 hover:scale-105"
+                        onClick={() => handleFilterSubcategory(cate.id, sub.id)}
+                        className={`pl-4 mr-2 py-1 cursor-pointer font-normal transition duration-300 hover:scale-105 ${
+                          selectedFilter === sub.id ? "bg-slate-300 rounded-sm" : "" // Clase de resaltado
+                        }`}
                       >
                         {sub?.contenido[0]?.nombre || sub?.contenido[1]?.nombre}
                       </li>
@@ -191,26 +212,6 @@ export const SearchProducts = () => {
               </li>
             </ul>
           </details>
-
-          {isSortOpen && (
-            <ul className="pl-4">
-              <li
-                className="cursor-pointer"
-                onClick={() => handleSortPrice("DESC")}
-              >
-                mayor a menor
-              </li>
-              <li
-                className="cursor-pointer"
-                onClick={() => handleSortPrice("ASC")}
-              >
-                menor a mayor
-              </li>
-              <li className="cursor-pointer" onClick={() => handleSortPrice()}>
-                Mas Relevante
-              </li>
-            </ul>
-          )}
         </div>
 
         {/* Productos */}
