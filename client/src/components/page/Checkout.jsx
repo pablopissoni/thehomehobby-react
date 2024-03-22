@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import LogoGrande from "../../assets/logo The Home Hobby.svg";
+import { validateEmail } from "../../utils/validationRegister";
 import {
   CardElement,
   useStripe,
@@ -13,19 +14,57 @@ import { apiUrl, frontUrl } from "../../utils/config";
 
 export const Checkout = () => {
   const [products, setProducts] = useState([]);
+  const [errorsForm, setErrorsForm] = useState({
+    // email: false,
+    cardHolder: false,
+    billingAddress: false,
+    zip: false,
+  });
+  const [paymentDetails, setPaymentDetails] = useState({
+    email: "",
+    cardHolder: "",
+    billingAddress: "",
+    zip: "",
+  });
+
   //* URL local o deploy
-  const urlLogin = `${apiUrl}/users/login`; //! COLOCAR RUTA DEPLOY
+  const urlLogin = `${apiUrl}/users/login`;
   const url = `${frontUrl}`;
 
   const stripe = useStripe();
   const elements = useElements();
 
+  //* ---- HANDLEs ----
+
+  const handleInput = (event) => {
+    const { name, value } = event.target;
+    setPaymentDetails({ ...paymentDetails, [name]: value });
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    // -- validaciones --
     if (!stripe || !elements) {
       return;
     }
+
+    if (products.length === 0) {
+      alert("No hay productos en el carrito");
+      return;
+    }
+
+    // const errorsFormObj = {
+    //   // email: validateEmail(paymentDetails.email),
+    //   cardHolder: paymentDetails.cardHolder.length < 3,
+    //   billingAddress: paymentDetails.billingAddress.length === 0,
+    //   zip: paymentDetails.zip.length === 0,
+    // }
+    // if (Object.values(errorsFormObj).some(Boolean)) {
+    //   setErrorsForm(errorsFormObj);
+    //   alert("Error en los datos ingresados");
+    //   console.log("Errors >> ",errorsForm )
+    //   return;
+    // }
 
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: "card",
@@ -278,9 +317,12 @@ export const Checkout = () => {
             </label>
             <div className="relative">
               <input
+                required
                 type="text"
                 id="email"
                 name="email"
+                value={paymentDetails.email}
+                onChange={(e) => handleInput(e)}
                 className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="your.email@gmail.com"
               />
@@ -309,9 +351,12 @@ export const Checkout = () => {
             </label>
             <div className="relative">
               <input
+                required
                 type="text"
                 id="card-holder"
-                name="card-holder"
+                name="cardHolder" //se cambio de card-holder
+                value={paymentDetails.cardHolder}
+                onChange={(e) => handleInput(e)}
                 className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm uppercase shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Your full name here"
               />
@@ -348,9 +393,12 @@ export const Checkout = () => {
             <div className="flex flex-col sm:flex-row">
               <div className="relative flex-shrink-0 sm:w-7/12">
                 <input
+                  required
                   type="text"
                   id="billing-address"
-                  name="billing-address"
+                  name="billingAddress" //se cambio de billing-address
+                  value={paymentDetails.billingAddress}
+                  onChange={(e) => handleInput(e)}
                   className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="Street Address"
                 />
@@ -370,8 +418,11 @@ export const Checkout = () => {
                 <option value="State">State</option>
               </select>
               <input
+                required
                 type="text"
-                name="billing-zip"
+                name="zip" // se cambio de billing-zip
+                value={paymentDetails.zip}
+                onChange={(e) => handleInput(e)}
                 className="flex-shrink-0 rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="ZIP"
               />

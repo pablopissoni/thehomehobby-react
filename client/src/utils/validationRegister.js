@@ -44,3 +44,37 @@ export const validateRegistration = (userRegister) => {
 
   return errorsObj;
 };
+
+// export const validateEmail = (userEmail) => {
+//   const regexEmail = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
+//   // const regexEmail = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2, })$/;
+//   let errorEmail = "";
+
+//   if (userEmail === "") {
+//     errorEmail = "Email is required";
+//   }
+//   if (!regexEmail.test(userEmail)) {
+//     errorEmail = "Incorrect email format";
+//   }
+//   // if (userEmail.length < 50) {
+//   //   errorEmail = "Email must be at least 50 characters long";
+//   // }
+
+//   return errorEmail
+// }
+
+export const validateEmail = (userEmail) => {
+  const regexEmail = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2, })$/;
+  
+  if (userEmail === "") {
+    return true; // El email está vacío, es inválido
+  }
+  if (!regexEmail.test(userEmail)) {
+    return true; // El email no cumple con el formato válido
+  }
+  // if (userEmail.length < 50) {
+  //   return true; // El email es demasiado corto
+  // }
+
+  return false; // El email es válido
+}
