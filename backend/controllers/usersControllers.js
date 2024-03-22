@@ -1,4 +1,5 @@
 const AmazonCognitoIdentity = require("amazon-cognito-identity-js");
+const AWS = require("aws-sdk");
 const jwt = require("jsonwebtoken");
 const dbConnection = require("../dbConfig");
 const app = require("../server");
@@ -9,7 +10,6 @@ const poolData = {
   UserPoolId: process.env.COGNITO_USER_POOL_ID,
   ClientId: process.env.COGNITO_CLIENT_ID,
 };
-const AWS = require("aws-sdk");
 
 // Configura las credenciales de AWS
 AWS.config.update({ region: "us-east-2" });
@@ -501,7 +501,7 @@ const deleteUser = (req, res) => {
   );
 };
 
-const editUser = async (req, res) => {
+const editRole = async (req, res) => {
   try {
     const userId = req.params.userId;
     const { role } = req.body;
@@ -548,6 +548,53 @@ const editUser = async (req, res) => {
   }
 };
 
+const editUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const { name, lastName, phone } = req.body;
+
+    // Validar que los campos no estén vacíos
+    if (!name || !lastName || !phone) {
+      return res.status(400).json({
+        error: "Los campos 'name', 'lastName' y 'phone' son obligatorios",
+      });
+    }
+
+    dbConnection.query(
+      "UPDATE users SET name = ?, lastName = ?, phone = ? WHERE id = ?",
+      [name, lastName, phone, userId],
+      (error, result) => {
+        if (error) {
+          console.error("Error updating user information in database:", error);
+          return res.status(500).json({
+            error: "Error updating user information in the database",
+          });
+        }
+
+        if (result.affectedRows === 0) {
+          return res.status(404).json({
+            error: "User not found",
+          });
+        }
+
+        console.log("User information updated successfully in database");
+        res.status(200).json({
+          message: "User information updated successfully",
+        });
+      }
+    );
+  } catch (error) {
+    console.error("Error updating user information:", error);
+    let errorCode = 500;
+
+    if (error.code === "BadRequestException") {
+      errorCode = 400;
+    }
+
+    return res.status(errorCode).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getToken,
   registerUser,
@@ -557,6 +604,7 @@ module.exports = {
   resetPassword,
   getAllUsers,
   deleteUser,
+  editRole,
   editUser,
   getUsers,
 };
