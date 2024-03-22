@@ -17,6 +17,7 @@ export const SearchProducts = () => {
   const [sub_categoria_id, setSubCategoryId] = useState("");
   const [precio_base, setPriceBase] = useState("");
   const [order, setOrder] = useState("");
+  console.log("🚀 ~ SearchProducts ~ order:", order)
 
   // console.log("🚀 ~ SearchProducts ~ filteredProducts:", filteredProducts)
   // console.log("🚀 ~ SearchProducts ~ producSearchs:", producSearchs)
@@ -80,6 +81,8 @@ export const SearchProducts = () => {
 
   //* --- Sort y Filtros ---
   const [selectedFilter, setSelectedFilter] = useState(null); // Marca la seleccion en los filtros
+  const [selectedPrice, setSelectedPrice] = useState(null); // Marca la seleccion en los Precios
+  console.log("🚀 ~ SearchProducts ~ selectedPrice:", selectedPrice)
   const toggleCategory = () => setCategoryOpen(!isCategoryOpen);
   const toggleSubcategory = () => setSubcategoryOpen(!isSubcategoryOpen);
   const toggleSort = () => setSortOpen(!isSortOpen);
@@ -87,16 +90,12 @@ export const SearchProducts = () => {
   // Función para manejar el clic en el botón de ordenar por precio
   const handleSortPrice = (sortOrder) => {
     setFilteredProducts({}); // Limpio la lista de productos
-
-    const precioBase = !sortOrder ? "" : "precio_base";
-
+    const precioBase = sortOrder ? "precio_base" : "";
+    setSelectedPrice(sortOrder);
+    setPriceBase(precioBase);
+    setOrder(sortOrder);
     getProducts(id, 1, categoria_id, sub_categoria_id, precioBase, sortOrder);
   };
-
-  // // Función para manejar el clic en el botón de filtrar por categoría
-  // const handleFilterCategory = (category) => {
-  //   // Aquí puedes realizar la lógica para filtrar los productos por categoría
-  // };
 
   // Función para manejar el clic en el botón de filtrar por subcategoría
   const handleFilterSubcategory = (categoriaId, subcategoryId) => {
@@ -107,13 +106,11 @@ export const SearchProducts = () => {
       setCategoryId("");
       setSubCategoryId("");
       getProducts(id, 1, "", "", precio_base, order);
-      
     } else {
-
-    setSelectedFilter(subcategoryId); // Marca la seleccion en los filtros
-    setCategoryId(categoriaId);
-    setSubCategoryId(subcategoryId);
-    getProducts(id, 1, categoriaId, subcategoryId, precio_base, order);
+      setSelectedFilter(subcategoryId); // Marca la seleccion en los filtros
+      setCategoryId(categoriaId);
+      setSubCategoryId(subcategoryId);
+      getProducts(id, 1, categoriaId, subcategoryId, precio_base, order);
     }
   };
 
@@ -171,7 +168,9 @@ export const SearchProducts = () => {
                         key={index}
                         onClick={() => handleFilterSubcategory(cate.id, sub.id)}
                         className={`pl-4 mr-2 py-1 cursor-pointer font-normal transition duration-300 hover:scale-105 ${
-                          selectedFilter === sub.id ? "bg-slate-300 rounded-sm" : "" // Clase de resaltado
+                          selectedFilter === sub.id
+                            ? "bg-slate-300 rounded-sm"
+                            : "" // Clase de resaltado
                         }`}
                       >
                         {sub?.contenido[0]?.nombre || sub?.contenido[1]?.nombre}
@@ -193,19 +192,25 @@ export const SearchProducts = () => {
             </summary>
             <ul>
               <li
-                className="pl-6 cursor-pointer font-normal transition duration-300 hover:scale-105"
+                className={`pl-4 mr-2 py-1 cursor-pointer font-normal transition duration-300 hover:scale-105 ${
+                  selectedPrice === "DESC" ? "bg-slate-300 rounded-sm" : "" // Clase de resaltado
+                }`}
                 onClick={() => handleSortPrice("DESC")}
               >
                 Mayor a Menor
               </li>
               <li
-                className="pl-6 cursor-pointer font-normal transition duration-300 hover:scale-105"
+                className={`pl-4 mr-2 py-1 cursor-pointer font-normal transition duration-300 hover:scale-105 ${
+                  selectedPrice === "ASC" ? "bg-slate-300 rounded-sm" : "" // Clase de resaltado
+                }`}
                 onClick={() => handleSortPrice("ASC")}
               >
                 Menor a Mayor
               </li>
               <li
-                className="pl-6 cursor-pointer font-normal transition duration-300 hover:scale-105"
+                className={`pl-4 mr-2 py-1 cursor-pointer font-normal transition duration-300 hover:scale-105 ${
+                  selectedPrice === "" ? "bg-slate-300 rounded-sm" : "" // Clase de resaltado
+                }`}
                 onClick={() => handleSortPrice("")}
               >
                 Mas Relevante
