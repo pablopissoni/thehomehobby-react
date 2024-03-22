@@ -8,12 +8,11 @@ import { apiUrl } from "../../utils/config";
 export const UserProfile = () => {
   const [userData, setUserData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-
-  const handleEditClick = () => {
-    // Aquí puedes implementar la lógica para abrir un modal o navegar a la página de edición de datos
-    console.log("Editar datos");
-  };
-
+  const [editedUserData, setEditedUserData] = useState({
+    name: "",
+    lastName: "",
+    phone: "",
+  });
   useEffect(() => {
     const fetchUserData = async () => {
       const accessToken = localStorage.getItem("accessToken");
@@ -32,7 +31,21 @@ export const UserProfile = () => {
             },
           }
         );
-        setUserData(response.data.data);
+
+        const userDataFromApi = response.data.data;
+        // Aquí puedes extraer los datos necesarios del usuario de la respuesta del endpoint
+        // Por ejemplo:
+        const userDataFromApiMysql = userDataFromApi.mysqlUsers[0];
+
+        setUserData({
+          UserAttributes: [
+            { Name: "email", Value: userDataFromApiMysql.email },
+            { Name: "phone_number", Value: userDataFromApiMysql.phone },
+            { Name: "name", Value: userDataFromApiMysql.name },
+            { Name: "family_name", Value: userDataFromApiMysql.lastname },
+          ],
+          mysqlUsers: [userDataFromApiMysql],
+        });
       } catch (error) {
         // Manejar el error al obtener los datos del usuario
         console.error("Error al obtener los datos del usuario:", error);
@@ -42,9 +55,80 @@ export const UserProfile = () => {
     fetchUserData();
   }, []);
 
-  const handleEditProfile = () => {
-    // Lógica para editar el perfil del usuario
-    console.log("Editar perfil del usuario");
+  const handleEditProfile = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      // Manejar el caso en que no se disponga de un token de acceso
+      return;
+    }
+
+    const userId =
+      userData &&
+      userData.mysqlUsers &&
+      userData.mysqlUsers.length > 0 &&
+      userData.mysqlUsers[0].id;
+    if (!userId) {
+      // Manejar el caso en que no se pueda obtener el ID del usuario
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        `${apiUrl}/users/users/${userId}`,
+        editedUserData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      console.log("Perfil del usuario actualizado:", response.data);
+
+      // Actualizar el estado userData con los datos editados
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        UserAttributes: [
+          { Name: "name", Value: editedUserData.name },
+          { Name: "family_name", Value: editedUserData.lastName },
+          { Name: "phone_number", Value: editedUserData.phone },
+          ...prevUserData.UserAttributes.filter(
+            (attr) =>
+              attr.Name !== "name" &&
+              attr.Name !== "family_name" &&
+              attr.Name !== "phone_number"
+          ),
+        ],
+        mysqlUsers: [
+          {
+            ...prevUserData.mysqlUsers[0],
+            name: editedUserData.name,
+            lastname: editedUserData.lastName,
+            phone: editedUserData.phone,
+          },
+        ],
+      }));
+
+      // Después de guardar exitosamente, establecer isEditing en false para ocultar los campos de edición y el botón de guardado
+      setIsEditing(false);
+      // También puedes limpiar los datos editados para los próximos cambios
+      setEditedUserData({
+        name: "",
+        lastName: "",
+        phone: "",
+      });
+    } catch (error) {
+      // Manejar el error al intentar actualizar el perfil del usuario
+      console.error("Error al actualizar el perfil del usuario:", error);
+      // Puedes mostrar un mensaje de error al usuario si lo deseas
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedUserData((prevUserData) => ({
+      ...prevUserData,
+      [name]: value,
+    }));
   };
 
   return (
@@ -99,19 +183,63 @@ export const UserProfile = () => {
                         </p>
                       )}
 
+                    {isEditing && (
+                      <div className="mt-4">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Name
+                        </label>
+                        <input
+                          type="text"
+                          name="name"
+                          value={editedUserData.name}
+                          onChange={handleInputChange}
+                          className="mt-1 p-2 border rounded-md w-full"
+                        />
+                        <label className="block text-sm font-medium text-gray-700 mt-2">
+                          Last Name
+                        </label>
+                        <input
+                          type="text"
+                          name="lastName"
+                          value={editedUserData.lastName}
+                          onChange={handleInputChange}
+                          className="mt-1 p-2 border rounded-md w-full"
+                        />
+                        <label className="block text-sm font-medium text-gray-700 mt-2">
+                          Phone Number
+                        </label>
+                        <input
+                          type="text"
+                          name="phone"
+                          value={editedUserData.phone}
+                          onChange={handleInputChange}
+                          className="mt-1 p-2 border rounded-md w-full"
+                        />
+                      </div>
+                    )}
+
                     <div className="mt-6 flex justify-center">
-                      <button
-                        className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-slate-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                        onClick={handleEditProfile}
-                      >
-                        Edit Profile
-                      </button>
+                      {isEditing ? (
+                        <button
+                          onClick={handleEditProfile}
+                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        >
+                          Save Changes
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => setIsEditing(true)}
+                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        >
+                          Edit Profile
+                        </button>
+                      )}
                     </div>
                   </div>
-                  <div className="mt-6 flex flex-wrap gap-4 justify-center"></div>
                 </div>
               </div>
             </div>
+
             <div className="col-span-4 sm:col-span-9">
               <div className="bg-white shadow rounded-lg p-6">
                 <h2 className="text-xl font-bold mb-4">Purchase history</h2>
