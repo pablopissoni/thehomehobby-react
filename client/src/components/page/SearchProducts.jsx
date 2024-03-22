@@ -74,6 +74,7 @@ export const SearchProducts = () => {
       setPaginationData(response.data.info);
     } catch (error) {
       setProducSearchs({ message: "no products found" });
+      setFilteredProducts({ message: "no products found" });
       console.error("Error en getProduct ID >>> ", error);
     }
   }
