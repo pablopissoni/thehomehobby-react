@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unknown-property */
+/* eslint-disable no-unused-vars */
 import React from "react";
 
 import Quill from "quill/core"; // Quill JS
@@ -6,6 +8,7 @@ import "quill/dist/quill.snow.css"; // Quill JS
 import ReactQuill from "react-quill"; // Quill React
 import "react-quill/dist/quill.snow.css"; // Quill React
 import "react-quill/dist/quill.bubble.css"; // Quill React
+import { Navigate, useNavigate } from "react-router-dom";
 import Toolbar from "quill/modules/toolbar";
 import Snow from "quill/themes/snow";
 import Bold from "quill/formats/bold";
@@ -36,6 +39,7 @@ import { apiUrl } from "../../utils/config";
 //----------------------------------------
 
 export const Details = () => {
+  const navigate = useNavigate();
   //* ---- HOOKS ----
   const { id } = useParams();
   const [count, setCount] = useState(0);
@@ -51,11 +55,14 @@ export const Details = () => {
   const [product, setProduct] = useState({
     contenido: [{ ficha: "Cargando" }],
   });
+
   console.log("🚀 ~ Details ~ product:", product);
   // ---- HOOKS ----
 
   const [token, setToken] = useState("");
   const [userEmail, setUserEmail] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
+  const [message, setMessage] = useState("");
 
   const fetchToken = async () => {
     const accessToken = localStorage.getItem("accessToken");
@@ -157,9 +164,11 @@ export const Details = () => {
       // Obtener el userId del usuario logeado
       const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
-        console.log(
-          "No se encontró un token de acceso en el almacenamiento local."
-        );
+        // Mostrar mensaje flotante si el usuario no está logeado
+        setMessage("To add a product to the cart, you need to log in.");
+        setShowMessage(true);
+        // Ocultar el mensaje después de 7 segundos
+        setTimeout(() => setShowMessage(false), 7000);
         return;
       }
 
@@ -200,6 +209,10 @@ export const Details = () => {
       // Manejar cualquier error que ocurra durante la solicitud
       console.error("Error al agregar el producto al carrito:", error);
     }
+  };
+
+  const handleLoginRedirect = () => {
+    navigate.push("/login");
   };
 
   //? --- Loader ---
@@ -297,6 +310,29 @@ export const Details = () => {
 
   return (
     <div className="flex min-h-full flex-col bg-body font-poppins text-txt bg-gray-100">
+      {showMessage && (
+        <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center">
+          <div className="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-3 shadow-md max-w-md">
+            <div className="flex items-center">
+              <div className="py-1">
+                <svg
+                  className="fill-current h-6 w-6 text-red-500 mr-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z" />
+                </svg>
+              </div>
+              <div>
+                <p className="font-bold">{message}</p>
+                <button className="text-sm" onClick={handleLoginRedirect}>
+                  Go to login
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="product-details container mx-auto my-5 px-2 sm:px-8">
         {/* Mostrar el email del usuario logeado */}
 
