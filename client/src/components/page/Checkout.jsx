@@ -15,7 +15,7 @@ import { apiUrl, frontUrl } from "../../utils/config";
 export const Checkout = () => {
   const [products, setProducts] = useState([]);
   const [errorsForm, setErrorsForm] = useState({
-    // email: false,
+    email: false,
     cardHolder: false,
     billingAddress: false,
     zip: false,
@@ -53,16 +53,22 @@ export const Checkout = () => {
       return;
     }
 
-    // const errorsFormObj = {
-    //   // email: validateEmail(paymentDetails.email),
-    //   cardHolder: paymentDetails.cardHolder.length < 3,
-    //   billingAddress: paymentDetails.billingAddress.length === 0,
-    //   zip: paymentDetails.zip.length === 0,
+    // const errorsEmail = validateEmail(paymentDetails.email) // validacion de email
+    // setErrorsForm({...errorsForm, email: errorsEmail});
+    // console.log("Fuera de IF>", errorsForm)
+    
+    // // Verificar si hay algún error
+    // if (Object.keys(errorsEmail).length > 0) {
+    //   console.log("Dentro de IF>", errorsForm)
+    //   console.log("Validation errors:", errorsEmail);
+    //   return;
     // }
+
     // if (Object.values(errorsFormObj).some(Boolean)) {
     //   setErrorsForm(errorsFormObj);
-    //   alert("Error en los datos ingresados");
     //   console.log("Errors >> ",errorsForm )
+    //   console.log("Errors OBJ >> ",errorsFormObj )
+    //   alert("Error en los datos ingresados");
     //   return;
     // }
 
