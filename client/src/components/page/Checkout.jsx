@@ -53,7 +53,7 @@ export const Checkout = () => {
       return;
     }
 
-    // const errorsEmail = validateEmail(paymentDetails.email) // validacion de email
+    const errorsEmail = validateEmail(paymentDetails.email) // validacion de email
     // setErrorsForm({...errorsForm, email: errorsEmail});
     // console.log("Fuera de IF>", errorsForm)
     
@@ -324,7 +324,7 @@ export const Checkout = () => {
             <div className="relative">
               <input
                 required
-                type="text"
+                type="email"
                 id="email"
                 name="email"
                 value={paymentDetails.email}
