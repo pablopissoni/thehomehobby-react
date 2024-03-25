@@ -79,4 +79,47 @@ const createOrder = async (req, res) => {
   }
 };
 
-module.exports = { createOrder };
+const getAllOrders = async (req, res) => {
+  try {
+    // Consulta para obtener todos los pedidos
+    const query = "SELECT * FROM pedidos";
+    dbConnection.query(query, (error, results, fields) => {
+      if (error) {
+        console.error("Error al obtener los pedidos:", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+      } else {
+        res.status(200).json(results);
+      }
+    });
+  } catch (error) {
+    console.error("Error al obtener los pedidos:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+const deleteOrder = async (req, res) => {
+  try {
+    const orderId = req.params.orderId; // Obtener el orderId de la URL
+
+    // Consulta para eliminar el pedido por su ID
+    const query = "DELETE FROM pedidos WHERE id = ?";
+    dbConnection.query(query, [orderId], (error, results, fields) => {
+      if (error) {
+        console.error("Error al eliminar el pedido:", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+      } else {
+        // Verificar si alguna fila fue afectada por la consulta
+        if (results.affectedRows > 0) {
+          res.status(200).json({ message: "Pedido eliminado exitosamente" });
+        } else {
+          res.status(404).json({ error: "El pedido no existe" });
+        }
+      }
+    });
+  } catch (error) {
+    console.error("Error al eliminar el pedido:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+module.exports = { createOrder, getAllOrders, deleteOrder };
