@@ -32,14 +32,15 @@ const createOrder = async (req, res) => {
       sub_total,
       total,
       porcentaje_cupon,
+      email,
     } = req.body;
 
     const orderId = generateRandomId(); // Generar el ID del pedido
     const createdAt = new Date().toISOString(); // Obtener la fecha y hora actual
 
     // Insertar el nuevo pedido en la base de datos
-    const query = `INSERT INTO pedidos (id, userId, metodo_pago, envio_type, envio, direccion, phone, city, codigo_postal, estado, cupon_id, productsId, iva, sub_total, total, porcentaje_cupon, created_at, updated_at)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const query = `INSERT INTO pedidos (id, userId, metodo_pago, envio_type, envio, direccion, phone, city, codigo_postal, estado, cupon_id, productsId, iva, sub_total, total, porcentaje_cupon, created_at, updated_at, email)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     dbConnection.query(
       query,
       [
@@ -61,6 +62,7 @@ const createOrder = async (req, res) => {
         porcentaje_cupon,
         createdAt,
         createdAt, // Se asume que 'updated_at' será igual a 'created_at' al principio
+        email,
       ],
       (error, results, fields) => {
         if (error) {
