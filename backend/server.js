@@ -4,6 +4,7 @@ const multer = require("multer");
 const router = require("./routes/productsRoutes");
 const usersRouter = require("./routes/usersRoutes");
 const cartsRouter = require("./routes/cartsRoutes");
+const ordersRouter = require("./routes/ordersRoutes");
 const dbConnection = require("./dbConfig");
 const fs = require("fs");
 const Stripe = require("stripe");
@@ -86,3 +87,4 @@ app.post("/api/checkout", async (req, res) => {
 app.use("/", router);
 app.use("/users", usersRouter);
 app.use("/carrito", cartsRouter);
+app.use("/orders", ordersRouter);
