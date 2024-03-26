@@ -13,6 +13,9 @@ import axios from "axios";
 import { apiUrl, frontUrl } from "../../utils/config";
 
 export const Checkout = () => {
+  const [userId, setUserId] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
+  const [message, setMessage] = useState("");
   const [products, setProducts] = useState([]);
   const [errorsForm, setErrorsForm] = useState({
     email: false,
@@ -43,7 +46,7 @@ export const Checkout = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // -- validaciones --
+
     if (!stripe || !elements) {
       return;
     }
@@ -53,25 +56,6 @@ export const Checkout = () => {
       return;
     }
 
-    const errorsEmail = validateEmail(paymentDetails.email) // validacion de email
-    // setErrorsForm({...errorsForm, email: errorsEmail});
-    // console.log("Fuera de IF>", errorsForm)
-    
-    // // Verificar si hay algún error
-    // if (Object.keys(errorsEmail).length > 0) {
-    //   console.log("Dentro de IF>", errorsForm)
-    //   console.log("Validation errors:", errorsEmail);
-    //   return;
-    // }
-
-    // if (Object.values(errorsFormObj).some(Boolean)) {
-    //   setErrorsForm(errorsFormObj);
-    //   console.log("Errors >> ",errorsForm )
-    //   console.log("Errors OBJ >> ",errorsFormObj )
-    //   alert("Error en los datos ingresados");
-    //   return;
-    // }
-
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: "card",
       card: elements.getElement(CardElement),
@@ -79,32 +63,73 @@ export const Checkout = () => {
 
     if (error) {
       console.error(error);
-    } else {
-      const { id } = paymentMethod;
-      const { data } = await axios.post(`${apiUrl}/api/checkout`, {
+      return;
+    }
+
+    const { id } = paymentMethod;
+    const totalAmount = ((parseFloat(subtotal) + 8) * 100).toFixed(0);
+
+    try {
+      const stripeResponse = await axios.post(`${apiUrl}/api/checkout`, {
         id,
-        amount: ((parseFloat(subtotal) + 8) * 100).toFixed(0),
+        amount: totalAmount,
       });
-      console.log(data);
-      elements.getElement(CardElement).clear();
-      // Aquí puedes enviar el ID del método de pago a tu servidor para completar la transacción
+
+      console.log("Respuesta de Stripe:", stripeResponse.data);
+
+      if (stripeResponse.data) {
+        console.log("Datos enviados al endpoint:", {
+          userId: userId,
+          email: paymentDetails.email,
+          metodo_pago: paymentDetails.cardHolder,
+          direccion: paymentDetails.billingAddress,
+          city: "",
+          codigo_postal: paymentDetails.zip,
+          productsId: products.map((product) => product.id).join(", "),
+          total: parseFloat(totalAmount / 100),
+          paymentMethodId: id,
+        });
+        const { data } = await axios.post(`${apiUrl}/orders/${userId}`, {
+          userId: userId,
+          email: paymentDetails.email,
+          metodo_pago: paymentDetails.cardHolder,
+          direccion: paymentDetails.billingAddress,
+          city: "",
+          codigo_postal: paymentDetails.zip,
+          productsId: products.map((product) => product.id).join(", "),
+          total: parseFloat(totalAmount / 100),
+          paymentMethodId: id,
+        });
+
+        console.log("Respuesta del backend:", data); // Agregar esta línea
+
+        // Verificar si el pedido se realizó correctamente según la respuesta del backend
+        if (data.success) {
+          // Mostrar mensaje de éxito si el pedido se realizó correctamente
+          console.log("El pedido se realizó correctamente");
+        } else {
+          // Mostrar mensaje de error si el pedido no se realizó correctamente
+          console.log("El pedido no se realizó correctamente:", data.error);
+        }
+
+        elements.getElement(CardElement).clear();
+      }
+    } catch (error) {
+      console.error("Error al procesar el pago:", error);
     }
   };
 
   useEffect(() => {
     const fetchUserData = async () => {
-      // Obtener el token del localStorage
       const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
-        // Manejar el caso en que no se disponga de un token de acceso
         return;
       }
 
       try {
-        // Obtener los datos del usuario
         const response = await axios.post(
           `${apiUrl}/users/get-token`,
-          {}, // Enviar un cuerpo vacío, si es necesario
+          {},
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -112,8 +137,7 @@ export const Checkout = () => {
           }
         );
         const userId = response.data.data.mysqlUsers[0].id;
-
-        // Obtener los productos del carrito del usuario
+        setUserId(userId); // Guardar el userId en el estado
         const cartResponse = await axios.get(
           `${apiUrl}/carrito/carrito/${userId}`
         );
@@ -127,7 +151,6 @@ export const Checkout = () => {
           }))
         );
       } catch (error) {
-        // Manejar el error al obtener los datos
         console.error("Error al obtener los datos:", error);
       }
     };
@@ -147,6 +170,26 @@ export const Checkout = () => {
       <div className="flex flex-col items-center border-b bg-white py-4 sm:flex-row sm:px-10 lg:px-20 xl:px-32">
         <div className="mt-4 py-2 text-xs sm:mt-0 sm:ml-auto sm:text-base">
           <div className="relative">
+            {showMessage && (
+              <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center">
+                <div className="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-3 shadow-md max-w-md">
+                  <div className="flex items-center">
+                    <div className="py-1">
+                      <svg
+                        className="fill-current h-6 w-6 text-red-500 mr-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-bold">{message}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
             <ul className="relative flex w-full items-center justify-between space-x-2 sm:space-x-4">
               <li className="flex items-center space-x-3 text-left sm:space-x-4">
                 <a
