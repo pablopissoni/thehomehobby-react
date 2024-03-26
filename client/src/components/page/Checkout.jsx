@@ -13,7 +13,6 @@ import axios from "axios";
 import { apiUrl, frontUrl } from "../../utils/config";
 
 export const Checkout = () => {
-  const [userId, setUserId] = useState("");
   const [products, setProducts] = useState([]);
   const [errorsForm, setErrorsForm] = useState({
     email: false,
@@ -54,11 +53,24 @@ export const Checkout = () => {
       return;
     }
 
-    const errorsEmail = validateEmail(paymentDetails.email);
-    if (Object.keys(errorsEmail).length > 0) {
-      console.log("Validation errors:", errorsEmail);
-      return;
-    }
+    const errorsEmail = validateEmail(paymentDetails.email) // validacion de email
+    // setErrorsForm({...errorsForm, email: errorsEmail});
+    // console.log("Fuera de IF>", errorsForm)
+    
+    // // Verificar si hay algún error
+    // if (Object.keys(errorsEmail).length > 0) {
+    //   console.log("Dentro de IF>", errorsForm)
+    //   console.log("Validation errors:", errorsEmail);
+    //   return;
+    // }
+
+    // if (Object.values(errorsFormObj).some(Boolean)) {
+    //   setErrorsForm(errorsFormObj);
+    //   console.log("Errors >> ",errorsForm )
+    //   console.log("Errors OBJ >> ",errorsFormObj )
+    //   alert("Error en los datos ingresados");
+    //   return;
+    // }
 
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: "card",
@@ -69,41 +81,30 @@ export const Checkout = () => {
       console.error(error);
     } else {
       const { id } = paymentMethod;
-      const totalAmount = ((parseFloat(subtotal) + 8) * 100).toFixed(0);
-
-      // Realizar el pedido
-      try {
-        const response = await axios.post(`${apiUrl}/orders/${userId}`, {
-          userId: userId,
-          email: paymentDetails.email,
-          metodo_pago: paymentDetails.cardHolder, // Puedes cambiar esto según lo necesites
-          direccion: paymentDetails.billingAddress,
-          city: "", // Agrega la ciudad si tienes esta información disponible
-          codigo_postal: paymentDetails.zip,
-          productsId: products.map((product) => product.id).join(", "), // Concatenar los IDs de los productos
-          total: parseFloat(totalAmount / 100), // Convertir el total de centavos a dólares
-        });
-
-        console.log("Pedido realizado:", response.data);
-        // Aquí puedes manejar la respuesta del servidor después de realizar el pedido
-      } catch (error) {
-        console.error("Error al realizar el pedido:", error);
-        // Manejar el error al realizar el pedido
-      }
+      const { data } = await axios.post(`${apiUrl}/api/checkout`, {
+        id,
+        amount: ((parseFloat(subtotal) + 8) * 100).toFixed(0),
+      });
+      console.log(data);
+      elements.getElement(CardElement).clear();
+      // Aquí puedes enviar el ID del método de pago a tu servidor para completar la transacción
     }
   };
 
   useEffect(() => {
     const fetchUserData = async () => {
+      // Obtener el token del localStorage
       const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
+        // Manejar el caso en que no se disponga de un token de acceso
         return;
       }
 
       try {
+        // Obtener los datos del usuario
         const response = await axios.post(
           `${apiUrl}/users/get-token`,
-          {},
+          {}, // Enviar un cuerpo vacío, si es necesario
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -111,7 +112,8 @@ export const Checkout = () => {
           }
         );
         const userId = response.data.data.mysqlUsers[0].id;
-        setUserId(userId); // Guardar el userId en el estado
+
+        // Obtener los productos del carrito del usuario
         const cartResponse = await axios.get(
           `${apiUrl}/carrito/carrito/${userId}`
         );
@@ -125,6 +127,7 @@ export const Checkout = () => {
           }))
         );
       } catch (error) {
+        // Manejar el error al obtener los datos
         console.error("Error al obtener los datos:", error);
       }
     };
