@@ -100,7 +100,7 @@ export const Checkout = () => {
           total: parseFloat(totalAmount / 100),
           paymentMethodId: id,
         });
-
+        //
         console.log("Respuesta del backend:", data); // Agregar esta línea
 
         // Verificar si el pedido se realizó correctamente según la respuesta del backend
