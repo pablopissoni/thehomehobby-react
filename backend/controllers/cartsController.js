@@ -109,7 +109,6 @@ const getCartByUserId = (req, res, connection) => {
     }
 
     const productIds = cartResults.map((cartItem) => cartItem.productId);
-    console.log("Product IDs:", productIds);
 
     const productQuery =
       "SELECT id, imagen, nombre_ingles, oferta_id, precio_base FROM productos WHERE id IN (?)";
