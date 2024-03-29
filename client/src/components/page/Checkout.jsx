@@ -14,7 +14,6 @@ import { apiUrl, frontUrl } from "../../utils/config";
 
 export const Checkout = () => {
   const [userId, setUserId] = useState("");
-  const [showMessage, setShowMessage] = useState(false);
   const [message, setMessage] = useState("");
   const [products, setProducts] = useState([]);
   const [errorsForm, setErrorsForm] = useState({
@@ -62,60 +61,45 @@ export const Checkout = () => {
     });
 
     if (error) {
-      console.error(error);
+      console.error("Error al procesar el pago:", error.message);
+      // Mostrar mensaje de error al usuario
+      alert("Error al procesar el pago: " + error.message);
       return;
     }
 
     const { id } = paymentMethod;
-    const totalAmount = ((parseFloat(subtotal) + 8) * 100).toFixed(0);
+
+    const totalFormatted = parseFloat(subtotal) + 8; // Total calculado en el frontend
+    const totalAmount = Math.round(totalFormatted * 100); // Convertir el total a centavos y redondearlo
+    const totalAmountWithoutDecimals = Math.floor(totalAmount); // Eliminar decimales del total
+
+    console.log("Total enviado al backend:", totalAmountWithoutDecimals);
 
     try {
-      const stripeResponse = await axios.post(`${apiUrl}/api/checkout`, {
+      const stripeResponse = await axios.post(`${apiUrl}/orders/${userId}`, {
         id,
         amount: totalAmount,
+        email: paymentDetails.email, // Agregar el campo email al cuerpo de la solicitud
+        total: totalAmountWithoutDecimals, // Enviar el total sin decimales
       });
 
       console.log("Respuesta de Stripe:", stripeResponse.data);
 
-      if (stripeResponse.data) {
-        console.log("Datos enviados al endpoint:", {
-          userId: userId,
-          email: paymentDetails.email,
-          metodo_pago: paymentDetails.cardHolder,
-          direccion: paymentDetails.billingAddress,
-          city: "",
-          codigo_postal: paymentDetails.zip,
-          productsId: products.map((product) => product.id).join(", "),
-          total: parseFloat(totalAmount / 100),
-          paymentMethodId: id,
-        });
-        const { data } = await axios.post(`${apiUrl}/orders/${userId}`, {
-          userId: userId,
-          email: paymentDetails.email,
-          metodo_pago: paymentDetails.cardHolder,
-          direccion: paymentDetails.billingAddress,
-          city: "",
-          codigo_postal: paymentDetails.zip,
-          productsId: products.map((product) => product.id).join(", "),
-          total: parseFloat(totalAmount / 100),
-          paymentMethodId: id,
-        });
-        //
-        console.log("Respuesta del backend:", data); // Agregar esta línea
-
-        // Verificar si el pedido se realizó correctamente según la respuesta del backend
-        if (data.success) {
-          // Mostrar mensaje de éxito si el pedido se realizó correctamente
-          console.log("El pedido se realizó correctamente");
-        } else {
-          // Mostrar mensaje de error si el pedido no se realizó correctamente
-          console.log("El pedido no se realizó correctamente:", data.error);
-        }
-
-        elements.getElement(CardElement).clear();
+      if (
+        stripeResponse.data &&
+        stripeResponse.data.message === "Payment successful"
+      ) {
+        // Procesar la respuesta de Stripe y del backend aquí
+        // Mostrar mensaje de éxito al usuario
+        alert("El pago se realizó correctamente");
+      } else {
+        // Mostrar mensaje de error al usuario
+        alert("Error al procesar el pago. Inténtalo de nuevo más tarde.");
       }
     } catch (error) {
       console.error("Error al procesar el pago:", error);
+      // Mostrar mensaje de error al usuario
+      alert("Error al procesar el pago. Inténtalo de nuevo más tarde.");
     }
   };
 
@@ -170,26 +154,6 @@ export const Checkout = () => {
       <div className="flex flex-col items-center border-b bg-white py-4 sm:flex-row sm:px-10 lg:px-20 xl:px-32">
         <div className="mt-4 py-2 text-xs sm:mt-0 sm:ml-auto sm:text-base">
           <div className="relative">
-            {showMessage && (
-              <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center">
-                <div className="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-3 shadow-md max-w-md">
-                  <div className="flex items-center">
-                    <div className="py-1">
-                      <svg
-                        className="fill-current h-6 w-6 text-red-500 mr-4"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="font-bold">{message}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
             <ul className="relative flex w-full items-center justify-between space-x-2 sm:space-x-4">
               <li className="flex items-center space-x-3 text-left sm:space-x-4">
                 <a
