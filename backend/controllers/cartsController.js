@@ -187,9 +187,36 @@ const editCartItem = (req, res, connection) => {
     });
 };
 
+const removeAllFromCart = (req, res, connection) => {
+  const userId = req.params.userId; // Obtener el ID del usuario
+
+  // Realizar la eliminación en la base de datos
+  const query = "DELETE FROM carrito WHERE userId = ?";
+  connection.query(query, [userId], (error, result) => {
+    if (error) {
+      console.error("Error al eliminar elementos del carrito:", error);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+
+    if (result.affectedRows === 0) {
+      return res
+        .status(404)
+        .json({
+          error: "No se encontraron elementos en el carrito para el usuario",
+        });
+    }
+
+    res.json({
+      message:
+        "Todos los elementos del carrito del usuario eliminados con éxito",
+    });
+  });
+};
+
 module.exports = {
   addToCart: addToCart,
   removeFromCart: removeFromCart,
   getCartByUserId: getCartByUserId,
   editCartItem: editCartItem,
+  removeAllFromCart: removeAllFromCart,
 };
