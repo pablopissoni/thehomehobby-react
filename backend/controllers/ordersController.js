@@ -128,4 +128,25 @@ const deleteOrder = async (req, res) => {
   }
 };
 
-module.exports = { createOrder, getAllOrders, deleteOrder };
+// Función para obtener los pedidos de un usuario por su ID
+const getOrdersByUserId = async (req, res) => {
+  try {
+    const userId = req.params.userId; // Obtener el userId de los parámetros de la URL
+
+    // Consulta para obtener los pedidos asociados a un usuario específico
+    const query = "SELECT * FROM pedidos WHERE userId = ?";
+    dbConnection.query(query, [userId], (error, results, fields) => {
+      if (error) {
+        console.error("Error al obtener los pedidos del usuario:", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+      } else {
+        res.status(200).json(results);
+      }
+    });
+  } catch (error) {
+    console.error("Error al obtener los pedidos del usuario:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+module.exports = { createOrder, getAllOrders, deleteOrder, getOrdersByUserId };
