@@ -87,6 +87,7 @@ export const Checkout = () => {
         amount: totalAmount,
         email: paymentDetails.email, // Agregar el campo email al cuerpo de la solicitud
         total: totalString, // Enviar el total como cadena con punto decimal
+        userId: userId,
       });
 
       console.log("Respuesta de Stripe:", stripeResponse.data);
