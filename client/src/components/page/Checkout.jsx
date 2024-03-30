@@ -71,16 +71,17 @@ export const Checkout = () => {
 
     const totalFormatted = parseFloat(subtotal) + 8; // Total calculado en el frontend
     const totalAmount = Math.round(totalFormatted * 100); // Convertir el total a centavos y redondearlo
-    const totalAmountWithoutDecimals = Math.floor(totalAmount); // Eliminar decimales del total
 
-    console.log("Total enviado al backend:", totalAmountWithoutDecimals);
+    const totalString = (totalAmount / 100).toFixed(2);
+
+    console.log("Total enviado al backend:", totalString);
 
     try {
       const stripeResponse = await axios.post(`${apiUrl}/orders/${userId}`, {
         id,
         amount: totalAmount,
         email: paymentDetails.email, // Agregar el campo email al cuerpo de la solicitud
-        total: totalAmountWithoutDecimals, // Enviar el total sin decimales
+        total: totalString, // Enviar el total como cadena con punto decimal
       });
 
       console.log("Respuesta de Stripe:", stripeResponse.data);
