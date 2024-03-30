@@ -34,4 +34,12 @@ router.put("/carrito/:userId", (req, res, next) => {
   }
 });
 
+router.delete("/:userId", (req, res, next) => {
+  try {
+    cartController.removeAllFromCart(req, res, req.dbConnection);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
