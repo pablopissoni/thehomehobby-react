@@ -107,8 +107,14 @@ export const Checkout = () => {
               zip: "",
             });
 
-            // Navigate to /userprofile
-            navigate("/userprofile");
+            // Llamar al endpoint para limpiar el carrito
+            axios
+              .delete(`http://localhost:3001/carrito/${userId}`)
+              .then((response) => {
+                console.log(response.data);
+                // Navigate to /userprofile
+                navigate("/userprofile");
+              });
           }
         });
       } else {
