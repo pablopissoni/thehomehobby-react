@@ -82,12 +82,20 @@ export const Checkout = () => {
     console.log("Total enviado al backend:", totalString);
 
     try {
+      const productDetails = JSON.stringify(
+        products.map((product) => ({
+          id: product.product.id,
+          quantity: product.quantity,
+        }))
+      );
+
       const stripeResponse = await axios.post(`${apiUrl}/orders/${userId}`, {
         id,
         amount: totalAmount,
         email: paymentDetails.email, // Agregar el campo email al cuerpo de la solicitud
         total: totalString, // Enviar el total como cadena con punto decimal
         userId: userId,
+        productsId: productDetails,
       });
 
       console.log("Respuesta de Stripe:", stripeResponse.data);
