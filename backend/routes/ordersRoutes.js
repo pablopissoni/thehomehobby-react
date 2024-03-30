@@ -6,6 +6,8 @@ const ordersController = require("../controllers/ordersController");
 router.post("/:userId", ordersController.createOrder);
 // Ruta para obtener todos los pedidos
 router.get("/", ordersController.getAllOrders);
+// Ruta para obtener los pedidos de un usuario específico
+router.get("/:userId", ordersController.getOrdersByUserId);
 // Ruta para eliminar un pedido por su ID
 router.delete("/:orderId", ordersController.deleteOrder);
 
