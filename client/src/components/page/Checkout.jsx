@@ -11,6 +11,8 @@ import {
 import { Axios } from "axios";
 import axios from "axios";
 import { apiUrl, frontUrl } from "../../utils/config";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 export const Checkout = () => {
   const [userId, setUserId] = useState("");
@@ -35,7 +37,7 @@ export const Checkout = () => {
 
   const stripe = useStripe();
   const elements = useElements();
-
+  const navigate = useNavigate();
   //* ---- HANDLEs ----
 
   const handleInput = (event) => {
@@ -63,7 +65,10 @@ export const Checkout = () => {
     if (error) {
       console.error("Error al procesar el pago:", error.message);
       // Mostrar mensaje de error al usuario
-      alert("Error al procesar el pago: " + error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Error processing payment",
+      });
       return;
     }
 
@@ -86,21 +91,39 @@ export const Checkout = () => {
 
       console.log("Respuesta de Stripe:", stripeResponse.data);
 
-      if (
-        stripeResponse.data &&
-        stripeResponse.data.message === "Payment successful"
-      ) {
-        // Procesar la respuesta de Stripe y del backend aquí
-        // Mostrar mensaje de éxito al usuario
-        alert("El pago se realizó correctamente");
+      if (stripeResponse.status === 201) {
+        // El pago se realizó correctamente
+        Swal.fire({
+          icon: "success",
+          title: "Payment successful!",
+          text: "Your order has been successfully processed.",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Clear data
+            setPaymentDetails({
+              email: "",
+              cardHolder: "",
+              billingAddress: "",
+              zip: "",
+            });
+
+            // Navigate to /userprofile
+            navigate("/userprofile");
+          }
+        });
       } else {
-        // Mostrar mensaje de error al usuario
-        alert("Error al procesar el pago. Inténtalo de nuevo más tarde.");
+        Swal.fire({
+          icon: "error",
+          title: "Error processing payment",
+        });
       }
     } catch (error) {
       console.error("Error al procesar el pago:", error);
       // Mostrar mensaje de error al usuario
-      alert("Error al procesar el pago. Inténtalo de nuevo más tarde.");
+      Swal.fire({
+        icon: "error",
+        title: "Error processing payment",
+      });
     }
   };
 
